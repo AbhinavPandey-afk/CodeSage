@@ -354,6 +354,106 @@
   font-size: 0.75rem;
 }
 
+/* --- Graph view --- */
+.graph-view {
+  margin-top: 1.5rem;
+  position: relative;
+}
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-bottom: 0.6rem;
+}
+
+.graph-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-file {
+  background: #4f8ac1;
+}
+.dot-class {
+  background: var(--accent-text);
+}
+
+.line {
+  width: 16px;
+  height: 2px;
+  display: inline-block;
+}
+.line-contains {
+  background: #7a8488;
+}
+.line-inherits {
+  background: #4f8ac1;
+}
+.line-uses {
+  background: var(--accent-text);
+}
+
+.graph-truncated {
+  margin-left: auto;
+  font-style: italic;
+}
+
+.graph-canvas {
+  width: 100%;
+  height: 480px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.graph-detail {
+  position: absolute;
+  top: 3rem;
+  right: 0.5rem;
+  width: 230px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.graph-detail-close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.graph-detail code {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  word-break: break-word;
+}
+
+.graph-detail-degree {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
 /* --- Smells panel --- */
 .smells-panel {
   margin-top: 1.5rem;

@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import ask, health, repositories, smells
+from app.api.routes import ask, graph, health, repositories, smells
 from app.core.config import settings
 from app.core.logging import configure_logging
 
@@ -16,7 +16,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"] if settings.app_env == "development" else [],
+    # Vite auto-increments its port (5173, 5174, ...) whenever the default is
+    # already taken, so a fixed origin list breaks the moment a second dev
+    # server is running. A localhost-only regex tolerates any port instead.
+    allow_origin_regex=r"http://localhost:\d+" if settings.app_env == "development" else None,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -25,3 +28,4 @@ app.include_router(health.router)
 app.include_router(repositories.router)
 app.include_router(ask.router)
 app.include_router(smells.router)
+app.include_router(graph.router)

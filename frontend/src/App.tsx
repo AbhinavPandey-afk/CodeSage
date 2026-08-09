@@ -2,18 +2,19 @@ import { useState } from "react";
 import "./App.css";
 import { api } from "./api/client";
 import { AskPanel } from "./components/AskPanel";
+import { GraphView } from "./components/GraphView";
 import { PipelineProgress } from "./components/PipelineProgress";
 import { RepositoryForm } from "./components/RepositoryForm";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
 
-type Tab = "ask" | "smells";
+type Tab = "graph" | "ask" | "smells";
 
 function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [tab, setTab] = useState<Tab>("ask");
+  const [tab, setTab] = useState<Tab>("graph");
   const repository = useRepositoryPolling(repoId);
 
   const handleSubmit = async (url: string) => {
@@ -48,6 +49,9 @@ function App() {
             {repository.status === "ready" && (
               <>
                 <div className="tabs">
+                  <button className={tab === "graph" ? "tab active" : "tab"} onClick={() => setTab("graph")}>
+                    Knowledge graph
+                  </button>
                   <button className={tab === "ask" ? "tab active" : "tab"} onClick={() => setTab("ask")}>
                     Ask
                   </button>
@@ -55,7 +59,9 @@ function App() {
                     Architecture smells
                   </button>
                 </div>
-                {tab === "ask" ? <AskPanel repoId={repository.id} /> : <SmellsPanel repoId={repository.id} />}
+                {tab === "graph" && <GraphView repoId={repository.id} />}
+                {tab === "ask" && <AskPanel repoId={repository.id} />}
+                {tab === "smells" && <SmellsPanel repoId={repository.id} />}
               </>
             )}
 

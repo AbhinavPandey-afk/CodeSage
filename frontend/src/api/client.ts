@@ -1,4 +1,4 @@
-import type { AskResponse, Repository, Smell } from "./types";
+import type { AskResponse, GraphViewResponse, Repository, Smell } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -32,4 +32,7 @@ export const api = {
     }),
 
   getSmells: (id: string) => request<Smell[]>(`/api/repositories/${id}/smells`),
+
+  getGraph: (id: string, limit = 150) =>
+    request<GraphViewResponse>(`/api/repositories/${id}/graph?limit=${limit}`),
 };

@@ -70,3 +70,27 @@ export interface Smell {
   evidence: string;
   affected: AffectedSymbol[];
 }
+
+export interface GraphNode {
+  uid: string;
+  symbol_type: string;
+  name: string;
+  qualified_name: string;
+  file_path: string;
+  start_line: number;
+  end_line: number;
+  degree: number;
+}
+
+export interface GraphEdge {
+  source_uid: string;
+  target_uid: string;
+  relationship_type: string;
+  weight: number;
+}
+
+export interface GraphViewResponse {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  truncated: boolean;
+}
