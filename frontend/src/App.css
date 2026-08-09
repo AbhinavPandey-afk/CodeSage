@@ -1,0 +1,444 @@
+.app {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 2rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.tagline {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+}
+
+/* --- Repository form --- */
+.repo-form {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+
+.repo-form input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.repo-form button,
+.ask-form button,
+.retry-button {
+  padding: 0.75rem 1.3rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-text);
+  color: #12161a;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.repo-form button:disabled,
+.ask-form button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.form-error {
+  color: var(--bad);
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+
+/* --- Pipeline progress --- */
+.pipeline {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.4rem 1.5rem;
+}
+
+.pipeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.repo-name {
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.status-pill {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  color: var(--text-soft);
+}
+
+.status-ready {
+  color: var(--ok);
+}
+
+.status-failed {
+  color: var(--bad);
+}
+
+.pipeline-stages {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-faint);
+}
+
+.stage-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--border);
+  flex: none;
+}
+
+.stage-done {
+  color: var(--text-soft);
+}
+.stage-done .stage-dot {
+  background: var(--ok);
+}
+
+.stage-active {
+  color: var(--text);
+  font-weight: 600;
+}
+.stage-active .stage-dot {
+  background: var(--accent-text);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-text) 25%, transparent);
+}
+
+.pipeline-error {
+  color: var(--bad);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.pipeline-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.3rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+
+.pipeline-stats div {
+  display: flex;
+  flex-direction: column;
+}
+
+.pipeline-stats strong {
+  font-family: var(--mono);
+  font-size: 1.2rem;
+}
+
+.pipeline-stats span {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hint {
+  margin-top: 1rem;
+  color: var(--text-faint);
+  font-size: 0.9rem;
+}
+
+.retry-button {
+  margin-top: 1rem;
+}
+
+/* --- Tabs --- */
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 0.6rem 0.9rem;
+  border: none;
+  background: none;
+  color: var(--text-faint);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent-text);
+}
+
+/* --- Ask panel --- */
+.ask-panel {
+  margin-top: 1.5rem;
+}
+
+.ask-form {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.ask-form input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.ask-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.suggestion-chip {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.suggestion-chip:hover {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+.ask-result {
+  margin-top: 1.5rem;
+}
+
+.answer-block {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.3rem 1.4rem;
+}
+
+.answer-block p {
+  margin: 0.7rem 0 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.confidence-pill {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.confidence-confirmed {
+  background: color-mix(in srgb, var(--ok) 18%, transparent);
+  color: var(--ok);
+}
+.confidence-inferred {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+.confidence-uncertain {
+  background: color-mix(in srgb, var(--bad) 18%, transparent);
+  color: var(--bad);
+}
+
+.evidence-block {
+  margin-top: 1.2rem;
+}
+
+.evidence-block h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin: 0 0 0.6rem;
+}
+
+.evidence-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+  background: var(--bg-raised);
+}
+
+.evidence-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.symbol-tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: var(--bg-sunken);
+  color: var(--text-faint);
+}
+
+.evidence-location {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-top: 0.3rem;
+}
+
+.evidence-related {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.evidence-related .conf {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+/* --- Smells panel --- */
+.smells-panel {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.smell-item {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+}
+
+.smell-item.severity-high {
+  border-left-color: var(--bad);
+}
+.smell-item.severity-medium {
+  border-left-color: var(--warn);
+}
+.smell-item.severity-low {
+  border-left-color: var(--text-faint);
+}
+
+.smell-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.severity-pill {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+.severity-pill.severity-high {
+  background: color-mix(in srgb, var(--bad) 18%, transparent);
+  color: var(--bad);
+}
+.severity-pill.severity-medium {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+.severity-pill.severity-low {
+  background: var(--bg-sunken);
+  color: var(--text-faint);
+}
+
+.smell-type {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+
+.smell-title {
+  font-weight: 600;
+  margin: 0.5rem 0 0.3rem;
+}
+
+.smell-explanation {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  margin: 0 0 0.4rem;
+}
+
+.smell-evidence {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+.smell-affected {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0.6rem 0 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}

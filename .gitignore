@@ -1,0 +1,37 @@
+# Environments
+.env
+.env.local
+**/.env
+!.env.example
+!**/.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/build/
+.vite/
+
+# Repository workspace (cloned repos analyzed by CodeSage)
+backend/workspace/
+backend/.workspace/
+*.faiss
+*.index
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
