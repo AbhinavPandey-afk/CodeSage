@@ -1,4 +1,11 @@
-import type { AskResponse, GraphViewResponse, Repository, Smell } from "./types";
+import type {
+  AskResponse,
+  GraphViewResponse,
+  ImpactReport,
+  Repository,
+  Smell,
+  SymbolSearchResult,
+} from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -35,4 +42,13 @@ export const api = {
 
   getGraph: (id: string, granularity: "files" | "classes" = "files") =>
     request<GraphViewResponse>(`/api/repositories/${id}/graph?granularity=${granularity}`),
+
+  searchSymbols: (id: string, q: string) =>
+    request<SymbolSearchResult[]>(`/api/repositories/${id}/symbols?q=${encodeURIComponent(q)}`),
+
+  getImpact: (id: string, symbolUid: string) =>
+    request<ImpactReport>(`/api/repositories/${id}/impact`, {
+      method: "POST",
+      body: JSON.stringify({ symbol_uid: symbolUid }),
+    }),
 };

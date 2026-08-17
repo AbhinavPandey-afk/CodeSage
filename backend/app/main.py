@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import ask, graph, health, repositories, smells
+from app.api.routes import ask, graph, health, impact, repositories, smells
 from app.core.config import settings
 from app.core.logging import configure_logging
 
@@ -29,3 +29,4 @@ app.include_router(repositories.router)
 app.include_router(ask.router)
 app.include_router(smells.router)
 app.include_router(graph.router)
+app.include_router(impact.router)

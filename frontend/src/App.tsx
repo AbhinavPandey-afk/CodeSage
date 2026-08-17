@@ -3,12 +3,13 @@ import "./App.css";
 import { api } from "./api/client";
 import { AskPanel } from "./components/AskPanel";
 import { GraphView } from "./components/GraphView";
+import { ImpactPanel } from "./components/ImpactPanel";
 import { PipelineProgress } from "./components/PipelineProgress";
 import { RepositoryForm } from "./components/RepositoryForm";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
 
-type Tab = "graph" | "ask" | "smells";
+type Tab = "graph" | "ask" | "smells" | "impact";
 
 function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
@@ -58,10 +59,14 @@ function App() {
                   <button className={tab === "smells" ? "tab active" : "tab"} onClick={() => setTab("smells")}>
                     Design issues
                   </button>
+                  <button className={tab === "impact" ? "tab active" : "tab"} onClick={() => setTab("impact")}>
+                    Impact analysis
+                  </button>
                 </div>
                 {tab === "graph" && <GraphView repoId={repository.id} />}
                 {tab === "ask" && <AskPanel repoId={repository.id} />}
                 {tab === "smells" && <SmellsPanel repoId={repository.id} />}
+                {tab === "impact" && <ImpactPanel repoId={repository.id} />}
               </>
             )}
 

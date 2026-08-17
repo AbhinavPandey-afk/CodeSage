@@ -94,3 +94,54 @@ export interface GraphViewResponse {
   edges: GraphEdge[];
   truncated: boolean;
 }
+
+export interface SymbolSearchResult {
+  uid: string;
+  symbol_type: string;
+  name: string;
+  qualified_name: string;
+  file_path: string;
+  start_line: number;
+}
+
+export interface Dependent {
+  uid: string;
+  symbol_type: string;
+  name: string;
+  qualified_name: string;
+  file_path: string;
+  start_line: number;
+  end_line: number;
+  depth: number;
+}
+
+export interface ExternalDependency {
+  name: string;
+  category: "database" | "external_service";
+}
+
+export interface RiskSignal {
+  name: string;
+  value: string;
+  points: number;
+}
+
+export type RiskLevel = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+export interface ImpactReport {
+  target_uid: string;
+  target_qualified_name: string;
+  target_symbol_type: string;
+  target_file_path: string;
+  direct_dependents: Dependent[];
+  indirect_dependents: Dependent[];
+  affected_apis: Dependent[];
+  affected_services: Dependent[];
+  affected_tests: Dependent[];
+  external_dependencies: ExternalDependency[];
+  risk_level: RiskLevel;
+  risk_score: number;
+  risk_signals: RiskSignal[];
+  explanation: string;
+  detection_notes: string[];
+}

@@ -596,3 +596,240 @@
   flex-direction: column;
   gap: 0.3rem;
 }
+
+/* --- Impact analysis panel --- */
+.impact-panel {
+  margin-top: 1.5rem;
+}
+
+.impact-search {
+  position: relative;
+  margin-bottom: 1.4rem;
+}
+
+.impact-search input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.impact-search input:focus {
+  outline: none;
+  border-color: var(--accent-text);
+}
+
+.impact-search-spinner {
+  position: absolute;
+  right: 0.9rem;
+  top: 0.85rem;
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.impact-results {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem;
+}
+
+.impact-results li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.impact-results li:hover {
+  background: var(--bg-sunken);
+}
+
+.impact-results code {
+  word-break: break-word;
+}
+
+.impact-report {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.3rem 1.5rem;
+}
+
+.impact-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.impact-target-name {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.risk-pill {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.risk-pill.risk-low {
+  background: color-mix(in srgb, var(--ok) 18%, transparent);
+  color: var(--ok);
+}
+.risk-pill.risk-medium {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+.risk-pill.risk-high {
+  background: color-mix(in srgb, var(--bad) 18%, transparent);
+  color: var(--bad);
+}
+.risk-pill.risk-critical {
+  background: #7a1f1f;
+  color: #ffdede;
+}
+
+.impact-explanation {
+  margin: 0.9rem 0;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.risk-signals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.2rem;
+}
+
+.risk-signal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+}
+
+.rs-name {
+  color: var(--text-soft);
+  flex: 1 1 auto;
+}
+
+.rs-value {
+  color: var(--text-faint);
+  font-family: var(--mono);
+}
+
+.rs-points {
+  font-family: var(--mono);
+  color: var(--accent-text);
+  min-width: 2.2rem;
+  text-align: right;
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
+}
+
+.impact-cell h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  font-weight: 600;
+}
+
+.dependent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+}
+
+.dependent-list code {
+  display: block;
+  word-break: break-word;
+  color: var(--text);
+}
+
+.dependent-loc {
+  display: block;
+  color: var(--text-faint);
+  font-size: 0.75rem;
+}
+
+.dependent-more {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-soft);
+  background: var(--bg-sunken);
+}
+
+.chip-database {
+  border-color: #5b8a8a;
+  color: #5b8a8a;
+}
+.chip-external_service {
+  border-color: var(--border);
+}
+
+.detection-notes {
+  margin: 1.3rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  font-style: italic;
+}
