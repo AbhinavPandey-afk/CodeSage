@@ -56,7 +56,7 @@ function App() {
                     Ask
                   </button>
                   <button className={tab === "smells" ? "tab active" : "tab"} onClick={() => setTab("smells")}>
-                    Architecture smells
+                    Design issues
                   </button>
                 </div>
                 {tab === "graph" && <GraphView repoId={repository.id} />}
