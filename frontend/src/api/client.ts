@@ -33,6 +33,6 @@ export const api = {
 
   getSmells: (id: string) => request<Smell[]>(`/api/repositories/${id}/smells`),
 
-  getGraph: (id: string, limit = 150) =>
-    request<GraphViewResponse>(`/api/repositories/${id}/graph?limit=${limit}`),
+  getGraph: (id: string, granularity: "files" | "classes" = "files") =>
+    request<GraphViewResponse>(`/api/repositories/${id}/graph?granularity=${granularity}`),
 };

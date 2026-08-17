@@ -357,17 +357,50 @@
 /* --- Graph view --- */
 .graph-view {
   margin-top: 1.5rem;
-  position: relative;
+}
+
+.graph-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.granularity-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.gtoggle {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  background: var(--bg-raised);
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.gtoggle + .gtoggle {
+  border-left: 1px solid var(--border);
+}
+
+.gtoggle.active {
+  background: var(--accent-text);
+  color: #12161a;
 }
 
 .graph-legend {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
   font-size: 0.78rem;
   color: var(--text-faint);
-  margin-bottom: 0.6rem;
 }
 
 .graph-legend span {
@@ -404,9 +437,15 @@
   background: var(--accent-text);
 }
 
-.graph-truncated {
-  margin-left: auto;
-  font-style: italic;
+.graph-caption {
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  margin: 0 0 0.8rem;
+  max-width: 70ch;
+}
+
+.graph-canvas-wrap {
+  position: relative;
 }
 
 .graph-canvas {
@@ -417,16 +456,31 @@
   border-radius: 10px;
 }
 
+.graph-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  z-index: 1;
+}
+
 .graph-detail {
   position: absolute;
-  top: 3rem;
-  right: 0.5rem;
+  top: 0.75rem;
+  right: 0.75rem;
   width: 230px;
   background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.9rem 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 2;
 }
 
 .graph-detail-close {

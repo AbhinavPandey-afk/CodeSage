@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../api/client";
 import type { GraphNode } from "../api/types";
 
+type Granularity = "files" | "classes";
+
 const EDGE_COLOR: Record<string, string> = {
   CONTAINS: "#7a8488",
   INHERITS: "#4f8ac1",
@@ -12,20 +14,25 @@ const EDGE_COLOR: Record<string, string> = {
 export function GraphView({ repoId }: { repoId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const [granularity, setGranularity] = useState<Granularity>("files");
   const [selected, setSelected] = useState<GraphNode | null>(null);
   const [truncated, setTruncated] = useState(false);
   const [nodeCount, setNodeCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    setLoading(true);
+    setSelected(null);
 
     api
-      .getGraph(repoId, 150)
+      .getGraph(repoId, granularity)
       .then((view) => {
         if (cancelled || !containerRef.current) return;
         setTruncated(view.truncated);
         setNodeCount(view.nodes.length);
+        setLoading(false);
 
         const nodesByUid = new Map(view.nodes.map((n) => [n.uid, n]));
         const elements = [
@@ -57,12 +64,12 @@ export function GraphView({ repoId }: { repoId: string }) {
               selector: "node",
               style: {
                 label: "data(label)",
-                "font-size": 9,
+                "font-size": 10,
                 color: "#aab3b7",
                 "text-valign": "bottom",
-                "text-margin-y": 4,
-                width: "mapData(degree, 0, 40, 14, 44)",
-                height: "mapData(degree, 0, 40, 14, 44)",
+                "text-margin-y": 5,
+                width: "mapData(degree, 0, 20, 18, 50)",
+                height: "mapData(degree, 0, 20, 18, 50)",
                 "background-color": "#c1832f",
                 "border-width": 1,
                 "border-color": "#8a5a1d",
@@ -79,8 +86,9 @@ export function GraphView({ repoId }: { repoId: string }) {
                 "line-color": (ele: cytoscape.EdgeSingular) => EDGE_COLOR[ele.data("type")] ?? "#7a8488",
                 "target-arrow-color": (ele: cytoscape.EdgeSingular) => EDGE_COLOR[ele.data("type")] ?? "#7a8488",
                 "target-arrow-shape": "triangle",
+                "arrow-scale": 0.8,
                 "curve-style": "bezier",
-                opacity: 0.7,
+                opacity: 0.55,
               },
             },
             {
@@ -88,7 +96,15 @@ export function GraphView({ repoId }: { repoId: string }) {
               style: { "border-width": 3, "border-color": "#e3b473" },
             },
           ],
-          layout: { name: "cose", animate: false, padding: 30 },
+          layout: {
+            name: "cose",
+            animate: false,
+            padding: 40,
+            nodeRepulsion: () => 12000,
+            idealEdgeLength: () => 90,
+            componentSpacing: 80,
+            nodeOverlap: 16,
+          } as cytoscape.LayoutOptions,
         });
 
         cy.on("tap", "node", (evt) => {
@@ -102,28 +118,63 @@ export function GraphView({ repoId }: { repoId: string }) {
 
         cyRef.current = cy;
       })
-      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load graph."));
+      .catch((err) => {
+        setLoading(false);
+        setError(err instanceof Error ? err.message : "Failed to load graph.");
+      });
 
     return () => {
       cancelled = true;
       cyRef.current?.destroy();
       cyRef.current = null;
     };
-  }, [repoId]);
+  }, [repoId, granularity]);
 
   if (error) return <p className="form-error">{error}</p>;
 
   return (
     <div className="graph-view">
-      <div className="graph-legend">
-        <span><i className="dot dot-file" /> File</span>
-        <span><i className="dot dot-class" /> Class</span>
-        <span><i className="line line-contains" /> Contains</span>
-        <span><i className="line line-inherits" /> Inherits</span>
-        <span><i className="line line-uses" /> Uses</span>
-        {truncated && <span className="graph-truncated">Showing top {nodeCount} most-connected symbols</span>}
+      <div className="graph-toolbar">
+        <div className="granularity-toggle">
+          <button
+            className={granularity === "files" ? "gtoggle active" : "gtoggle"}
+            onClick={() => setGranularity("files")}
+          >
+            Files
+          </button>
+          <button
+            className={granularity === "classes" ? "gtoggle active" : "gtoggle"}
+            onClick={() => setGranularity("classes")}
+          >
+            Files + classes
+          </button>
+        </div>
+        <div className="graph-legend">
+          {granularity === "classes" && (
+            <>
+              <span><i className="dot dot-file" /> File</span>
+              <span><i className="dot dot-class" /> Class</span>
+              <span><i className="line line-contains" /> Contains</span>
+              <span><i className="line line-inherits" /> Inherits</span>
+            </>
+          )}
+          {granularity === "files" && <span><i className="dot dot-file" /> File</span>}
+          <span><i className="line line-uses" /> Uses</span>
+        </div>
       </div>
-      <div className="graph-canvas" ref={containerRef} />
+
+      <p className="graph-caption">
+        {granularity === "files"
+          ? "Each node is a file; a line means a function in one calls a function in the other. Isolated files with no cross-file calls are hidden."
+          : "Files and the classes they define, with containment, inheritance, and aggregated call relationships between classes."}
+        {truncated && ` Showing the ${nodeCount} most-connected symbols.`}
+      </p>
+
+      <div className="graph-canvas-wrap">
+        {loading && <div className="graph-loading">Loading graph…</div>}
+        <div className="graph-canvas" ref={containerRef} />
+      </div>
+
       {selected && (
         <div className="graph-detail">
           <button className="graph-detail-close" onClick={() => setSelected(null)}>×</button>

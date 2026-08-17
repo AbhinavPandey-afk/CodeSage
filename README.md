@@ -45,8 +45,16 @@ python -m venv .venv
 ./.venv/Scripts/activate      # Windows; use `source .venv/bin/activate` on macOS/Linux
 pip install -r requirements.txt
 cp .env.example .env          # then fill in GROQ_API_KEY, NEO4J_URI, NEO4J_PASSWORD
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --reload-exclude "workspace/**" --port 8000
 ```
+
+> **Why `--reload-exclude`:** repository analysis clones repos into
+> `backend/workspace/`. Without excluding it, `--reload` treats every file in
+> a freshly-cloned repo as a source change and restarts the server mid- (or
+> right after) analysis — which silently wipes the in-memory vector index
+> even though the repository's status still shows "ready". If you hit
+> "This repository has no vector index yet" on a repo that already finished
+> analyzing, this is why — re-run without `--reload`, or with the flag above.
 
 Run tests: `pytest -q`
 
