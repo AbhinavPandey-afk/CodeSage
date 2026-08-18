@@ -602,6 +602,17 @@
   margin-top: 1.5rem;
 }
 
+.impact-suggestions {
+  margin-top: 0.6rem;
+  margin-bottom: 1.4rem;
+  align-items: center;
+}
+
+.impact-suggestions-label {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
 .impact-search {
   position: relative;
   margin-bottom: 1.4rem;

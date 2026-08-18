@@ -12,7 +12,7 @@ from app.schemas.impact import (
     RiskSignalResponse,
     SymbolSearchResponse,
 )
-from graph.queries.symbol_search import search_symbols
+from graph.queries.symbol_search import search_symbols, suggest_symbols
 
 router = APIRouter(prefix="/api/repositories", tags=["impact"])
 
@@ -29,6 +29,16 @@ def _require_ready(repo_id: str):
 def get_symbols(repo_id: str, q: str = Query(..., min_length=1), limit: int = Query(default=20, ge=1, le=50)):
     _require_ready(repo_id)
     results = search_symbols(repo_id, q, limit=limit)
+    return [SymbolSearchResponse(**r.__dict__) for r in results]
+
+
+@router.get("/{repo_id}/symbols/suggestions", response_model=list[SymbolSearchResponse])
+def get_symbol_suggestions(repo_id: str, limit: int = Query(default=6, ge=1, le=20)):
+    """Repo-specific starting points for impact analysis — the most-connected
+    real symbols in this repository, so the picker never shows a generic
+    placeholder example that doesn't exist in whatever repo is loaded."""
+    _require_ready(repo_id)
+    results = suggest_symbols(repo_id, limit=limit)
     return [SymbolSearchResponse(**r.__dict__) for r in results]
 
 

@@ -25,6 +25,11 @@ export function ImpactPanel({ repoId }: { repoId: string }) {
   const [report, setReport] = useState<ImpactReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<SymbolSearchResult[]>([]);
+
+  useEffect(() => {
+    api.getSymbolSuggestions(repoId).then(setSuggestions).catch(() => setSuggestions([]));
+  }, [repoId]);
 
   useEffect(() => {
     if (!query.trim() || selected?.qualified_name === query) {
@@ -64,7 +69,7 @@ export function ImpactPanel({ repoId }: { repoId: string }) {
       <div className="impact-search">
         <input
           type="text"
-          placeholder="Search a function, method, or class — e.g. PaymentService.process"
+          placeholder="Search a function, method, or class in this repository…"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -83,6 +88,17 @@ export function ImpactPanel({ repoId }: { repoId: string }) {
           </ul>
         )}
       </div>
+
+      {suggestions.length > 0 && (
+        <div className="ask-suggestions impact-suggestions">
+          <span className="impact-suggestions-label">Try:</span>
+          {suggestions.map((s) => (
+            <button key={s.uid} className="suggestion-chip" onClick={() => runAnalysis(s)}>
+              {s.qualified_name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {loading && <p className="hint">Analyzing impact…</p>}
       {error && <p className="form-error">{error}</p>}

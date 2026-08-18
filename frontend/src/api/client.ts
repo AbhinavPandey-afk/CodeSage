@@ -46,6 +46,9 @@ export const api = {
   searchSymbols: (id: string, q: string) =>
     request<SymbolSearchResult[]>(`/api/repositories/${id}/symbols?q=${encodeURIComponent(q)}`),
 
+  getSymbolSuggestions: (id: string) =>
+    request<SymbolSearchResult[]>(`/api/repositories/${id}/symbols/suggestions`),
+
   getImpact: (id: string, symbolUid: string) =>
     request<ImpactReport>(`/api/repositories/${id}/impact`, {
       method: "POST",
