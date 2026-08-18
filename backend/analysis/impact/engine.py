@@ -92,6 +92,7 @@ def analyze_impact(repo_id: str, target_uid: str) -> ImpactReport:
         affected_services_count=len(affected_services),
         affected_tests_count=len(affected_tests),
         external_names=[d.name for d in external_deps],
+        target_degree=target_row["degree"],
         risk_level=risk_level,
     )
 
