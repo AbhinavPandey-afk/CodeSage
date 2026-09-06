@@ -4,6 +4,7 @@ import type {
   EntryPoint,
   ExecutionFlowReport,
   GraphViewResponse,
+  HistoryReport,
   ImpactReport,
   OptimizationReport,
   RelationshipResponse,
@@ -77,4 +78,6 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ entry_uid: entryUid }),
     }),
+
+  getHistory: (id: string) => request<HistoryReport>(`/api/repositories/${id}/history`),
 };

@@ -1268,3 +1268,85 @@
   color: var(--text-faint);
   font-style: italic;
 }
+
+/* --- History panel --- */
+.hist-panel {
+  margin-top: 1.5rem;
+}
+
+.hist-components,
+.hist-recent {
+  margin-bottom: 1.6rem;
+}
+
+.hist-components h4,
+.hist-recent h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin: 0 0 0.7rem;
+}
+
+.hist-component {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.6rem;
+}
+
+.hist-component-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.hist-commit-count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.hist-dates {
+  margin: 0.4rem 0 0.3rem;
+}
+
+.hist-intro {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.hist-sha {
+  font-family: var(--mono);
+  color: var(--accent-text);
+}
+
+.hist-commit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hist-commit-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.7rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.hist-subject {
+  flex: 1 1 auto;
+  color: var(--text-soft);
+}

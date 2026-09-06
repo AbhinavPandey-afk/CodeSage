@@ -19,9 +19,8 @@ foundational phases below — treat `CLAUDE.md` as the current source of truth.
 
 ## Current status
 
-The foundation (ingestion → Python parsing → knowledge graph → evidence-based
-Q&A → architecture analysis → impact/risk) is implemented, with Architecture
-Reconstruction and Architecture Optimization now sitting on top of it:
+All of CLAUDE.md's reconstruction/analysis phases (§34 Phases 1–5) are now
+implemented — only Phase 6 (language expansion beyond Python) remains:
 
 - GitHub ingestion → Python parsing → Neo4j knowledge graph
 - **Architecture Reconstruction** — the existing graph's files are grouped
@@ -40,14 +39,16 @@ Reconstruction and Architecture Optimization now sitting on top of it:
   entry point to where it terminates in a data-access or external-integration
   component, with a PROPOSED variant that reroutes any layer-skip through the
   service layer Architecture Optimization identified
+- **Historical Reconstruction** — which architectural components change most
+  and when they were likely introduced, derived from the repository's own
+  Git commit history (never fabricated developer intent)
 - Hybrid (graph + vector) evidence-backed Q&A ("Ask the Archeologist")
 - Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
 Only **Python** has a working parser today; JavaScript, TypeScript, Java, and
-C++ are recognized during language detection but not yet parsed (see
-[Supported languages](#supported-languages) below). Not yet built: Historical
-(Git) Reconstruction — see `CLAUDE.md` §34 for the phase plan.
+C++ are recognized during language detection but not yet parsed (Phase 6 —
+see [Supported languages](#supported-languages) below and `CLAUDE.md` §34).
 
 ## Architecture
 
@@ -197,6 +198,21 @@ explanation, evidence, and affected symbols.
   `POST /api/repositories/{id}/flows/reconstruct`; rendered in the
   **Execution flow** tab with a current/proposed toggle.
 
+### Historical Reconstruction
+- `backend/analysis/history/` reads the repository's own Git commit history
+  (via GitPython) and, for each architectural component, computes commit
+  count, first/last-touched dates, top authors, and an **introduction
+  commit** — real evidence answering "when was this component introduced?"
+  (CLAUDE.md §27) without asking the LLM to guess.
+- Repositories are cloned shallow (`depth=1`) for parsing speed, so this
+  module best-effort widens the clone on demand (`git fetch --deepen`),
+  bounded to a fixed number of extra commits — deliberately not changing the
+  default ingestion clone depth for every repository just for this feature.
+- When history is truncated (still shallow, or more commits exist than were
+  analyzed), that limitation is disclosed in `detection_notes` rather than
+  silently presenting a partial picture as complete.
+- `GET /api/repositories/{id}/history`; rendered in the **History** tab.
+
 ### Change impact & risk analysis
 - Symbol search/autocomplete (`/symbols`) plus repo-specific starting-point
   suggestions (`/symbols/suggestions`) — the most-connected real symbols in
@@ -257,7 +273,7 @@ backend at `http://localhost:8000` by default (override with `VITE_API_URL`).
 
 1. Paste a GitHub URL (e.g. `https://github.com/pallets/flask`) and submit.
 2. Watch the pipeline progress (clone → parse → graph → embed).
-3. Once ready, explore seven tabs:
+3. Once ready, explore eight tabs:
    - **Architecture** — the reconstructed architectural components, their
      inferred roles, confidence, evidence, and relationships to each other.
    - **Execution flow** — pick a detected API entry point and see its static
@@ -272,6 +288,9 @@ backend at `http://localhost:8000` by default (override with `VITE_API_URL`).
      deterministic risk level — recommendations only.
    - **Impact & risk** — pick a symbol and see its dependents, affected
      APIs/services/tests, external dependencies, and a scored risk level.
+   - **History** — the most historically active components, their
+     introduction commit, top authors, and a recent-commits feed, from the
+     repository's own Git history.
    - **Ask the Archeologist** — ask a question (e.g. "How does authentication
      work?") and get an answer with cited evidence and a confidence label.
 
@@ -288,6 +307,8 @@ GET    /api/repositories/{id}/optimization               # proposed fixes for ea
 
 GET    /api/repositories/{id}/flows                     # detected API entry points
 POST   /api/repositories/{id}/flows/reconstruct          # static execution-flow reconstruction from an entry point
+
+GET    /api/repositories/{id}/history                   # Git-history-derived component activity + recent commits
 
 GET    /api/repositories/{id}/graph                     # file- or class-level graph view
 POST   /api/repositories/{id}/graph/relationship        # explain the connection between two nodes
@@ -311,8 +332,9 @@ GET    /health                                           # liveness check
   grouping/role inference, component-level architecture violation detection
   (layer skips, boundary violations, circular dependencies, coupling),
   optimization-proposal assembly (goal mapping, risk/confidence derivation),
-  and execution-flow tree building (terminal detection, cycle guards, hop
-  budget, proposed-flow splicing).
+  execution-flow tree building (terminal detection, cycle guards, hop
+  budget, proposed-flow splicing), and history aggregation (component commit
+  grouping, introduction-commit selection, author ranking).
 - Run with `pytest -q` from `backend/`.
 
 ## Security notes

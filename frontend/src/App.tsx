@@ -5,6 +5,7 @@ import { ArchitecturePanel } from "./components/ArchitecturePanel";
 import { AskPanel } from "./components/AskPanel";
 import { ExecutionFlowPanel } from "./components/ExecutionFlowPanel";
 import { GraphView } from "./components/GraphView";
+import { HistoryPanel } from "./components/HistoryPanel";
 import { ImpactPanel } from "./components/ImpactPanel";
 import { OptimizationPanel } from "./components/OptimizationPanel";
 import { PipelineProgress } from "./components/PipelineProgress";
@@ -12,7 +13,7 @@ import { RepositoryForm } from "./components/RepositoryForm";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
 
-type Tab = "architecture" | "flow" | "graph" | "smells" | "optimization" | "impact" | "ask";
+type Tab = "architecture" | "flow" | "graph" | "smells" | "optimization" | "impact" | "history" | "ask";
 
 function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
@@ -77,6 +78,9 @@ function App() {
                   <button className={tab === "impact" ? "tab active" : "tab"} onClick={() => setTab("impact")}>
                     Impact &amp; risk
                   </button>
+                  <button className={tab === "history" ? "tab active" : "tab"} onClick={() => setTab("history")}>
+                    History
+                  </button>
                   <button className={tab === "ask" ? "tab active" : "tab"} onClick={() => setTab("ask")}>
                     Ask the Archeologist
                   </button>
@@ -87,6 +91,7 @@ function App() {
                 {tab === "smells" && <SmellsPanel repoId={repository.id} />}
                 {tab === "optimization" && <OptimizationPanel repoId={repository.id} />}
                 {tab === "impact" && <ImpactPanel repoId={repository.id} />}
+                {tab === "history" && <HistoryPanel repoId={repository.id} />}
                 {tab === "ask" && <AskPanel repoId={repository.id} />}
               </>
             )}

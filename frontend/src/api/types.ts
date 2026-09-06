@@ -265,6 +265,35 @@ export interface ExecutionFlowReport {
   detection_notes: string[];
 }
 
+export interface CommitInfo {
+  sha: string;
+  short_sha: string;
+  author_name: string;
+  authored_date: string;
+  subject: string;
+  files_changed: number;
+}
+
+export interface ComponentHistory {
+  component_id: string;
+  component_name: string;
+  role: ComponentRole;
+  commit_count: number;
+  first_seen: string;
+  last_changed: string;
+  top_authors: [string, number][];
+  introduction_commit: CommitInfo;
+}
+
+export interface HistoryReport {
+  repo_id: string;
+  commits_analyzed: number;
+  history_truncated: boolean;
+  components: ComponentHistory[];
+  recent_commits: CommitInfo[];
+  detection_notes: string[];
+}
+
 export interface ImpactReport {
   target_uid: string;
   target_qualified_name: string;
