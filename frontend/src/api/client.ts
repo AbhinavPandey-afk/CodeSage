@@ -1,7 +1,9 @@
 import type {
+  ArchitectureModel,
   AskResponse,
   GraphViewResponse,
   ImpactReport,
+  RelationshipResponse,
   Repository,
   Smell,
   SymbolSearchResult,
@@ -43,6 +45,12 @@ export const api = {
   getGraph: (id: string, granularity: "files" | "classes" = "files") =>
     request<GraphViewResponse>(`/api/repositories/${id}/graph?granularity=${granularity}`),
 
+  getRelationship: (id: string, sourceUid: string, targetUid: string) =>
+    request<RelationshipResponse>(`/api/repositories/${id}/graph/relationship`, {
+      method: "POST",
+      body: JSON.stringify({ source_uid: sourceUid, target_uid: targetUid }),
+    }),
+
   searchSymbols: (id: string, q: string) =>
     request<SymbolSearchResult[]>(`/api/repositories/${id}/symbols?q=${encodeURIComponent(q)}`),
 
@@ -54,4 +62,6 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ symbol_uid: symbolUid }),
     }),
+
+  getArchitecture: (id: string) => request<ArchitectureModel>(`/api/repositories/${id}/architecture`),
 };

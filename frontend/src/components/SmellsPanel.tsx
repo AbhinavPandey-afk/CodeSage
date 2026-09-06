@@ -7,6 +7,10 @@ const TYPE_LABELS: Record<string, string> = {
   god_class: "God class",
   large_function: "Large function",
   dead_code_candidate: "Dead code candidate",
+  architecture_boundary_violation: "Architecture boundary violation",
+  layer_skip: "Layer skip",
+  circular_component_dependency: "Circular component dependency",
+  excessive_component_coupling: "Excessive component coupling",
 };
 
 const MEDIUM_DISPLAY_LIMIT = 5;

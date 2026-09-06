@@ -357,6 +357,7 @@
 /* --- Graph view --- */
 .graph-view {
   margin-top: 1.5rem;
+  position: relative;
 }
 
 .graph-toolbar {
@@ -506,6 +507,63 @@
   margin-top: 0.5rem;
   font-size: 0.78rem;
   color: var(--text-faint);
+}
+
+.graph-relationship-status {
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
+
+.graph-relationship {
+  width: 300px;
+}
+
+.relationship-pair {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.relationship-pair code {
+  word-break: break-word;
+}
+
+.relationship-arrow {
+  color: var(--text-faint);
+}
+
+.relationship-explanation {
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.relationship-steps {
+  list-style: none;
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.relationship-steps li {
+  font-size: 0.76rem;
+}
+
+.relationship-steps code {
+  word-break: break-word;
+}
+
+.relationship-rel-type {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0.3rem;
 }
 
 /* --- Smells panel --- */
@@ -843,4 +901,193 @@
   font-size: 0.76rem;
   color: var(--text-faint);
   font-style: italic;
+}
+
+/* --- Architecture reconstruction panel --- */
+.arch-panel {
+  margin-top: 1.5rem;
+}
+
+.arch-intro {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  margin: 0 0 1.2rem;
+  line-height: 1.5;
+}
+
+.arch-components {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.arch-component {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.arch-component.role-api {
+  border-left-color: var(--accent-text);
+}
+.arch-component.role-service {
+  border-left-color: #5b8a8a;
+}
+.arch-component.role-data_access {
+  border-left-color: var(--warn);
+}
+.arch-component.role-external_integration {
+  border-left-color: #9a7bd6;
+}
+.arch-component.role-test {
+  border-left-color: var(--text-faint);
+}
+
+.arch-component-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.9rem 1.1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.arch-component-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.arch-component-title code {
+  word-break: break-word;
+}
+
+.arch-role-pill {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: var(--bg-sunken);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.arch-component-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.confidence-pill {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.confidence-pill.confidence-confirmed {
+  background: color-mix(in srgb, var(--ok) 18%, transparent);
+  color: var(--ok);
+}
+.confidence-pill.confidence-inferred {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+.confidence-pill.confidence-uncertain {
+  background: var(--bg-sunken);
+  color: var(--text-faint);
+}
+
+.arch-component-body {
+  padding: 0 1.1rem 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.arch-evidence {
+  margin: 0.8rem 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+.arch-files-label {
+  margin: 0.6rem 0 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.arch-files {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  color: var(--text-faint);
+}
+
+.arch-relationships {
+  margin-top: 1.4rem;
+}
+
+.arch-relationships h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin: 0 0 0.6rem;
+}
+
+.arch-relationship-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.arch-relationship-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  padding: 0.5rem 0.7rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.arch-rel-arrow {
+  color: var(--text-faint);
+}
+
+.arch-rel-count {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.75rem;
 }

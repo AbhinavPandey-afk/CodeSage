@@ -59,7 +59,15 @@ export interface AffectedSymbol {
   end_line: number;
 }
 
-export type SmellType = "circular_dependency" | "god_class" | "large_function" | "dead_code_candidate";
+export type SmellType =
+  | "circular_dependency"
+  | "god_class"
+  | "large_function"
+  | "dead_code_candidate"
+  | "architecture_boundary_violation"
+  | "layer_skip"
+  | "circular_component_dependency"
+  | "excessive_component_coupling";
 export type Severity = "LOW" | "MEDIUM" | "HIGH";
 
 export interface Smell {
@@ -95,6 +103,30 @@ export interface GraphViewResponse {
   truncated: boolean;
 }
 
+export interface SymbolRef {
+  uid: string;
+  symbol_type: string;
+  qualified_name: string;
+  file_path: string;
+}
+
+export interface RelationshipStep {
+  from_qualified_name: string;
+  to_qualified_name: string;
+  relationship_type: string;
+  source_file: string | null;
+  source_line: number | null;
+  confidence: number | null;
+}
+
+export interface RelationshipResponse {
+  source: SymbolRef;
+  target: SymbolRef;
+  connected: boolean;
+  steps: RelationshipStep[];
+  explanation: string;
+}
+
 export interface SymbolSearchResult {
   uid: string;
   symbol_type: string;
@@ -127,6 +159,46 @@ export interface RiskSignal {
 }
 
 export type RiskLevel = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+export type ComponentRole =
+  | "api"
+  | "service"
+  | "data_access"
+  | "external_integration"
+  | "model"
+  | "test"
+  | "other";
+
+export type ArchitectureConfidenceLabel = "Confirmed" | "Inferred" | "Uncertain";
+
+export interface ArchitectureComponent {
+  id: string;
+  name: string;
+  role: ComponentRole;
+  file_count: number;
+  symbol_count: number;
+  files: string[];
+  confidence: number;
+  confidence_label: ArchitectureConfidenceLabel;
+  evidence: string[];
+}
+
+export interface ComponentRelationship {
+  source_id: string;
+  target_id: string;
+  call_count: number;
+  confidence: number;
+  confidence_label: ArchitectureConfidenceLabel;
+  evidence: string[];
+}
+
+export interface ArchitectureModel {
+  repo_id: string;
+  components: ArchitectureComponent[];
+  relationships: ComponentRelationship[];
+  truncated: boolean;
+  detection_notes: string[];
+}
 
 export interface ImpactReport {
   target_uid: string;

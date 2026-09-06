@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { api } from "./api/client";
+import { ArchitecturePanel } from "./components/ArchitecturePanel";
 import { AskPanel } from "./components/AskPanel";
 import { GraphView } from "./components/GraphView";
 import { ImpactPanel } from "./components/ImpactPanel";
@@ -9,13 +10,13 @@ import { RepositoryForm } from "./components/RepositoryForm";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
 
-type Tab = "graph" | "ask" | "smells" | "impact";
+type Tab = "architecture" | "graph" | "ask" | "smells" | "impact";
 
 function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [tab, setTab] = useState<Tab>("graph");
+  const [tab, setTab] = useState<Tab>("architecture");
   const repository = useRepositoryPolling(repoId);
 
   const handleSubmit = async (url: string) => {
@@ -34,8 +35,8 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <span className="brand">CodeSage</span>
-        <span className="tagline">AI software architecture intelligence</span>
+        <span className="brand">CodeBase Archeologist</span>
+        <span className="tagline">Evidence-driven software architecture reconstruction</span>
       </header>
 
       <main className="app-main">
@@ -50,19 +51,26 @@ function App() {
             {repository.status === "ready" && (
               <>
                 <div className="tabs">
+                  <button
+                    className={tab === "architecture" ? "tab active" : "tab"}
+                    onClick={() => setTab("architecture")}
+                  >
+                    Architecture
+                  </button>
                   <button className={tab === "graph" ? "tab active" : "tab"} onClick={() => setTab("graph")}>
-                    Knowledge graph
+                    Evidence explorer
                   </button>
                   <button className={tab === "ask" ? "tab active" : "tab"} onClick={() => setTab("ask")}>
-                    Ask
+                    Ask the Archeologist
                   </button>
                   <button className={tab === "smells" ? "tab active" : "tab"} onClick={() => setTab("smells")}>
-                    Design issues
+                    Architecture analysis
                   </button>
                   <button className={tab === "impact" ? "tab active" : "tab"} onClick={() => setTab("impact")}>
-                    Impact analysis
+                    Impact &amp; risk
                   </button>
                 </div>
+                {tab === "architecture" && <ArchitecturePanel repoId={repository.id} />}
                 {tab === "graph" && <GraphView repoId={repository.id} />}
                 {tab === "ask" && <AskPanel repoId={repository.id} />}
                 {tab === "smells" && <SmellsPanel repoId={repository.id} />}

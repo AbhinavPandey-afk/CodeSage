@@ -1,7 +1,7 @@
 import cytoscape, { type Core } from "cytoscape";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api/client";
-import type { GraphNode } from "../api/types";
+import type { GraphNode, RelationshipResponse } from "../api/types";
 
 type Granularity = "files" | "classes";
 
@@ -14,17 +14,45 @@ const EDGE_COLOR: Record<string, string> = {
 export function GraphView({ repoId }: { repoId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const selectedRef = useRef<GraphNode | null>(null);
   const [granularity, setGranularity] = useState<Granularity>("files");
   const [selected, setSelected] = useState<GraphNode | null>(null);
   const [truncated, setTruncated] = useState(false);
   const [nodeCount, setNodeCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [relationship, setRelationship] = useState<RelationshipResponse | null>(null);
+  const [relationshipLoading, setRelationshipLoading] = useState(false);
+  const [relationshipError, setRelationshipError] = useState<string | null>(null);
+
+  function selectNode(node: GraphNode | null) {
+    selectedRef.current = node;
+    setSelected(node);
+    setRelationship(null);
+    setRelationshipError(null);
+  }
+
+  const compareNodes = useCallback(
+    async (a: GraphNode, b: GraphNode) => {
+      selectNode(null);
+      setRelationshipLoading(true);
+      setRelationshipError(null);
+      try {
+        const res = await api.getRelationship(repoId, a.uid, b.uid);
+        setRelationship(res);
+      } catch (err) {
+        setRelationshipError(err instanceof Error ? err.message : "Failed to load relationship.");
+      } finally {
+        setRelationshipLoading(false);
+      }
+    },
+    [repoId],
+  );
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    setSelected(null);
+    selectNode(null);
 
     api
       .getGraph(repoId, granularity)
@@ -110,10 +138,22 @@ export function GraphView({ repoId }: { repoId: string }) {
         cy.on("tap", "node", (evt) => {
           const uid = evt.target.id();
           const node = nodesByUid.get(uid);
-          if (node) setSelected(node);
+          if (!node) return;
+
+          const original = evt.originalEvent as MouseEvent | undefined;
+          const isCompareClick = original?.ctrlKey || original?.metaKey;
+          const current = selectedRef.current;
+
+          if (isCompareClick && current && current.uid !== node.uid) {
+            void compareNodes(current, node);
+          } else {
+            selectNode(node);
+          }
         });
         cy.on("tap", (evt) => {
-          if (evt.target === cy) setSelected(null);
+          if (evt.target === cy) {
+            selectNode(null);
+          }
         });
 
         cyRef.current = cy;
@@ -128,7 +168,7 @@ export function GraphView({ repoId }: { repoId: string }) {
       cyRef.current?.destroy();
       cyRef.current = null;
     };
-  }, [repoId, granularity]);
+  }, [repoId, granularity, compareNodes]);
 
   if (error) return <p className="form-error">{error}</p>;
 
@@ -168,6 +208,7 @@ export function GraphView({ repoId }: { repoId: string }) {
           ? "Each node is a file; a line means a function in one calls a function in the other. Isolated files with no cross-file calls are hidden."
           : "Files and the classes they define, with containment, inheritance, and aggregated call relationships between classes."}
         {truncated && ` Showing the ${nodeCount} most-connected symbols.`}
+        {" "}Select a node, then Ctrl/Cmd-click a second node to explain how they're connected.
       </p>
 
       <div className="graph-canvas-wrap">
@@ -177,13 +218,55 @@ export function GraphView({ repoId }: { repoId: string }) {
 
       {selected && (
         <div className="graph-detail">
-          <button className="graph-detail-close" onClick={() => setSelected(null)}>×</button>
+          <button className="graph-detail-close" onClick={() => selectNode(null)}>×</button>
           <span className="symbol-tag">{selected.symbol_type}</span>
           <code>{selected.qualified_name}</code>
           <div className="evidence-location">
             {selected.file_path}:{selected.start_line}-{selected.end_line}
           </div>
           <div className="graph-detail-degree">{selected.degree} connections</div>
+        </div>
+      )}
+
+      {relationshipLoading && (
+        <div className="graph-detail">
+          <p className="graph-relationship-status">Explaining relationship…</p>
+        </div>
+      )}
+
+      {relationshipError && (
+        <div className="graph-detail">
+          <button className="graph-detail-close" onClick={() => setRelationshipError(null)}>×</button>
+          <p className="form-error">{relationshipError}</p>
+        </div>
+      )}
+
+      {relationship && (
+        <div className="graph-detail graph-relationship">
+          <button className="graph-detail-close" onClick={() => setRelationship(null)}>×</button>
+          <div className="relationship-pair">
+            <code>{relationship.source.qualified_name}</code>
+            <span className="relationship-arrow">↔</span>
+            <code>{relationship.target.qualified_name}</code>
+          </div>
+          <p className="relationship-explanation">{relationship.explanation}</p>
+          {relationship.connected && relationship.steps.length > 0 && (
+            <ul className="relationship-steps">
+              {relationship.steps.map((step, i) => (
+                <li key={i}>
+                  <code>{step.from_qualified_name}</code>
+                  <span className="relationship-rel-type">{step.relationship_type}</span>
+                  <code>{step.to_qualified_name}</code>
+                  {step.source_file && (
+                    <div className="evidence-location">
+                      {step.source_file}
+                      {step.source_line ? `:${step.source_line}` : ""}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>

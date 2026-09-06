@@ -3,6 +3,8 @@
 that a panel/reviewer can audit exactly why a finding fired, not trust an LLM's
 say-so.
 """
+from analysis.reconstruction.engine import reconstruct_architecture
+from analysis.smells.architecture_violations import detect_architecture_violations
 from analysis.smells.graph_algorithms import strongly_connected_components
 from analysis.smells.models import AffectedSymbol, Smell
 from graph.neo4j.client import get_driver
@@ -185,5 +187,6 @@ def run_smell_detection(repo_id: str) -> list[Smell]:
         *detect_god_classes(repo_id),
         *detect_large_functions(repo_id),
         *detect_dead_code_candidates(repo_id),
+        *detect_architecture_violations(reconstruct_architecture(repo_id)),
     ]
     return sorted(smells, key=lambda s: _SEVERITY_ORDER[s.severity])
