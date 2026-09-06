@@ -13,7 +13,9 @@ _API_DECORATOR_RE = re.compile(
     r"\.(route|get|post|put|delete|patch|websocket)\s*\(|@api_view|@action\b"
     # NestJS/Angular-style bare route decorators (@Get('/x'), @Post(), ...) --
     # no dot-access, since the decorator itself IS the route registration.
-    r"|@(get|post|put|delete|patch|all)\s*\(",
+    r"|@(get|post|put|delete|patch|all)\s*\("
+    # Spring (Java/Kotlin) annotations: @GetMapping, @PostMapping, @RequestMapping, ...
+    r"|@(get|post|put|delete|patch|request)mapping\b",
     re.IGNORECASE,
 )
 
@@ -28,6 +30,14 @@ _DB_PACKAGE_PREFIXES = {
     "pg", "mongoose", "mysql2", "sequelize", "knex", "prisma", "ioredis", "typeorm",
 }
 
+# Java's reversed-domain import convention (java.sql.*, org.hibernate.*, ...)
+# means the *first* segment alone (java/javax/org/com) is too generic to
+# classify -- these are matched against the first two dotted segments instead.
+_DB_PACKAGE_TWO_SEGMENT_PREFIXES = {
+    "java.sql", "javax.persistence", "org.hibernate", "org.mybatis",
+    "com.mongodb", "redis.clients", "org.jooq",
+}
+
 _STDLIB_MODULES = set(sys.stdlib_module_names)
 
 # Node.js built-in modules -- the JS equivalent of Python's stdlib exclusion,
@@ -37,6 +47,11 @@ _NODE_BUILTIN_MODULES = {
     "util", "child_process", "net", "querystring", "assert", "buffer", "zlib",
     "readline", "process", "cluster", "dns", "tls", "worker_threads", "timers",
 }
+
+# Java standard/platform namespaces -- the JDK equivalent of Python's stdlib
+# exclusion (checked only when a two-segment DB prefix above didn't already
+# match, so e.g. "javax.persistence" is still classified as "database").
+_JAVA_STDLIB_PREFIXES = {"java", "javax"}
 
 
 def is_api_endpoint(decorators: list[str]) -> bool:
@@ -66,10 +81,13 @@ def is_test(file_path: str, name: str) -> bool:
 def classify_import(dotted_name: str) -> str | None:
     """Categorize a raw import target as 'database', 'external_service', or
     None (stdlib / not externally interesting)."""
-    top_level = dotted_name.split(".")[0]
-    if top_level in _DB_PACKAGE_PREFIXES:
+    parts = dotted_name.split(".")
+    top_level = parts[0]
+    top_two = ".".join(parts[:2]) if len(parts) >= 2 else top_level
+
+    if top_level in _DB_PACKAGE_PREFIXES or top_two in _DB_PACKAGE_TWO_SEGMENT_PREFIXES:
         return "database"
-    if top_level in _STDLIB_MODULES or top_level in _NODE_BUILTIN_MODULES:
+    if top_level in _STDLIB_MODULES or top_level in _NODE_BUILTIN_MODULES or top_level in _JAVA_STDLIB_PREFIXES:
         return None
     if not top_level or top_level.startswith("_"):
         return None

@@ -22,7 +22,7 @@ foundational phases below — treat `CLAUDE.md` as the current source of truth.
 All of CLAUDE.md's reconstruction/analysis phases (§34 Phases 1–5) are
 implemented, and Phase 6 (language expansion) is underway:
 
-- GitHub ingestion → Python/JavaScript/TypeScript parsing → Neo4j knowledge graph
+- GitHub ingestion → Python/JavaScript/TypeScript/Java parsing → Neo4j knowledge graph
 - **Architecture Reconstruction** — the existing graph's files are grouped
   into architectural components, each with an inferred role and
   Confirmed/Inferred/Uncertain confidence, plus inter-component relationships
@@ -46,9 +46,10 @@ implemented, and Phase 6 (language expansion) is underway:
 - Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
-**Python, JavaScript, and TypeScript** have working parsers today; Java and
-C++ are recognized during language detection but not yet parsed (Phase 6 —
-see [Supported languages](#supported-languages) below and `CLAUDE.md` §34).
+**Python, JavaScript, TypeScript, and Java** have working parsers today; only
+**C++** remains — recognized during language detection but not yet parsed
+(Phase 6 — see [Supported languages](#supported-languages) below and
+`CLAUDE.md` §34).
 
 ## Architecture
 
@@ -74,7 +75,7 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   (`pending → cloning → parsing → building_graph → ready`) and renders a live
   pipeline progress bar.
 
-### Multi-language architecture, Python/JavaScript/TypeScript parsers implemented
+### Multi-language architecture, Python/JavaScript/TypeScript/Java parsers implemented
 - Common `LanguageParser` interface and normalized Intermediate Representation
   (`Symbol` / `Relationship`) so the graph and analysis engines never depend on
   a specific language.
@@ -103,10 +104,22 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   interfaces, type aliases, enums, and `implements` clauses are parsed but
   not yet mapped into the IR — that needs new `SymbolType`/`RelationshipType`
   variants, a separate, larger increment.
+- The Java parser extracts files, classes (with `extends` inheritance,
+  including nested classes), constructors and methods, imports (including
+  `static` and wildcard imports), calls (`method_invocation`) and `new`
+  expressions (`object_creation_expression`), and annotations attached to
+  `Symbol.decorators` the same way Python's decorators are. `is_api_endpoint`
+  was extended to recognize Spring's `@GetMapping`/`@PostMapping`/
+  `@RequestMapping` family, so Spring Boot controllers get the same
+  entry-point detection Flask/FastAPI/NestJS get. `classify_import` gained a
+  two-segment check (`java.sql`, `org.hibernate`, `javax.persistence`, …)
+  since Java's reversed-domain imports (`java.*`, `org.*`, `com.*`) make the
+  first segment alone too generic to classify. Same disclosed limitation as
+  TypeScript: interfaces and enums aren't mapped into the IR yet.
 - Language detection recognizes Python, JavaScript, TypeScript, Java, and C++
-  file extensions; Java and C++ don't have a parser wired up yet
-  (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`) — next in
-  CLAUDE.md §34 Phase 6's stated order.
+  file extensions; only C++ doesn't have a parser wired up yet
+  (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`) — the last
+  language in CLAUDE.md §34 Phase 6's stated order.
 
 ### Knowledge graph (Neo4j)
 - IR is loaded into Neo4j with `CONTAINS`, `IMPORTS`, `CALLS`, `INHERITS`,
@@ -348,10 +361,11 @@ GET    /health                                           # liveness check
 
 ## Testing
 
-- Unit tests cover the Python, JavaScript, and TypeScript parsers (including
-  decorator extraction, TSX parsing, and interface/enum non-crash behavior),
-  IR resolution, URL validation, impact classifiers (DB/external-service/
-  Node-builtin classification), smell detection algorithms (cycle detection, thresholds),
+- Unit tests cover the Python, JavaScript, TypeScript, and Java parsers
+  (including decorator/annotation extraction, TSX parsing, static/wildcard
+  imports, and interface/enum non-crash behavior), IR resolution, URL
+  validation, impact classifiers (DB/external-service/Node-builtin/Java-
+  reversed-domain classification), smell detection algorithms (cycle detection, thresholds),
   impact-analysis risk scoring, relationship evidence lookup,
   architecture-reconstruction grouping/role inference, component-level
   architecture violation detection (layer skips, boundary violations,

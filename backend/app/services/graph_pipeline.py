@@ -16,6 +16,7 @@ from graph.loader import load_repository_graph
 from ingestion.repository_manager.workspace import IGNORED_DIRS
 from parsing.ir.models import ParsedFile, SymbolType
 from parsing.parsers.base import LanguageParser
+from parsing.parsers.java.parser import JavaParser
 from parsing.parsers.javascript.parser import JavaScriptParser
 from parsing.parsers.python.parser import PythonParser
 from parsing.parsers.typescript.parser import TypeScriptParser
@@ -26,6 +27,7 @@ PARSER_REGISTRY: dict[Language, LanguageParser] = {
     Language.PYTHON: PythonParser(),
     Language.JAVASCRIPT: JavaScriptParser(),
     Language.TYPESCRIPT: TypeScriptParser(),
+    Language.JAVA: JavaParser(),
 }
 
 
