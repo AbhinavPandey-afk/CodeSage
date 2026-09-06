@@ -22,7 +22,7 @@ foundational phases below — treat `CLAUDE.md` as the current source of truth.
 All of CLAUDE.md's reconstruction/analysis phases (§34 Phases 1–5) are
 implemented, and Phase 6 (language expansion) is underway:
 
-- GitHub ingestion → Python/JavaScript parsing → Neo4j knowledge graph
+- GitHub ingestion → Python/JavaScript/TypeScript parsing → Neo4j knowledge graph
 - **Architecture Reconstruction** — the existing graph's files are grouped
   into architectural components, each with an inferred role and
   Confirmed/Inferred/Uncertain confidence, plus inter-component relationships
@@ -46,7 +46,7 @@ implemented, and Phase 6 (language expansion) is underway:
 - Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
-**Python and JavaScript** have working parsers today; TypeScript, Java, and
+**Python, JavaScript, and TypeScript** have working parsers today; Java and
 C++ are recognized during language detection but not yet parsed (Phase 6 —
 see [Supported languages](#supported-languages) below and `CLAUDE.md` §34).
 
@@ -74,7 +74,7 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   (`pending → cloning → parsing → building_graph → ready`) and renders a live
   pipeline progress bar.
 
-### Multi-language architecture, Python and JavaScript parsers implemented
+### Multi-language architecture, Python/JavaScript/TypeScript parsers implemented
 - Common `LanguageParser` interface and normalized Intermediate Representation
   (`Symbol` / `Relationship`) so the graph and analysis engines never depend on
   a specific language.
@@ -92,8 +92,19 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   Express-style routes (`app.get('/x', handler)`) aren't yet detected as API
   entry points (that needs call-argument-callback analysis, a documented
   follow-up) — disclosed directly in the parser's own docstring.
+- The TypeScript parser reuses the same structural shape as JavaScript, plus
+  **real decorators** (`@Injectable()`, `@Get('/x')`), which the JS grammar
+  can't give us. NestJS/Angular-style bare route decorators are now detected
+  as API entry points via the same `is_api_endpoint` check Python's
+  Flask/FastAPI decorators use (the regex was extended, not duplicated).
+  `.tsx` files are parsed with the dedicated TSX grammar, since `.ts`/`.tsx`
+  aren't interchangeable (`<Foo>` is ambiguous between a JSX element and a
+  type assertion). Known limitation, disclosed in the parser's own docstring:
+  interfaces, type aliases, enums, and `implements` clauses are parsed but
+  not yet mapped into the IR — that needs new `SymbolType`/`RelationshipType`
+  variants, a separate, larger increment.
 - Language detection recognizes Python, JavaScript, TypeScript, Java, and C++
-  file extensions; TypeScript, Java, and C++ don't have a parser wired up yet
+  file extensions; Java and C++ don't have a parser wired up yet
   (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`) — next in
   CLAUDE.md §34 Phase 6's stated order.
 
@@ -337,9 +348,10 @@ GET    /health                                           # liveness check
 
 ## Testing
 
-- Unit tests cover the Python and JavaScript parsers, IR resolution, URL
-  validation, impact classifiers (DB/external-service/Node-builtin
-  classification), smell detection algorithms (cycle detection, thresholds),
+- Unit tests cover the Python, JavaScript, and TypeScript parsers (including
+  decorator extraction, TSX parsing, and interface/enum non-crash behavior),
+  IR resolution, URL validation, impact classifiers (DB/external-service/
+  Node-builtin classification), smell detection algorithms (cycle detection, thresholds),
   impact-analysis risk scoring, relationship evidence lookup,
   architecture-reconstruction grouping/role inference, component-level
   architecture violation detection (layer skips, boundary violations,

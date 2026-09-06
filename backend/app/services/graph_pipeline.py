@@ -18,12 +18,14 @@ from parsing.ir.models import ParsedFile, SymbolType
 from parsing.parsers.base import LanguageParser
 from parsing.parsers.javascript.parser import JavaScriptParser
 from parsing.parsers.python.parser import PythonParser
+from parsing.parsers.typescript.parser import TypeScriptParser
 
 logger = get_logger(__name__)
 
 PARSER_REGISTRY: dict[Language, LanguageParser] = {
     Language.PYTHON: PythonParser(),
     Language.JAVASCRIPT: JavaScriptParser(),
+    Language.TYPESCRIPT: TypeScriptParser(),
 }
 
 

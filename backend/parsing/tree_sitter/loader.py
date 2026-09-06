@@ -23,4 +23,20 @@ def get_ts_parser(language: CodeSageLanguage) -> Parser:
 
         return Parser(Language(tsjavascript.language()))
 
+    if language == CodeSageLanguage.TYPESCRIPT:
+        import tree_sitter_typescript as tstypescript
+
+        return Parser(Language(tstypescript.language_typescript()))
+
     raise NotImplementedError(f"No Tree-sitter grammar wired for {language.value} yet.")
+
+
+@lru_cache(maxsize=None)
+def get_tsx_parser() -> Parser:
+    """TypeScript ships two grammars: `.ts` and `.tsx`. They aren't
+    interchangeable -- `<Foo>` is ambiguous between a JSX element and a type
+    assertion, so a `.tsx` file must be parsed with the `tsx` grammar rather
+    than get_ts_parser(TYPESCRIPT)'s plain-`.ts` one."""
+    import tree_sitter_typescript as tstypescript
+
+    return Parser(Language(tstypescript.language_tsx()))

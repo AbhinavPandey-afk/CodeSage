@@ -10,7 +10,10 @@ import re
 import sys
 
 _API_DECORATOR_RE = re.compile(
-    r"\.(route|get|post|put|delete|patch|websocket)\s*\(|@api_view|@action\b",
+    r"\.(route|get|post|put|delete|patch|websocket)\s*\(|@api_view|@action\b"
+    # NestJS/Angular-style bare route decorators (@Get('/x'), @Post(), ...) --
+    # no dot-access, since the decorator itself IS the route registration.
+    r"|@(get|post|put|delete|patch|all)\s*\(",
     re.IGNORECASE,
 )
 
