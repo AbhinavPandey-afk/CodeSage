@@ -5,12 +5,13 @@ import { ArchitecturePanel } from "./components/ArchitecturePanel";
 import { AskPanel } from "./components/AskPanel";
 import { GraphView } from "./components/GraphView";
 import { ImpactPanel } from "./components/ImpactPanel";
+import { OptimizationPanel } from "./components/OptimizationPanel";
 import { PipelineProgress } from "./components/PipelineProgress";
 import { RepositoryForm } from "./components/RepositoryForm";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
 
-type Tab = "architecture" | "graph" | "ask" | "smells" | "impact";
+type Tab = "architecture" | "graph" | "smells" | "optimization" | "impact" | "ask";
 
 function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
@@ -60,21 +61,28 @@ function App() {
                   <button className={tab === "graph" ? "tab active" : "tab"} onClick={() => setTab("graph")}>
                     Evidence explorer
                   </button>
-                  <button className={tab === "ask" ? "tab active" : "tab"} onClick={() => setTab("ask")}>
-                    Ask the Archeologist
-                  </button>
                   <button className={tab === "smells" ? "tab active" : "tab"} onClick={() => setTab("smells")}>
                     Architecture analysis
+                  </button>
+                  <button
+                    className={tab === "optimization" ? "tab active" : "tab"}
+                    onClick={() => setTab("optimization")}
+                  >
+                    Optimization
                   </button>
                   <button className={tab === "impact" ? "tab active" : "tab"} onClick={() => setTab("impact")}>
                     Impact &amp; risk
                   </button>
+                  <button className={tab === "ask" ? "tab active" : "tab"} onClick={() => setTab("ask")}>
+                    Ask the Archeologist
+                  </button>
                 </div>
                 {tab === "architecture" && <ArchitecturePanel repoId={repository.id} />}
                 {tab === "graph" && <GraphView repoId={repository.id} />}
-                {tab === "ask" && <AskPanel repoId={repository.id} />}
                 {tab === "smells" && <SmellsPanel repoId={repository.id} />}
+                {tab === "optimization" && <OptimizationPanel repoId={repository.id} />}
                 {tab === "impact" && <ImpactPanel repoId={repository.id} />}
+                {tab === "ask" && <AskPanel repoId={repository.id} />}
               </>
             )}
 

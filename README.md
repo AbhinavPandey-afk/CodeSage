@@ -20,27 +20,31 @@ foundational phases below — treat `CLAUDE.md` as the current source of truth.
 ## Current status
 
 The foundation (ingestion → Python parsing → knowledge graph → evidence-based
-Q&A → architecture analysis → impact/risk) is implemented, and the first
-**Architecture Reconstruction** milestone now sits on top of it:
+Q&A → architecture analysis → impact/risk) is implemented, with Architecture
+Reconstruction and Architecture Optimization now sitting on top of it:
 
 - GitHub ingestion → Python parsing → Neo4j knowledge graph
 - **Architecture Reconstruction** — the existing graph's files are grouped
   into architectural components, each with an inferred role and
   Confirmed/Inferred/Uncertain confidence, plus inter-component relationships
-- Hybrid (graph + vector) evidence-backed Q&A ("Ask the Archeologist")
-- Interactive Evidence Explorer (graph view + relationship explanations)
 - Architecture analysis: per-symbol smells (circular dependencies, god
   classes, large functions, dead-code candidates) plus per-component
   violations (layer skips, boundary violations, circular component
   dependencies, excessive coupling) reasoned over the reconstructed
   architecture
+- **Architecture Optimization** — a proposed fix for every structural
+  violation found above (problem, evidence, proposed change, expected
+  benefit, potential risk, deterministic risk level), a recommendation only —
+  nothing is applied automatically
+- Hybrid (graph + vector) evidence-backed Q&A ("Ask the Archeologist")
+- Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
 Only **Python** has a working parser today; JavaScript, TypeScript, Java, and
 C++ are recognized during language detection but not yet parsed (see
-[Supported languages](#supported-languages) below). Not yet built: Architecture
-Optimization (current vs. proposed), Execution Flow Reconstruction, and
-Historical (Git) Reconstruction — see `CLAUDE.md` §34 for the phase plan.
+[Supported languages](#supported-languages) below). Not yet built: Execution
+Flow Reconstruction and Historical (Git) Reconstruction — see `CLAUDE.md` §34
+for the phase plan.
 
 ## Architecture
 
@@ -153,6 +157,25 @@ heuristically from directory/naming conventions, per CLAUDE.md §18's
 Findings are surfaced in the UI ranked by severity (HIGH → MEDIUM → LOW) with
 explanation, evidence, and affected symbols.
 
+### Architecture Optimization
+- `backend/analysis/optimization/` generates one proposal per structural
+  violation found by Architecture Analysis — there is no free-standing
+  "redesign this repository" step; every recommendation traces back to a
+  specific finding.
+- Each proposal states, per CLAUDE.md §38: the **problem** (observed
+  violation), **evidence**, **proposed change** (explicitly labeled as a
+  recommendation, never a fact), **expected benefit**, **potential risk**, a
+  deterministic **risk level** (`LOW`/`MEDIUM`/`HIGH`/`CRITICAL`), and a
+  Confirmed/Inferred/Uncertain confidence.
+- Where possible, risk is grounded in a real `analyze_impact` run against the
+  most-connected symbol in the affected component(s) — CLAUDE.md §26's
+  "optimization should use existing impact analysis" — rather than only the
+  violation's own severity.
+- **Never modifies the repository.** This is a design recommendation surface
+  only, per CLAUDE.md §19.
+- `GET /api/repositories/{id}/optimization`; rendered in the **Optimization**
+  tab.
+
 ### Change impact & risk analysis
 - Symbol search/autocomplete (`/symbols`) plus repo-specific starting-point
   suggestions (`/symbols/suggestions`) — the most-connected real symbols in
@@ -213,17 +236,20 @@ backend at `http://localhost:8000` by default (override with `VITE_API_URL`).
 
 1. Paste a GitHub URL (e.g. `https://github.com/pallets/flask`) and submit.
 2. Watch the pipeline progress (clone → parse → graph → embed).
-3. Once ready, explore five tabs:
+3. Once ready, explore six tabs:
    - **Architecture** — the reconstructed architectural components, their
      inferred roles, confidence, evidence, and relationships to each other.
    - **Evidence explorer** — browse files/classes, click nodes for details,
      click two nodes to see how they're connected.
-   - **Ask the Archeologist** — ask a question (e.g. "How does authentication
-     work?") and get an answer with cited evidence and a confidence label.
-   - **Architecture analysis** — deterministic architectural smells, ranked by
-     severity.
+   - **Architecture analysis** — deterministic architectural smells (per-symbol
+     and per-component), ranked by severity.
+   - **Optimization** — a proposed fix for every violation found above:
+     problem, proposed change, expected benefit, potential risk, and a
+     deterministic risk level — recommendations only.
    - **Impact & risk** — pick a symbol and see its dependents, affected
      APIs/services/tests, external dependencies, and a scored risk level.
+   - **Ask the Archeologist** — ask a question (e.g. "How does authentication
+     work?") and get an answer with cited evidence and a confidence label.
 
 ## API
 
@@ -234,6 +260,7 @@ GET    /api/repositories/{id}                          # repo detail
 GET    /api/repositories/{id}/status                    # poll analysis status
 
 GET    /api/repositories/{id}/architecture               # reconstructed architecture (components + relationships)
+GET    /api/repositories/{id}/optimization               # proposed fixes for each architecture-analysis finding
 
 GET    /api/repositories/{id}/graph                     # file- or class-level graph view
 POST   /api/repositories/{id}/graph/relationship        # explain the connection between two nodes
@@ -254,9 +281,9 @@ GET    /health                                           # liveness check
 - Unit tests cover the Python parser, IR resolution, URL validation, smell
   detection algorithms (cycle detection, thresholds), impact-analysis risk
   scoring, relationship evidence lookup, architecture-reconstruction
-  grouping/role inference, and component-level architecture violation
-  detection (layer skips, boundary violations, circular dependencies,
-  coupling).
+  grouping/role inference, component-level architecture violation detection
+  (layer skips, boundary violations, circular dependencies, coupling), and
+  optimization-proposal assembly (goal mapping, risk/confidence derivation).
 - Run with `pytest -q` from `backend/`.
 
 ## Security notes

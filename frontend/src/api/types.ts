@@ -200,6 +200,38 @@ export interface ArchitectureModel {
   detection_notes: string[];
 }
 
+export type OptimizationGoal = "enforce_layering" | "reduce_circularity" | "reduce_coupling";
+
+export interface RepresentativeImpact {
+  symbol_qualified_name: string;
+  direct_dependents: number;
+  indirect_dependents: number;
+  risk_level: RiskLevel;
+}
+
+export interface OptimizationProposal {
+  id: string;
+  goal: OptimizationGoal;
+  problem: string;
+  evidence: string;
+  proposed_change: string;
+  expected_benefit: string;
+  potential_risk: string;
+  risk_level: RiskLevel;
+  confidence: number;
+  confidence_label: ArchitectureConfidenceLabel;
+  affected_components: string[];
+  affected_files: string[];
+  representative_impact: RepresentativeImpact | null;
+}
+
+export interface OptimizationReport {
+  repo_id: string;
+  current_architecture_summary: string;
+  proposals: OptimizationProposal[];
+  detection_notes: string[];
+}
+
 export interface ImpactReport {
   target_uid: string;
   target_qualified_name: string;

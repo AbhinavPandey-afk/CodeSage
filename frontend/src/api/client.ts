@@ -3,6 +3,7 @@ import type {
   AskResponse,
   GraphViewResponse,
   ImpactReport,
+  OptimizationReport,
   RelationshipResponse,
   Repository,
   Smell,
@@ -64,4 +65,6 @@ export const api = {
     }),
 
   getArchitecture: (id: string) => request<ArchitectureModel>(`/api/repositories/${id}/architecture`),
+
+  getOptimization: (id: string) => request<OptimizationReport>(`/api/repositories/${id}/optimization`),
 };
