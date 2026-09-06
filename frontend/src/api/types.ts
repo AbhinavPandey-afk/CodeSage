@@ -232,6 +232,39 @@ export interface OptimizationReport {
   detection_notes: string[];
 }
 
+export type FlowLabel = "OBSERVED" | "PROPOSED";
+
+export interface EntryPoint {
+  uid: string;
+  qualified_name: string;
+  file_path: string;
+  start_line: number;
+  route_hint: string | null;
+}
+
+export interface FlowHop {
+  label: FlowLabel;
+  caller_qualified_name: string;
+  callee_qualified_name: string;
+  callee_uid: string | null;
+  relationship_type: string;
+  source_file: string | null;
+  source_line: number | null;
+  confidence: number;
+  terminal_kind: "database" | "external_service" | null;
+  note: string | null;
+  children: FlowHop[];
+}
+
+export interface ExecutionFlowReport {
+  repo_id: string;
+  entry: EntryPoint;
+  observed: FlowHop;
+  proposed: FlowHop | null;
+  truncated: boolean;
+  detection_notes: string[];
+}
+
 export interface ImpactReport {
   target_uid: string;
   target_qualified_name: string;

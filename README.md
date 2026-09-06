@@ -36,15 +36,18 @@ Reconstruction and Architecture Optimization now sitting on top of it:
   violation found above (problem, evidence, proposed change, expected
   benefit, potential risk, deterministic risk level), a recommendation only —
   nothing is applied automatically
+- **Execution Flow Reconstruction** — a static call tree from a detected API
+  entry point to where it terminates in a data-access or external-integration
+  component, with a PROPOSED variant that reroutes any layer-skip through the
+  service layer Architecture Optimization identified
 - Hybrid (graph + vector) evidence-backed Q&A ("Ask the Archeologist")
 - Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
 Only **Python** has a working parser today; JavaScript, TypeScript, Java, and
 C++ are recognized during language detection but not yet parsed (see
-[Supported languages](#supported-languages) below). Not yet built: Execution
-Flow Reconstruction and Historical (Git) Reconstruction — see `CLAUDE.md` §34
-for the phase plan.
+[Supported languages](#supported-languages) below). Not yet built: Historical
+(Git) Reconstruction — see `CLAUDE.md` §34 for the phase plan.
 
 ## Architecture
 
@@ -176,6 +179,24 @@ explanation, evidence, and affected symbols.
 - `GET /api/repositories/{id}/optimization`; rendered in the **Optimization**
   tab.
 
+### Execution Flow Reconstruction
+- `backend/analysis/execution_flow/` detects API entry points (route-decorated
+  functions/methods, reusing the same `is_api_endpoint` classifier as impact
+  analysis) and reconstructs a bounded call tree from resolved `CALLS` edges —
+  purely static, the repository is never executed.
+- Each hop carries file/line evidence and resolver confidence; traversal stops
+  at any symbol whose component (from Architecture Reconstruction) is
+  `data_access` or `external_integration`, and is bounded in depth/branching
+  so large repos don't produce an unreadable tree.
+- A **PROPOSED** variant is derived by splicing a synthetic hop through the
+  service-layer component wherever the flow crosses a `layer_skip` violation
+  Architecture Optimization already found — every synthesized node is
+  explicitly labeled `PROPOSED`, never presented as an observed call
+  (CLAUDE.md §39).
+- `GET /api/repositories/{id}/flows` (candidate entry points),
+  `POST /api/repositories/{id}/flows/reconstruct`; rendered in the
+  **Execution flow** tab with a current/proposed toggle.
+
 ### Change impact & risk analysis
 - Symbol search/autocomplete (`/symbols`) plus repo-specific starting-point
   suggestions (`/symbols/suggestions`) — the most-connected real symbols in
@@ -236,9 +257,12 @@ backend at `http://localhost:8000` by default (override with `VITE_API_URL`).
 
 1. Paste a GitHub URL (e.g. `https://github.com/pallets/flask`) and submit.
 2. Watch the pipeline progress (clone → parse → graph → embed).
-3. Once ready, explore six tabs:
+3. Once ready, explore seven tabs:
    - **Architecture** — the reconstructed architectural components, their
      inferred roles, confidence, evidence, and relationships to each other.
+   - **Execution flow** — pick a detected API entry point and see its static
+     call tree down to the database/external service, with a toggle to
+     compare against the proposed (optimized) flow.
    - **Evidence explorer** — browse files/classes, click nodes for details,
      click two nodes to see how they're connected.
    - **Architecture analysis** — deterministic architectural smells (per-symbol
@@ -262,6 +286,9 @@ GET    /api/repositories/{id}/status                    # poll analysis status
 GET    /api/repositories/{id}/architecture               # reconstructed architecture (components + relationships)
 GET    /api/repositories/{id}/optimization               # proposed fixes for each architecture-analysis finding
 
+GET    /api/repositories/{id}/flows                     # detected API entry points
+POST   /api/repositories/{id}/flows/reconstruct          # static execution-flow reconstruction from an entry point
+
 GET    /api/repositories/{id}/graph                     # file- or class-level graph view
 POST   /api/repositories/{id}/graph/relationship        # explain the connection between two nodes
 
@@ -282,8 +309,10 @@ GET    /health                                           # liveness check
   detection algorithms (cycle detection, thresholds), impact-analysis risk
   scoring, relationship evidence lookup, architecture-reconstruction
   grouping/role inference, component-level architecture violation detection
-  (layer skips, boundary violations, circular dependencies, coupling), and
-  optimization-proposal assembly (goal mapping, risk/confidence derivation).
+  (layer skips, boundary violations, circular dependencies, coupling),
+  optimization-proposal assembly (goal mapping, risk/confidence derivation),
+  and execution-flow tree building (terminal detection, cycle guards, hop
+  budget, proposed-flow splicing).
 - Run with `pytest -q` from `backend/`.
 
 ## Security notes

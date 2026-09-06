@@ -1169,3 +1169,102 @@
   font-size: 0.78rem;
   color: var(--text-faint);
 }
+
+.suggestion-chip-active {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+  background: color-mix(in srgb, var(--accent-text) 12%, transparent);
+}
+
+/* --- Execution flow panel --- */
+.flow-panel {
+  margin-top: 1.5rem;
+}
+
+.flow-entry-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.flow-subtabs {
+  margin-bottom: 1rem;
+}
+
+.flow-report {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+}
+
+.flow-tree {
+  overflow-x: auto;
+}
+
+.flow-node {
+  position: relative;
+}
+
+.flow-children {
+  border-left: 1px solid var(--border);
+  padding-left: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.flow-hop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.45rem 0;
+  font-size: 0.85rem;
+}
+
+.flow-hop-proposed {
+  background: color-mix(in srgb, var(--accent-text) 6%, transparent);
+  border-radius: 6px;
+  padding-left: 0.4rem;
+}
+
+.flow-label-pill {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.flow-label-observed {
+  background: var(--bg-sunken);
+  color: var(--text-faint);
+}
+.flow-label-proposed {
+  background: color-mix(in srgb, var(--accent-text) 18%, transparent);
+  color: var(--accent-text);
+}
+
+.flow-callee {
+  word-break: break-word;
+}
+
+.flow-loc {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.flow-confidence {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.flow-note {
+  margin: 0 0 0.4rem;
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  font-style: italic;
+}

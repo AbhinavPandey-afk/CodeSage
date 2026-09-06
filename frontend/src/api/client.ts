@@ -1,6 +1,8 @@
 import type {
   ArchitectureModel,
   AskResponse,
+  EntryPoint,
+  ExecutionFlowReport,
   GraphViewResponse,
   ImpactReport,
   OptimizationReport,
@@ -67,4 +69,12 @@ export const api = {
   getArchitecture: (id: string) => request<ArchitectureModel>(`/api/repositories/${id}/architecture`),
 
   getOptimization: (id: string) => request<OptimizationReport>(`/api/repositories/${id}/optimization`),
+
+  getEntryPoints: (id: string) => request<EntryPoint[]>(`/api/repositories/${id}/flows`),
+
+  reconstructFlow: (id: string, entryUid: string) =>
+    request<ExecutionFlowReport>(`/api/repositories/${id}/flows/reconstruct`, {
+      method: "POST",
+      body: JSON.stringify({ entry_uid: entryUid }),
+    }),
 };

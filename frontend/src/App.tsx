@@ -3,6 +3,7 @@ import "./App.css";
 import { api } from "./api/client";
 import { ArchitecturePanel } from "./components/ArchitecturePanel";
 import { AskPanel } from "./components/AskPanel";
+import { ExecutionFlowPanel } from "./components/ExecutionFlowPanel";
 import { GraphView } from "./components/GraphView";
 import { ImpactPanel } from "./components/ImpactPanel";
 import { OptimizationPanel } from "./components/OptimizationPanel";
@@ -11,7 +12,7 @@ import { RepositoryForm } from "./components/RepositoryForm";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
 
-type Tab = "architecture" | "graph" | "smells" | "optimization" | "impact" | "ask";
+type Tab = "architecture" | "flow" | "graph" | "smells" | "optimization" | "impact" | "ask";
 
 function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
@@ -58,6 +59,9 @@ function App() {
                   >
                     Architecture
                   </button>
+                  <button className={tab === "flow" ? "tab active" : "tab"} onClick={() => setTab("flow")}>
+                    Execution flow
+                  </button>
                   <button className={tab === "graph" ? "tab active" : "tab"} onClick={() => setTab("graph")}>
                     Evidence explorer
                   </button>
@@ -78,6 +82,7 @@ function App() {
                   </button>
                 </div>
                 {tab === "architecture" && <ArchitecturePanel repoId={repository.id} />}
+                {tab === "flow" && <ExecutionFlowPanel repoId={repository.id} />}
                 {tab === "graph" && <GraphView repoId={repository.id} />}
                 {tab === "smells" && <SmellsPanel repoId={repository.id} />}
                 {tab === "optimization" && <OptimizationPanel repoId={repository.id} />}
