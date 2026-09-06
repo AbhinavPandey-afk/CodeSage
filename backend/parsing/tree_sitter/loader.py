@@ -33,6 +33,11 @@ def get_ts_parser(language: CodeSageLanguage) -> Parser:
 
         return Parser(Language(tsjava.language()))
 
+    if language == CodeSageLanguage.CPP:
+        import tree_sitter_cpp as tscpp
+
+        return Parser(Language(tscpp.language()))
+
     raise NotImplementedError(f"No Tree-sitter grammar wired for {language.value} yet.")
 
 

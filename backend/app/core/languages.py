@@ -32,4 +32,6 @@ EXTENSION_LANGUAGE_MAP: dict[str, Language] = {
 }
 
 # Languages with a real parser implementation wired up (grows as milestones land).
-IMPLEMENTED_PARSERS: set[Language] = {Language.PYTHON, Language.JAVASCRIPT, Language.TYPESCRIPT, Language.JAVA}
+IMPLEMENTED_PARSERS: set[Language] = {
+    Language.PYTHON, Language.JAVASCRIPT, Language.TYPESCRIPT, Language.JAVA, Language.CPP,
+}

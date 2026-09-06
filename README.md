@@ -19,10 +19,11 @@ foundational phases below — treat `CLAUDE.md` as the current source of truth.
 
 ## Current status
 
-All of CLAUDE.md's reconstruction/analysis phases (§34 Phases 1–5) are
-implemented, and Phase 6 (language expansion) is underway:
+All six of CLAUDE.md's §34 phases are implemented — reconstruction/analysis
+(Phases 1–5) and language expansion (Phase 6, all five supported languages
+now parsed):
 
-- GitHub ingestion → Python/JavaScript/TypeScript/Java parsing → Neo4j knowledge graph
+- GitHub ingestion → Python/JavaScript/TypeScript/Java/C++ parsing → Neo4j knowledge graph
 - **Architecture Reconstruction** — the existing graph's files are grouped
   into architectural components, each with an inferred role and
   Confirmed/Inferred/Uncertain confidence, plus inter-component relationships
@@ -46,10 +47,10 @@ implemented, and Phase 6 (language expansion) is underway:
 - Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
-**Python, JavaScript, TypeScript, and Java** have working parsers today; only
-**C++** remains — recognized during language detection but not yet parsed
-(Phase 6 — see [Supported languages](#supported-languages) below and
-`CLAUDE.md` §34).
+**All five of CLAUDE.md's supported languages — Python, JavaScript,
+TypeScript, Java, and C++ — have working parsers.** See the "Multi-language
+architecture" entry under [Features](#features) below for what each one
+extracts and its disclosed limitations.
 
 ## Architecture
 
@@ -75,7 +76,7 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   (`pending → cloning → parsing → building_graph → ready`) and renders a live
   pipeline progress bar.
 
-### Multi-language architecture, Python/JavaScript/TypeScript/Java parsers implemented
+### Multi-language architecture — all 5 supported languages parsed (Python/JavaScript/TypeScript/Java/C++)
 - Common `LanguageParser` interface and normalized Intermediate Representation
   (`Symbol` / `Relationship`) so the graph and analysis engines never depend on
   a specific language.
@@ -116,10 +117,24 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   since Java's reversed-domain imports (`java.*`, `org.*`, `com.*`) make the
   first segment alone too generic to classify. Same disclosed limitation as
   TypeScript: interfaces and enums aren't mapped into the IR yet.
+- The C++ parser extracts files, classes/structs (with multiple `public`/
+  `private`/`protected` inheritance), free functions, methods — both defined
+  inline in the class body and out-of-line (`ReturnType ClassName::method()`,
+  the common header/impl split) — `#include` directives (both `<system>` and
+  `"local"` forms), calls, and `new` expressions. Namespaces (including
+  C++17's `namespace a::b {}` nesting) fold into the qualified-name prefix
+  the same way a directory or module would. Known limitation, disclosed in
+  the parser's own docstring: out-of-line method resolution is
+  same-scope-only — `ClassName::method` is attached under
+  `{prefix}.ClassName.method`, which matches the class's own qualified name
+  only when the class is declared in the same file/namespace, since there is
+  no cross-file header/impl symbol table. Interfaces have no C++ equivalent,
+  so — same as TypeScript/Java — enums and data members aren't mapped into
+  the IR (nothing callable to extract there).
 - Language detection recognizes Python, JavaScript, TypeScript, Java, and C++
-  file extensions; only C++ doesn't have a parser wired up yet
-  (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`) — the last
-  language in CLAUDE.md §34 Phase 6's stated order.
+  file extensions, and every one of them now has a real parser wired up
+  (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`) — CLAUDE.md
+  §34 Phase 6 is complete.
 
 ### Knowledge graph (Neo4j)
 - IR is loaded into Neo4j with `CONTAINS`, `IMPORTS`, `CALLS`, `INHERITS`,
@@ -361,9 +376,9 @@ GET    /health                                           # liveness check
 
 ## Testing
 
-- Unit tests cover the Python, JavaScript, TypeScript, and Java parsers
-  (including decorator/annotation extraction, TSX parsing, static/wildcard
-  imports, and interface/enum non-crash behavior), IR resolution, URL
+- Unit tests cover all five language parsers (including decorator/annotation
+  extraction, TSX parsing, static/wildcard imports, out-of-line C++ method
+  definitions, and interface/enum non-crash behavior), IR resolution, URL
   validation, impact classifiers (DB/external-service/Node-builtin/Java-
   reversed-domain classification), smell detection algorithms (cycle detection, thresholds),
   impact-analysis risk scoring, relationship evidence lookup,
