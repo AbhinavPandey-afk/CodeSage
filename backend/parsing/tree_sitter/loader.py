@@ -18,4 +18,9 @@ def get_ts_parser(language: CodeSageLanguage) -> Parser:
 
         return Parser(Language(tspython.language()))
 
+    if language == CodeSageLanguage.JAVASCRIPT:
+        import tree_sitter_javascript as tsjavascript
+
+        return Parser(Language(tsjavascript.language()))
+
     raise NotImplementedError(f"No Tree-sitter grammar wired for {language.value} yet.")

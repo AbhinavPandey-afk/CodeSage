@@ -19,10 +19,10 @@ foundational phases below — treat `CLAUDE.md` as the current source of truth.
 
 ## Current status
 
-All of CLAUDE.md's reconstruction/analysis phases (§34 Phases 1–5) are now
-implemented — only Phase 6 (language expansion beyond Python) remains:
+All of CLAUDE.md's reconstruction/analysis phases (§34 Phases 1–5) are
+implemented, and Phase 6 (language expansion) is underway:
 
-- GitHub ingestion → Python parsing → Neo4j knowledge graph
+- GitHub ingestion → Python/JavaScript parsing → Neo4j knowledge graph
 - **Architecture Reconstruction** — the existing graph's files are grouped
   into architectural components, each with an inferred role and
   Confirmed/Inferred/Uncertain confidence, plus inter-component relationships
@@ -46,7 +46,7 @@ implemented — only Phase 6 (language expansion beyond Python) remains:
 - Interactive Evidence Explorer (graph view + relationship explanations)
 - Change impact & risk analysis with deterministic risk scoring
 
-Only **Python** has a working parser today; JavaScript, TypeScript, Java, and
+**Python and JavaScript** have working parsers today; TypeScript, Java, and
 C++ are recognized during language detection but not yet parsed (Phase 6 —
 see [Supported languages](#supported-languages) below and `CLAUDE.md` §34).
 
@@ -74,17 +74,28 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
   (`pending → cloning → parsing → building_graph → ready`) and renders a live
   pipeline progress bar.
 
-### Multi-language architecture, Python parser implemented
+### Multi-language architecture, Python and JavaScript parsers implemented
 - Common `LanguageParser` interface and normalized Intermediate Representation
   (`Symbol` / `Relationship`) so the graph and analysis engines never depend on
   a specific language.
 - The Python parser (Tree-sitter) extracts files, classes, functions, methods,
   imports, function/method calls, and decorators, with cross-file call and
   inheritance resolution.
+- The JavaScript parser (Tree-sitter) extracts the same IR shape: files,
+  classes (with `extends` inheritance), functions/methods — including
+  `const`-assigned arrow/function expressions and arrow-valued class fields
+  (`handleClick = () => {...}`), both ES module (`import`) and CommonJS
+  (`require()`) imports, and calls/`new` expressions. `classify_import` was
+  extended with Node.js built-ins and common JS/Node DB packages so impact
+  analysis and architecture reconstruction work the same way for JS as for
+  Python. Known limitation: JSDoc isn't attached as docstrings, and
+  Express-style routes (`app.get('/x', handler)`) aren't yet detected as API
+  entry points (that needs call-argument-callback analysis, a documented
+  follow-up) — disclosed directly in the parser's own docstring.
 - Language detection recognizes Python, JavaScript, TypeScript, Java, and C++
-  file extensions, but only Python has a real parser wired up
-  (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`); other languages
-  are the next milestones (§34 Phase 2 in `CLAUDE.md`).
+  file extensions; TypeScript, Java, and C++ don't have a parser wired up yet
+  (`IMPLEMENTED_PARSERS` in `backend/app/core/languages.py`) — next in
+  CLAUDE.md §34 Phase 6's stated order.
 
 ### Knowledge graph (Neo4j)
 - IR is loaded into Neo4j with `CONTAINS`, `IMPORTS`, `CALLS`, `INHERITS`,
@@ -326,15 +337,17 @@ GET    /health                                           # liveness check
 
 ## Testing
 
-- Unit tests cover the Python parser, IR resolution, URL validation, smell
-  detection algorithms (cycle detection, thresholds), impact-analysis risk
-  scoring, relationship evidence lookup, architecture-reconstruction
-  grouping/role inference, component-level architecture violation detection
-  (layer skips, boundary violations, circular dependencies, coupling),
-  optimization-proposal assembly (goal mapping, risk/confidence derivation),
-  execution-flow tree building (terminal detection, cycle guards, hop
-  budget, proposed-flow splicing), and history aggregation (component commit
-  grouping, introduction-commit selection, author ranking).
+- Unit tests cover the Python and JavaScript parsers, IR resolution, URL
+  validation, impact classifiers (DB/external-service/Node-builtin
+  classification), smell detection algorithms (cycle detection, thresholds),
+  impact-analysis risk scoring, relationship evidence lookup,
+  architecture-reconstruction grouping/role inference, component-level
+  architecture violation detection (layer skips, boundary violations,
+  circular dependencies, coupling), optimization-proposal assembly (goal
+  mapping, risk/confidence derivation), execution-flow tree building
+  (terminal detection, cycle guards, hop budget, proposed-flow splicing),
+  and history aggregation (component commit grouping, introduction-commit
+  selection, author ranking).
 - Run with `pytest -q` from `backend/`.
 
 ## Security notes
