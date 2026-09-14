@@ -26,7 +26,7 @@ from tree_sitter import Node
 
 from app.core.languages import Language
 from parsing.ir.models import ParsedFile, Relationship, RelationshipType, Symbol, SymbolType
-from parsing.parsers.base import LanguageParser
+from parsing.parsers.base import LanguageParser, dedupe_symbol_id
 from parsing.tree_sitter.loader import get_ts_parser
 
 _CLASS_TYPES = {"class_specifier", "struct_specifier"}
@@ -45,6 +45,7 @@ class CppParser(LanguageParser):
         symbols: list[Symbol] = []
         relationships: list[Relationship] = []
         errors: list[str] = []
+        seen_ids: dict[str, int] = {}
 
         def text(node: Node) -> str:
             return source[node.start_byte : node.end_byte].decode("utf-8", errors="replace")
@@ -147,7 +148,7 @@ class CppParser(LanguageParser):
             else:
                 qname = f"{qualified_prefix}.{parts[-1]}" if qualified_prefix else parts[-1]
                 symbol_type = default_type
-            sid = qname
+            sid = dedupe_symbol_id(seen_ids, qname)
             symbols.append(
                 Symbol(
                     id=sid, name=parts[-1], qualified_name=qname, symbol_type=symbol_type,
@@ -181,7 +182,7 @@ class CppParser(LanguageParser):
             name_node = node.child_by_field_name("name")
             name = text(name_node) if name_node else "<anonymous>"
             qname = f"{qualified_prefix}.{name}" if qualified_prefix else name
-            sid = qname
+            sid = dedupe_symbol_id(seen_ids, qname)
             symbols.append(
                 Symbol(
                     id=sid, name=name, qualified_name=qname, symbol_type=SymbolType.CLASS,

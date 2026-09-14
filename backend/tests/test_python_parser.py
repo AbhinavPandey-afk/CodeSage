@@ -83,6 +83,27 @@ def test_resolver_links_call_and_inheritance_across_same_file(tmp_path):
     assert inherit.confidence == 0.75
 
 
+def test_duplicate_same_scope_class_names_get_unique_ids(tmp_path):
+    # Regression test: real repos (e.g. psf/black's tests/data/cases/*.py
+    # fixtures, which are literal formatted-output samples rather than
+    # importable modules) legitimately redefine the same class name twice in
+    # one file. Symbol.id must stay unique per definition -- it becomes the
+    # Neo4j uid primary key (graph/loader.py) -- while qualified_name stays
+    # shared, since that's what cross-file resolution keys on.
+    pkg = tmp_path / "mypkg"
+    pkg.mkdir()
+    (pkg / "dupes.py").write_text(
+        "class A:\n    pass\n\n\nclass A:\n    pass\n", encoding="utf-8"
+    )
+    parser = PythonParser()
+    pf = parser.parse_file(pkg / "dupes.py", tmp_path)
+
+    classes = [s for s in pf.symbols if s.symbol_type.value == "class"]
+    assert len(classes) == 2
+    assert all(c.qualified_name == "mypkg.dupes.A" for c in classes)
+    assert len({c.id for c in classes}) == 2
+
+
 def test_malformed_file_does_not_crash_parser(tmp_path):
     bad_file = tmp_path / "broken.py"
     bad_file.write_text("def f(:\n  pass", encoding="utf-8")  # invalid syntax

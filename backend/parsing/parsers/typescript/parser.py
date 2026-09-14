@@ -26,7 +26,7 @@ from tree_sitter import Node
 
 from app.core.languages import Language
 from parsing.ir.models import ParsedFile, Relationship, RelationshipType, Symbol, SymbolType
-from parsing.parsers.base import LanguageParser
+from parsing.parsers.base import LanguageParser, dedupe_symbol_id
 from parsing.tree_sitter.loader import get_ts_parser, get_tsx_parser
 
 _SCOPE_TYPES = {
@@ -49,6 +49,7 @@ class TypeScriptParser(LanguageParser):
         symbols: list[Symbol] = []
         relationships: list[Relationship] = []
         errors: list[str] = []
+        seen_ids: dict[str, int] = {}
 
         def text(node: Node) -> str:
             return source[node.start_byte : node.end_byte].decode("utf-8", errors="replace")
@@ -136,7 +137,7 @@ class TypeScriptParser(LanguageParser):
             name_node = node.child_by_field_name("name")
             name = name_override or (text(name_node) if name_node else "<anonymous>")
             qname = f"{qualified_prefix}.{name}" if qualified_prefix else name
-            sid = qname
+            sid = dedupe_symbol_id(seen_ids, qname)
             symbols.append(
                 Symbol(
                     id=sid, name=name, qualified_name=qname, symbol_type=SymbolType.FUNCTION,
@@ -166,7 +167,7 @@ class TypeScriptParser(LanguageParser):
             container_id: str, qualified_prefix: str, decorators: list[str],
         ) -> None:
             qname = f"{qualified_prefix}.{name}"
-            sid = qname
+            sid = dedupe_symbol_id(seen_ids, qname)
             symbols.append(
                 Symbol(
                     id=sid, name=name, qualified_name=qname, symbol_type=SymbolType.METHOD,
@@ -211,7 +212,7 @@ class TypeScriptParser(LanguageParser):
             name_node = node.child_by_field_name("name")
             name = text(name_node) if name_node else "<anonymous>"
             qname = f"{qualified_prefix}.{name}" if qualified_prefix else name
-            sid = qname
+            sid = dedupe_symbol_id(seen_ids, qname)
             class_decorators = [text(c) for c in node.children if c.type == "decorator"]
             symbols.append(
                 Symbol(

@@ -66,6 +66,60 @@ GitHub URL → clone (sandboxed) → Tree-sitter parse → normalized IR
 - **LLM**: Groq (`api.groq.com`), behind an `LLMProvider` abstraction —
   see the note in `backend/.env.example` about the CLAUDE.md/Grok naming.
 
+## Full workflow
+
+Stage 1 runs once per repository as a background job and is the only part
+that blocks on `status`. Stage 2's engines are all read-only queries over the
+graph/vector index already built in Stage 1 — each runs independently,
+on-demand, the first time its API endpoint is called (nothing here is
+pre-computed during ingestion, and Optimization/Execution-Flow reuse
+Reconstruction's and Analysis's output rather than re-deriving it).
+
+```mermaid
+flowchart TD
+    subgraph S1["Stage 1 — Ingestion pipeline (background job; record.status tracks progress)"]
+        direction TB
+        A["GitHub URL"] --> B["URL validation\ngithub.com/&lt;owner&gt;/&lt;repo&gt; only"]
+        B --> C["status: cloning\nSandboxed clone, size/file-count limited"]
+        C --> D["Language detection + file filtering"]
+        D --> E["status: parsing\nTree-sitter: Python / JS / TS / Java / C++"]
+        E --> F["Normalized IR\nSymbol + Relationship"]
+        F --> G["Cross-file resolution\ncalls, inheritance, imports"]
+        G --> H["status: building_graph\nNeo4j knowledge graph"]
+        G --> I["status: embedding\nTF-IDF vector index"]
+        H --> J["status: ready"]
+        I --> J
+    end
+
+    subgraph S2["Stage 2 — On-demand analysis (each is its own API call, computed from the graph above)"]
+        direction TB
+        H --> K["Architecture Reconstruction\ncomponents, roles, confidence"]
+        K --> L["Architecture Analysis\nper-symbol + per-component smells"]
+        L --> M["Architecture Optimization\nproposed fix per violation"]
+        K --> N["Execution Flow Reconstruction\ncurrent + proposed"]
+        M -. "layer-skip fixes\nsplice into flow" .-> N
+        H --> O["Change Impact & Risk Analysis"]
+        H --> P["Historical Reconstruction\nGit log via GitPython"]
+        H --> Q["Interactive Evidence Explorer\ngraph view + relationship explain"]
+        H --> R["Ask the Archeologist"]
+        I --> R
+    end
+
+    subgraph S3["Stage 3 — Frontend tabs"]
+        direction TB
+        K --> T1["Architecture"]
+        N --> T2["Execution flow"]
+        Q --> T3["Evidence explorer"]
+        L --> T4["Architecture analysis"]
+        M --> T5["Optimization"]
+        O --> T6["Impact & risk"]
+        P --> T7["History"]
+        R --> T8["Ask the Archeologist"]
+    end
+
+    J -. "unlocks Stage 2 + 3" .-> S2
+```
+
 ## Features
 
 ### Repository ingestion

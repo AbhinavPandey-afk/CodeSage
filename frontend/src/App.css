@@ -1,50 +1,4 @@
-.app {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 0 1.5rem 4rem;
-  min-height: 100vh;
-}
-
-.app-header {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding: 2rem 0 2.5rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-
-.brand {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 1.3rem;
-}
-
-.tagline {
-  color: var(--text-faint);
-  font-size: 0.9rem;
-}
-
-/* --- Repository form --- */
-.repo-form {
-  display: flex;
-  gap: 0.6rem;
-  margin-top: 2rem;
-}
-
-.repo-form input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg-raised);
-  color: var(--text);
-  font-size: 1rem;
-}
-
-.repo-form button,
-.ask-form button,
-.retry-button {
+.ask-form button {
   padding: 0.75rem 1.3rem;
   border-radius: 8px;
   border: none;
@@ -55,7 +9,6 @@
   white-space: nowrap;
 }
 
-.repo-form button:disabled,
 .ask-form button:disabled {
   opacity: 0.5;
   cursor: default;
@@ -67,149 +20,10 @@
   font-size: 0.9rem;
 }
 
-/* --- Pipeline progress --- */
-.pipeline {
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.4rem 1.5rem;
-}
-
-.pipeline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.repo-name {
-  font-family: var(--mono);
-  font-weight: 600;
-}
-
-.status-pill {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  background: var(--bg-sunken);
-  color: var(--text-soft);
-}
-
-.status-ready {
-  color: var(--ok);
-}
-
-.status-failed {
-  color: var(--bad);
-}
-
-.pipeline-stages {
-  list-style: none;
-  margin: 1.2rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.stage {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.9rem;
-  color: var(--text-faint);
-}
-
-.stage-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--border);
-  flex: none;
-}
-
-.stage-done {
-  color: var(--text-soft);
-}
-.stage-done .stage-dot {
-  background: var(--ok);
-}
-
-.stage-active {
-  color: var(--text);
-  font-weight: 600;
-}
-.stage-active .stage-dot {
-  background: var(--accent-text);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-text) 25%, transparent);
-}
-
-.pipeline-error {
-  color: var(--bad);
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
-.pipeline-stats {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1.3rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--border);
-}
-
-.pipeline-stats div {
-  display: flex;
-  flex-direction: column;
-}
-
-.pipeline-stats strong {
-  font-family: var(--mono);
-  font-size: 1.2rem;
-}
-
-.pipeline-stats span {
-  font-size: 0.75rem;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 .hint {
   margin-top: 1rem;
   color: var(--text-faint);
   font-size: 0.9rem;
-}
-
-.retry-button {
-  margin-top: 1rem;
-}
-
-/* --- Tabs --- */
-.tabs {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.tab {
-  padding: 0.6rem 0.9rem;
-  border: none;
-  background: none;
-  color: var(--text-faint);
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-}
-
-.tab.active {
-  color: var(--text);
-  border-bottom-color: var(--accent-text);
 }
 
 /* --- Ask panel --- */
@@ -1199,33 +1013,20 @@
   padding: 1.2rem 1.4rem;
 }
 
-.flow-tree {
-  overflow-x: auto;
+.flow-legend {
+  margin-bottom: 0.8rem;
 }
 
-.flow-node {
+.flow-canvas-wrap {
   position: relative;
 }
 
-.flow-children {
-  border-left: 1px solid var(--border);
-  padding-left: 0.6rem;
-  margin-top: 0.4rem;
-}
-
-.flow-hop {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  padding: 0.45rem 0;
-  font-size: 0.85rem;
-}
-
-.flow-hop-proposed {
-  background: color-mix(in srgb, var(--accent-text) 6%, transparent);
-  border-radius: 6px;
-  padding-left: 0.4rem;
+.flow-canvas {
+  width: 100%;
+  height: 480px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
 
 .flow-label-pill {
@@ -1243,23 +1044,6 @@
 .flow-label-proposed {
   background: color-mix(in srgb, var(--accent-text) 18%, transparent);
   color: var(--accent-text);
-}
-
-.flow-callee {
-  word-break: break-word;
-}
-
-.flow-loc {
-  color: var(--text-faint);
-  font-family: var(--mono);
-  font-size: 0.72rem;
-}
-
-.flow-confidence {
-  margin-left: auto;
-  color: var(--text-faint);
-  font-family: var(--mono);
-  font-size: 0.72rem;
 }
 
 .flow-note {

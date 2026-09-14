@@ -2,24 +2,51 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/fraunces";
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  --bg: #eef0f1;
-  --bg-raised: #ffffff;
-  --bg-sunken: #e4e7e8;
-  --text: #1b2226;
-  --text-soft: #4b5559;
-  --text-faint: #7a8488;
-  --border: rgba(17, 22, 27, 0.12);
-  --accent: #c1832f;
-  --accent-text: #8a5a1d;
-  --ok: #3f8a5c;
-  --warn: #b98a1f;
-  --bad: #b0403b;
+/* ==========================================================================
+   CodeBase Archeologist — design tokens
+   Palette concept: excavation site at dusk. Obsidian/graphite ground,
+   warm ivory surfaces, a single burnished-copper accent standing in for
+   "evidence marker" everywhere the UI needs the user's attention.
+   ========================================================================== */
 
-  --sans: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+:root {
+  /* --- surfaces (light / parchment mode) --- */
+  --bg: #f2ede2;
+  --bg-raised: #fbf9f3;
+  --bg-sunken: #e7e0d0;
+  --bg-inset: #ece5d5;
+
+  /* --- text --- */
+  --text: #211c15;
+  --text-soft: #55493a;
+  --text-faint: #8a7c66;
+
+  --border: rgba(33, 28, 21, 0.13);
+  --border-strong: rgba(33, 28, 21, 0.24);
+
+  /* --- accent system: one dominant accent (copper/terracotta) --- */
+  --accent: #a8501e;
+  --accent-text: #8a4318;
+  --accent-soft: rgba(168, 80, 30, 0.14);
+
+  /* --- secondary palette (used sparingly, semantic roles only) --- */
+  --bronze: #8a7038;
+  --sage: #5f6f4c;
+  --slate: #476070;
+
+  /* --- semantic state --- */
+  --ok: #3f7a4c;
+  --warn: #a1791e;
+  --bad: #a5402f;
+  --critical: #7a2318;
+  --critical-fg: #fbe9e4;
+
+  --sans: "Geist Variable", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --display: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
   --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
 
   font: 16px/1.55 var(--sans);
@@ -28,50 +55,70 @@
   background: var(--bg);
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --sh-accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --sh-border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* --- shadcn primitive mapping (kept in sync with the palette above) --- */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--bg-raised);
+  --card-foreground: var(--text);
+  --popover: var(--bg-raised);
+  --popover-foreground: var(--text);
+  --primary: var(--text);
+  --primary-foreground: var(--bg);
+  --secondary: var(--bg-sunken);
+  --secondary-foreground: var(--text);
+  --muted: var(--bg-sunken);
+  --muted-foreground: var(--text-faint);
+  --sh-accent: var(--accent-soft);
+  --accent-foreground: var(--accent-text);
+  --destructive: var(--bad);
+  --sh-border: var(--border);
+  --input: var(--border);
+  --ring: var(--accent);
+  --chart-1: var(--accent);
+  --chart-2: var(--slate);
+  --chart-3: var(--sage);
+  --chart-4: var(--bronze);
+  --chart-5: var(--text-faint);
+  --radius: 0.5rem;
+  --sidebar: var(--bg-sunken);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--text);
+  --sidebar-primary-foreground: var(--bg);
+  --sidebar-accent: var(--accent-soft);
+  --sidebar-accent-foreground: var(--accent-text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--accent);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #11161b;
-    --bg-raised: #171e24;
-    --bg-sunken: #0c1114;
-    --text: #e7e9ea;
-    --text-soft: #aab3b7;
-    --text-faint: #78838a;
-    --border: rgba(238, 240, 241, 0.14);
-    --accent-text: #e3b473;
+    /* --- surfaces (dark / obsidian mode) --- */
+    --bg: #13110d;
+    --bg-raised: #1a1712;
+    --bg-sunken: #0d0b08;
+    --bg-inset: #201c16;
+
+    --text: #ece6d9;
+    --text-soft: #b3a893;
+    --text-faint: #7c7261;
+
+    --border: rgba(236, 230, 217, 0.1);
+    --border-strong: rgba(236, 230, 217, 0.2);
+
+    --accent: #cd7c3e;
+    --accent-text: #e2a668;
+    --accent-soft: rgba(205, 124, 62, 0.16);
+
+    --bronze: #b79a5f;
+    --sage: #8a9b73;
+    --slate: #7ea0b3;
+
+    --ok: #6fa876;
+    --warn: #cca34d;
+    --bad: #c56e57;
+    --critical: #e5c3ba;
+    --critical-fg: #4a1712;
   }
 }
 
@@ -83,13 +130,29 @@ body {
   margin: 0;
 }
 
-code {
+code,
+kbd,
+samp {
   font-family: var(--mono);
 }
 
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+/* Recurring "field record" motif: a thin double rule used to separate a
+   section number/label from its content (see .stratum-label). */
+.stratum-rule {
+  height: 1px;
+  background: linear-gradient(to right, var(--border-strong), transparent 60%);
+}
+
 @theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-heading: var(--display);
+  --font-display: var(--display);
+  --font-sans: "Geist Variable", sans-serif;
+  --font-mono: var(--mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -130,44 +193,21 @@ code {
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --sh-accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --sh-border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 @layer base {
   /* Only default the border/outline color for shadcn components; the app's
      own body/html background, text color, and font (above) stay in charge. */
   * {
     @apply border-border outline-ring/50;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
