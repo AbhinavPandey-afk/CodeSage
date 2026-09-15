@@ -115,9 +115,11 @@ def _build_children(
     caller_uid: str, caller_qname: str, depth: int, path_seen: frozenset[str],
     adjacency: CallAdjacency, meta: SymbolMeta,
     file_to_component: dict[str, str], role_by_component: dict[str, str], budget: list[int],
+    component_name_by_id: dict[str, str] | None = None,
 ) -> list[FlowHop]:
     if depth >= _MAX_DEPTH or budget[0] <= 0:
         return []
+    component_name_by_id = component_name_by_id or {}
 
     edges = sorted(adjacency.get(caller_uid, []), key=lambda e: e[1], reverse=True)
     hops: list[FlowHop] = []
@@ -126,22 +128,26 @@ def _build_children(
             break
         if callee_uid in path_seen:
             continue  # recursive/cyclic call -- stop this branch rather than loop forever
-        callee_qname = meta.get(callee_uid, (callee_uid, None))[0]
+        callee_qname, callee_file = meta.get(callee_uid, (callee_uid, None))
         terminal_kind = _terminal_kind_for(callee_uid, meta, file_to_component, role_by_component)
+        component_id = file_to_component.get(callee_file) if callee_file else None
+        component_role = role_by_component.get(component_id) if component_id else None
+        component_name = component_name_by_id.get(component_id) if component_id else None
         budget[0] -= 1
 
         children: list[FlowHop] = []
         if terminal_kind is None:
             children = _build_children(
                 callee_uid, callee_qname, depth + 1, path_seen | {callee_uid},
-                adjacency, meta, file_to_component, role_by_component, budget,
+                adjacency, meta, file_to_component, role_by_component, budget, component_name_by_id,
             )
         hops.append(
             FlowHop(
                 label="OBSERVED", caller_qualified_name=caller_qname, callee_qualified_name=callee_qname,
                 callee_uid=callee_uid, relationship_type="CALLS", source_file=source_file,
                 source_line=source_line, confidence=confidence, terminal_kind=terminal_kind,
-                caller_uid=caller_uid, children=children,
+                callee_file_path=callee_file, component_id=component_id, component_role=component_role,
+                component_name=component_name, caller_uid=caller_uid, children=children,
             )
         )
     return hops
@@ -176,6 +182,7 @@ def _build_proposed_tree(
                     callee_qualified_name=f"{service_name} (proposed service layer)", callee_uid=None,
                     relationship_type="PROPOSED_CALL", source_file=None, source_line=None,
                     confidence=0.5, terminal_kind=None,
+                    component_role="service", component_name=service_name,
                     note=(
                         "Synthesized by Architecture Optimization: routes this call through an existing "
                         "service-layer component instead of calling it directly. This is a design "
@@ -230,13 +237,22 @@ def reconstruct_execution_flow(repo_id: str, entry_uid: str) -> ExecutionFlowRep
     adjacency = _fetch_call_adjacency(repo_id)
     model = reconstruct_architecture(repo_id)
     file_to_component, role_by_component = _component_maps(model)
+    component_name_by_id = {c.id: c.name for c in model.components}
 
     budget = [_MAX_TOTAL_HOPS]
-    children = _build_children(entry_uid, entry_qname, 0, frozenset({entry_uid}), adjacency, meta, file_to_component, role_by_component, budget)
+    children = _build_children(
+        entry_uid, entry_qname, 0, frozenset({entry_uid}), adjacency, meta,
+        file_to_component, role_by_component, budget, component_name_by_id,
+    )
+    entry_component_id = file_to_component.get(entry_file) if entry_file else None
+    entry_component_role = role_by_component.get(entry_component_id) if entry_component_id else None
+    entry_component_name = component_name_by_id.get(entry_component_id) if entry_component_id else None
     observed_root = FlowHop(
         label="OBSERVED", caller_qualified_name="", callee_qualified_name=entry_qname, callee_uid=entry_uid,
         relationship_type="ENTRY", source_file=entry_file, source_line=start_line, confidence=1.0,
-        terminal_kind=None, caller_uid=None, children=children,
+        terminal_kind=None, callee_file_path=entry_file, component_id=entry_component_id,
+        component_role=entry_component_role, component_name=entry_component_name,
+        caller_uid=None, children=children,
     )
 
     skip_pairs = _layer_skip_pairs(model)

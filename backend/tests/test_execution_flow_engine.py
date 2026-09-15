@@ -46,6 +46,7 @@ def test_build_children_stops_at_terminal_and_follows_confidence_order():
         relationships=[], truncated=False,
     )
     file_to_component, role_by_component = _component_maps(model)
+    component_name_by_id = {c.id: c.name for c in model.components}
     meta = {
         "entry": ("Controller.handle", "app/api/controller.py"),
         "db": ("Repo.find", "app/data/repo.py"),
@@ -55,12 +56,19 @@ def test_build_children_stops_at_terminal_and_follows_confidence_order():
         "entry": [("other", 0.5, "controller.py", 5), ("db", 0.9, "controller.py", 6)],
     }
     budget = [100]
-    children = _build_children("entry", "Controller.handle", 0, frozenset({"entry"}), adjacency, meta, file_to_component, role_by_component, budget)
+    children = _build_children(
+        "entry", "Controller.handle", 0, frozenset({"entry"}), adjacency, meta,
+        file_to_component, role_by_component, budget, component_name_by_id,
+    )
 
     assert [c.callee_uid for c in children] == ["db", "other"]  # highest confidence first
     db_hop = next(c for c in children if c.callee_uid == "db")
     assert db_hop.terminal_kind == "database"
     assert db_hop.children == []  # traversal stops at a terminal
+    assert db_hop.callee_file_path == "app/data/repo.py"
+    assert db_hop.component_id == "app/data"
+    assert db_hop.component_role == "data_access"
+    assert db_hop.component_name == "app/data"
 
 
 def test_build_children_avoids_infinite_recursion_on_cycles():

@@ -20,6 +20,10 @@ class FlowHopResponse(BaseModel):
     source_line: int | None
     confidence: float
     terminal_kind: str | None
+    callee_file_path: str | None = None
+    component_id: str | None = None
+    component_role: str | None = None
+    component_name: str | None = None
     note: str | None
     children: list["FlowHopResponse"] = []
 

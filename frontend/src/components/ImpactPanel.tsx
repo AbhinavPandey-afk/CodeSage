@@ -1,56 +1,51 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { api } from "../api/client";
 import type { Dependent, ImpactReport, SymbolSearchResult } from "../api/types";
+import { ImpactCone } from "@/components/impact/ImpactCone";
+import { SymbolSearch } from "@/components/impact/SymbolSearch";
+import { RiskBadge } from "@/components/evidence/RiskBadge";
+import { useInvestigation } from "@/lib/investigation";
+import { cn } from "@/lib/utils";
 
 function DependentList({ items, limit = 8 }: { items: Dependent[]; limit?: number }) {
-  if (items.length === 0) return <p className="hint">None found.</p>;
+  if (items.length === 0) return <p className="text-xs text-(--text-faint)">None found.</p>;
   return (
-    <ul className="dependent-list">
+    <ul className="flex flex-col gap-1">
       {items.slice(0, limit).map((d) => (
-        <li key={d.uid}>
-          <code>{d.qualified_name}</code>
-          <span className="dependent-loc">{d.file_path}:{d.start_line}</span>
+        <li key={d.uid} className="text-xs">
+          <code className="block truncate text-(--text-soft)">{d.qualified_name}</code>
+          <span className="text-(--text-faint)">
+            {d.file_path}:{d.start_line}
+          </span>
         </li>
       ))}
-      {items.length > limit && <li className="dependent-more">…and {items.length - limit} more</li>}
+      {items.length > limit && <li className="text-xs text-(--text-faint) italic">…and {items.length - limit} more</li>}
     </ul>
   );
 }
 
+function Section({ title, count, children }: { title: string; count: number; children: ReactNode }) {
+  return (
+    <div className="rounded-md border border-(--border) bg-(--bg-raised) p-3.5">
+      <h4 className="mb-2 text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">
+        {title} ({count})
+      </h4>
+      {children}
+    </div>
+  );
+}
+
 export function ImpactPanel({ repoId }: { repoId: string }) {
+  const { focus } = useInvestigation();
+  const consumedFocusRef = useRef(false);
+
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SymbolSearchResult[]>([]);
-  const [searching, setSearching] = useState(false);
-  const [selected, setSelected] = useState<SymbolSearchResult | null>(null);
   const [report, setReport] = useState<ImpactReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [suggestions, setSuggestions] = useState<SymbolSearchResult[]>([]);
-
-  useEffect(() => {
-    api.getSymbolSuggestions(repoId).then(setSuggestions).catch(() => setSuggestions([]));
-  }, [repoId]);
-
-  useEffect(() => {
-    if (!query.trim() || selected?.qualified_name === query) {
-      setResults([]);
-      return;
-    }
-    setSearching(true);
-    const handle = setTimeout(() => {
-      api
-        .searchSymbols(repoId, query)
-        .then(setResults)
-        .catch(() => setResults([]))
-        .finally(() => setSearching(false));
-    }, 250);
-    return () => clearTimeout(handle);
-  }, [query, repoId, selected]);
 
   const runAnalysis = async (symbol: SymbolSearchResult) => {
-    setSelected(symbol);
     setQuery(symbol.qualified_name);
-    setResults([]);
     setError(null);
     setLoading(true);
     setReport(null);
@@ -64,109 +59,125 @@ export function ImpactPanel({ repoId }: { repoId: string }) {
     }
   };
 
+  useEffect(() => {
+    if (consumedFocusRef.current || !focus?.qualifiedName) return;
+    consumedFocusRef.current = true;
+    api
+      .searchSymbols(repoId, focus.qualifiedName)
+      .then((results) => {
+        const match = results.find((r) => r.qualified_name === focus.qualifiedName) ?? results[0];
+        if (match) void runAnalysis(match);
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoId, focus]);
+
   return (
-    <div className="impact-panel">
-      <div className="impact-search">
-        <input
-          type="text"
-          placeholder="Search a function, method, or class in this repository…"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setSelected(null);
-          }}
-        />
-        {searching && <span className="impact-search-spinner">searching…</span>}
-        {results.length > 0 && (
-          <ul className="impact-results">
-            {results.map((r) => (
-              <li key={r.uid} onClick={() => runAnalysis(r)}>
-                <span className="symbol-tag">{r.symbol_type}</span>
-                <code>{r.qualified_name}</code>
-              </li>
-            ))}
-          </ul>
-        )}
+    <div>
+      <div className="mb-6 max-w-xl">
+        <SymbolSearch repoId={repoId} value={query} onSelect={runAnalysis} />
       </div>
 
-      {suggestions.length > 0 && (
-        <div className="ask-suggestions impact-suggestions">
-          <span className="impact-suggestions-label">Try:</span>
-          {suggestions.map((s) => (
-            <button key={s.uid} className="suggestion-chip" onClick={() => runAnalysis(s)}>
-              {s.qualified_name}
-            </button>
-          ))}
+      {loading && (
+        <div className="flex flex-col gap-3">
+          <div className="h-24 animate-pulse rounded-lg bg-(--bg-sunken)" />
+          <div className="h-64 animate-pulse rounded-lg bg-(--bg-sunken)" />
         </div>
       )}
-
-      {loading && <p className="hint">Analyzing impact…</p>}
-      {error && <p className="form-error">{error}</p>}
+      {error && <p className="text-sm text-(--bad)">{error}</p>}
 
       {report && (
-        <div className="impact-report">
-          <div className="impact-header">
-            <div>
-              <span className="symbol-tag">{report.target_symbol_type}</span>
-              <code className="impact-target-name">{report.target_qualified_name}</code>
+        <div>
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-3 rounded-lg border border-(--border) bg-(--bg-raised) p-4">
+            <div className="min-w-0">
+              <span className="rounded bg-(--bg-sunken) px-1.5 py-0.5 font-mono text-[0.62rem] text-(--text-faint) uppercase">
+                {report.target_symbol_type}
+              </span>
+              <code className="mt-1.5 block truncate text-base font-medium text-(--text)">
+                {report.target_qualified_name}
+              </code>
             </div>
-            <span className={`risk-pill risk-${report.risk_level.toLowerCase()}`}>
-              {report.risk_level} RISK
-            </span>
+            <RiskBadge level={report.risk_level} />
           </div>
 
-          <p className="impact-explanation">{report.explanation}</p>
+          <p className="mb-4 text-sm leading-relaxed text-(--text-soft)">{report.explanation}</p>
 
-          <div className="risk-signals">
-            {report.risk_signals.map((s, i) => (
-              <div key={i} className="risk-signal">
-                <span className="rs-name">{s.name}</span>
-                <span className="rs-value">{s.value}</span>
-                <span className="rs-points">+{s.points}</span>
-              </div>
-            ))}
-          </div>
+          {report.risk_signals.length > 0 && (
+            <div className="mb-5 flex flex-col gap-1.5 rounded-md border border-(--border) bg-(--bg-raised) p-3.5">
+              <p className="mb-1 text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">
+                Risk signals
+              </p>
+              {report.risk_signals.map((s, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm">
+                  <span className="flex-1 text-(--text-soft)">{s.name}</span>
+                  <span className="font-mono text-xs text-(--text-faint)">{s.value}</span>
+                  <span className="w-8 text-right font-mono text-xs text-(--accent-text)">+{s.points}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
-          <div className="impact-grid">
-            <div className="impact-cell">
-              <h4>Direct dependents ({report.direct_dependents.length})</h4>
+          {(report.direct_dependents.length > 0 || report.indirect_dependents.length > 0) && (
+            <div className="mb-5">
+              <p className="mb-2 text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">
+                Impact cone
+              </p>
+              <ImpactCone
+                targetName={report.target_qualified_name}
+                direct={report.direct_dependents}
+                indirect={report.indirect_dependents}
+              />
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Section title="Direct dependents" count={report.direct_dependents.length}>
               <DependentList items={report.direct_dependents} />
-            </div>
-            <div className="impact-cell">
-              <h4>Indirect dependents ({report.indirect_dependents.length})</h4>
+            </Section>
+            <Section title="Indirect dependents" count={report.indirect_dependents.length}>
               <DependentList items={report.indirect_dependents} />
-            </div>
-            <div className="impact-cell">
-              <h4>Affected API endpoints ({report.affected_apis.length})</h4>
+            </Section>
+            <Section title="Affected API endpoints" count={report.affected_apis.length}>
               <DependentList items={report.affected_apis} />
-            </div>
-            <div className="impact-cell">
-              <h4>Affected service components ({report.affected_services.length})</h4>
+            </Section>
+            <Section title="Affected service components" count={report.affected_services.length}>
               <DependentList items={report.affected_services} />
-            </div>
-            <div className="impact-cell">
-              <h4>Affected tests ({report.affected_tests.length})</h4>
+            </Section>
+            <Section title="Affected tests" count={report.affected_tests.length}>
               <DependentList items={report.affected_tests} />
-            </div>
-            <div className="impact-cell">
-              <h4>External dependencies ({report.external_dependencies.length})</h4>
+            </Section>
+            <Section title="External dependencies" count={report.external_dependencies.length}>
               {report.external_dependencies.length === 0 ? (
-                <p className="hint">None found.</p>
+                <p className="text-xs text-(--text-faint)">None found.</p>
               ) : (
-                <div className="chips">
+                <div className="flex flex-wrap gap-1.5">
                   {report.external_dependencies.map((d, i) => (
-                    <span key={i} className={`chip chip-${d.category}`}>{d.name}</span>
+                    <span
+                      key={i}
+                      className={cn(
+                        "rounded-full border px-2 py-0.5 font-mono text-xs",
+                        d.category === "database"
+                          ? "border-(--slate)/40 text-(--slate)"
+                          : "border-(--border) text-(--text-soft)",
+                      )}
+                    >
+                      {d.name}
+                    </span>
                   ))}
                 </div>
               )}
-            </div>
+            </Section>
           </div>
 
-          <ul className="detection-notes">
-            {report.detection_notes.map((n, i) => (
-              <li key={i}>{n}</li>
-            ))}
-          </ul>
+          {report.detection_notes.length > 0 && (
+            <ul className="mt-5 flex flex-col gap-1 border-t border-(--border) pt-4">
+              {report.detection_notes.map((n, i) => (
+                <li key={i} className="text-xs text-(--text-faint) italic">
+                  {n}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>

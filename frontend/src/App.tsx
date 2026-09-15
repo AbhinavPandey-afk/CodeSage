@@ -12,8 +12,10 @@ import { ImpactPanel } from "./components/ImpactPanel";
 import { OptimizationPanel } from "./components/OptimizationPanel";
 import { PipelineProgress } from "./components/PipelineProgress";
 import { RepositoryForm } from "./components/RepositoryForm";
+import { RepositoryOverview } from "./components/RepositoryOverview";
 import { SmellsPanel } from "./components/SmellsPanel";
 import { useRepositoryPolling } from "./hooks/useRepositoryPolling";
+import { InvestigationProvider } from "./lib/investigation";
 import { NAV_GROUPS, type Tab } from "./lib/navigation";
 
 const NAV_ITEMS = NAV_GROUPS.flatMap((g) => g.items);
@@ -22,7 +24,7 @@ function App() {
   const [repoId, setRepoId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [tab, setTab] = useState<Tab>("architecture");
+  const [tab, setTab] = useState<Tab>("overview");
   const repository = useRepositoryPolling(repoId);
 
   const handleSubmit = async (url: string) => {
@@ -52,17 +54,20 @@ function App() {
       )}
 
       {repository && repository.status === "ready" && (
-        <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8">
-          {activeItem && <PageHeader title={activeItem.label} question={activeItem.question} />}
-          {tab === "architecture" && <ArchitecturePanel repoId={repository.id} />}
-          {tab === "flow" && <ExecutionFlowPanel repoId={repository.id} />}
-          {tab === "graph" && <GraphView repoId={repository.id} />}
-          {tab === "smells" && <SmellsPanel repoId={repository.id} />}
-          {tab === "optimization" && <OptimizationPanel repoId={repository.id} />}
-          {tab === "impact" && <ImpactPanel repoId={repository.id} />}
-          {tab === "history" && <HistoryPanel repoId={repository.id} />}
-          {tab === "ask" && <AskPanel repoId={repository.id} />}
-        </div>
+        <InvestigationProvider tab={tab} onTabChange={setTab}>
+          <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8">
+            {activeItem && <PageHeader title={activeItem.label} question={activeItem.question} />}
+            {tab === "overview" && <RepositoryOverview repoId={repository.id} repository={repository} />}
+            {tab === "architecture" && <ArchitecturePanel repoId={repository.id} />}
+            {tab === "flow" && <ExecutionFlowPanel repoId={repository.id} />}
+            {tab === "graph" && <GraphView repoId={repository.id} />}
+            {tab === "smells" && <SmellsPanel repoId={repository.id} />}
+            {tab === "optimization" && <OptimizationPanel repoId={repository.id} />}
+            {tab === "impact" && <ImpactPanel repoId={repository.id} />}
+            {tab === "history" && <HistoryPanel repoId={repository.id} />}
+            {tab === "ask" && <AskPanel repoId={repository.id} />}
+          </div>
+        </InvestigationProvider>
       )}
     </AppShell>
   );

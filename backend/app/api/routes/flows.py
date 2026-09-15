@@ -31,6 +31,8 @@ def _hop_response(hop: FlowHop) -> FlowHopResponse:
         callee_qualified_name=hop.callee_qualified_name, callee_uid=hop.callee_uid,
         relationship_type=hop.relationship_type, source_file=hop.source_file,
         source_line=hop.source_line, confidence=hop.confidence, terminal_kind=hop.terminal_kind,
+        callee_file_path=hop.callee_file_path, component_id=hop.component_id,
+        component_role=hop.component_role, component_name=hop.component_name,
         note=hop.note, children=[_hop_response(c) for c in hop.children],
     )
 

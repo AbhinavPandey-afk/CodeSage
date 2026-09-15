@@ -33,6 +33,16 @@ class FlowHop:
     source_line: int | None
     confidence: float
     terminal_kind: str | None  # "database" | "external_service" | None
+    # The callee's own file (distinct from source_file/source_line, which is
+    # the call-site evidence inside the *caller*) and the reconstructed
+    # Architecture component it belongs to -- reused from ArchitectureModel
+    # rather than re-derived, so the frontend can group hops into the same
+    # API/Service/Data-Access/External layers Architecture Reconstruction
+    # already established, without inventing a second classification.
+    callee_file_path: str | None = None
+    component_id: str | None = None
+    component_role: str | None = None
+    component_name: str | None = None
     note: str | None = None
     caller_uid: str | None = None  # internal only -- not part of the API response
     children: list["FlowHop"] = field(default_factory=list)

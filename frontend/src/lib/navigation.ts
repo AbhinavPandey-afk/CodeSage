@@ -1,4 +1,5 @@
 import {
+  Compass,
   Hammer,
   History,
   Layers3,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 
 export type Tab =
+  | "overview"
   | "architecture"
   | "flow"
   | "graph"
@@ -35,6 +37,17 @@ export interface NavGroup {
 /** Mirrors CLAUDE.md §4's six capability areas, collapsed to the five stages
  * that apply once a repository is loaded (Excavate happens before this). */
 export const NAV_GROUPS: NavGroup[] = [
+  {
+    stage: "Site",
+    items: [
+      {
+        tab: "overview",
+        label: "Overview",
+        icon: Compass,
+        question: "What did CodeBase Archeologist discover?",
+      },
+    ],
+  },
   {
     stage: "Reconstruct",
     items: [

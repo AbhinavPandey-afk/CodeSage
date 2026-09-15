@@ -252,6 +252,12 @@ export interface FlowHop {
   source_line: number | null;
   confidence: number;
   terminal_kind: "database" | "external_service" | null;
+  /** The callee's own file — distinct from source_file/source_line, which is
+   * the call-site evidence inside the *caller*. */
+  callee_file_path: string | null;
+  component_id: string | null;
+  component_role: ComponentRole | null;
+  component_name: string | null;
   note: string | null;
   children: FlowHop[];
 }
