@@ -1,0 +1,24 @@
+== hackathon-starter(JS)
+ original  calls 2066 ->def 130 ->import 5 ambig 2 inh 0 / 0
+ phase2  calls 2066 ->def 131 ->import 0 ambig 0 inh 0 / 0
+ phase3  calls 2066 ->def 131 ->import 0 ambig 0 inh 0 / 0 secs 0.009
+== spring-petclinic(Java)
+ original  calls 1599 ->def 282 ->import 0 ambig 59 inh 8 / 8
+ phase2  calls 1599 ->def 61 ->import 0 ambig 2 inh 8 / 8
+ phase3  calls 1599 ->def 284 ->import 0 ambig 16 inh 8 / 8 secs 0.015
+== requests
+ original  calls 2510 ->def 930 ->import 23 ambig 473 inh 41 / 60
+ phase2  calls 2510 ->def 742 ->import 0 ambig 29 inh 41 / 60
+ phase3  calls 2510 ->def 908 ->import 0 ambig 31 inh 41 / 60 secs 0.05
+== jinja
+ original  calls 5906 ->def 2704 ->import 25 ambig 1343 inh 124 / 151
+ phase2  calls 5906 ->def 1760 ->import 0 ambig 20 inh 125 / 151
+ phase3  calls 5906 ->def 2093 ->import 0 ambig 21 inh 125 / 151 secs 0.037
+== black
+ original  calls 6426 ->def 2060 ->import 43 ambig 569 inh 22 / 72
+ phase2  calls 6426 ->def 1804 ->import 0 ambig 2 inh 22 / 72
+ phase3  calls 6426 ->def 1966 ->import 0 ambig 2 inh 22 / 72 secs 0.045
+== flask
+ original  calls 3350 ->def 833 ->import 239 ambig 862 inh 70 / 117
+ phase2  calls 3350 ->def 739 ->import 0 ambig 12 inh 76 / 117
+ phase3  calls 3350 ->def 854 ->import 0 ambig 11 inh 76 / 117 secs 0.023

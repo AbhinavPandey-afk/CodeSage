@@ -1,0 +1,362 @@
+[
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetTypeFormatterTests.java:74",
+  "line": "petTypeFormatter.parse(\"Fish\", Locale.ENGLISH);",
+  "target_name": "petTypeFormatter.parse",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.PetTypeFormatter.PetTypeFormatter.parse",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:129",
+  "line": "pet.setType(petType);",
+  "target_name": "pet.setType",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.setType",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:229",
+  "line": "owner6.addVisit(pet7.getId(), visit);",
+  "target_name": "owner6.addVisit",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.addVisit",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:176",
+  "line": "Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));",
+  "target_name": "Owner",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:80",
+  "line": "george.setTelephone(\"6085551023\");",
+  "target_name": "george.setTelephone",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.setTelephone",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/model/ValidatorTests.java:53",
+  "line": "person.setFirstName(\"\");",
+  "target_name": "person.setFirstName",
+  "declared": "Person",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.Person.Person.setFirstName",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:74",
+  "line": "Owner george = new Owner();",
+  "target_name": "Owner",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java:152",
+  "line": "if (!Objects.equals(owner.getId(), ownerId)) {",
+  "target_name": "owner.getId",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.getId",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java:148",
+  "line": "String petName = pet.getName();",
+  "target_name": "pet.getName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.getName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:290",
+  "line": "pet1.setName(\"SamePetName\");",
+  "target_name": "pet1.setName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.setName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:60",
+  "line": "pet = new Pet();",
+  "target_name": "Pet",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:120",
+  "line": "owner.setTelephone(\"4444444444\");",
+  "target_name": "owner.setTelephone",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.setTelephone",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetTypeFormatter.java:47",
+  "line": "String name = petType.getName();",
+  "target_name": "petType.getName",
+  "declared": "PetType",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.getName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java:80",
+  "line": "owner.addPet(pet);",
+  "target_name": "owner.addPet",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.addPet",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:104",
+  "line": "assertThat(owner.getPets()).hasSize(1);",
+  "target_name": "owner.getPets",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.getPets",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:263",
+  "line": "pet1.setType(EntityUtils.getById(types, PetType.class, 1));",
+  "target_name": "pet1.setType",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.setType",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetTypeFormatterTests.java:59",
+  "line": "String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);",
+  "target_name": "this.petTypeFormatter.print",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.PetTypeFormatter.PetTypeFormatter.print",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:167",
+  "line": "pet.setName(\"bowser\");",
+  "target_name": "pet.setName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.setName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:182",
+  "line": "assertThat(pet.getId()).isNotNull();",
+  "target_name": "pet.getId",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.getId",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:100",
+  "line": "if (visit.getDate() != null && !visit.getDate().isAfter(LocalDate.now())) {",
+  "target_name": "visit.getDate",
+  "declared": "Visit",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Visit.Visit.getDate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:86",
+  "line": "max.setBirthDate(LocalDate.now());",
+  "target_name": "max.setBirthDate",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.setBirthDate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:261",
+  "line": "pet1.setName(\"DuplicatePetName\");",
+  "target_name": "pet1.setName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.setName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetTypeFormatterTests.java:66",
+  "line": "PetType petType = petTypeFormatter.parse(\"Bird\", Locale.ENGLISH);",
+  "target_name": "petTypeFormatter.parse",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.PetTypeFormatter.PetTypeFormatter.parse",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:106",
+  "line": "pet.setBirthDate(petBirthDate);",
+  "target_name": "pet.setBirthDate",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.setBirthDate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/vet/VetControllerTests.java:63",
+  "line": "Vet helen = new Vet();",
+  "target_name": "Vet",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.vet.Vet.Vet",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:93",
+  "line": "pet.setName(\"\");",
+  "target_name": "pet.setName",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.setName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java:111",
+  "line": "if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) ",
+  "target_name": "pet.getName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.getName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:263",
+  "line": "Owner owner = new Owner();",
+  "target_name": "Owner",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/system/CrashControllerTests.java:37",
+  "line": "assertThatExceptionOfType(RuntimeException.class).isThrownBy(() -> testee.triggerException())",
+  "target_name": "testee.triggerException",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.system.CrashController.CrashController.triggerException",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:164",
+  "line": "int found = owner6.getPets().size();",
+  "target_name": "owner6.getPets",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.getPets",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/model/ValidatorTests.java:52",
+  "line": "Person person = new Person();",
+  "target_name": "Person",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.Person.Person",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java:159",
+  "line": "if (pet.getBirthDate() != null && pet.getBirthDate().isAfter(currentDate)) {",
+  "target_name": "pet.getBirthDate",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.getBirthDate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:122",
+  "line": "assertThat(owner.getId()).isNotZero();",
+  "target_name": "owner.getId",
+  "declared": "Owner",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.getId",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerTests.java:29",
+  "line": "pet.setId(5);",
+  "target_name": "pet.setId",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.setId",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java:159",
+  "line": "if (pet.getBirthDate() != null && pet.getBirthDate().isAfter(currentDate)) {",
+  "target_name": "pet.getBirthDate",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.getBirthDate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java:51",
+  "line": "if (pet.isNew() && pet.getType() == null) {",
+  "target_name": "pet.getType",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.getType",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/vet/VetTests.java:30",
+  "line": "Vet vet = new Vet();",
+  "target_name": "Vet",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.vet.Vet.Vet",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java:111",
+  "line": "if (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) ",
+  "target_name": "pet.getName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.getName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:212",
+  "line": "assertThat(vet.getNrOfSpecialties()).isEqualTo(2);",
+  "target_name": "vet.getNrOfSpecialties",
+  "declared": "Vet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.vet.Vet.Vet.getNrOfSpecialties",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerTests.java:28",
+  "line": "Pet pet = new Pet();",
+  "target_name": "Pet",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:92",
+  "line": "petType.setName(petTypeName);",
+  "target_name": "petType.setName",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.setName",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:82",
+  "line": "petValidator.validate(pet, errors);",
+  "target_name": "petValidator.validate",
+  "declared": null,
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.PetValidator.PetValidator.validate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:232",
+  "line": "assertThat(pet7.getVisits()) //",
+  "target_name": "pet7.getVisits",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.getVisits",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:101",
+  "line": "visit.setDate(LocalDate.now());",
+  "target_name": "visit.setDate",
+  "declared": "Visit",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.owner.Visit.Visit.setDate",
+  "confidence": 0.85
+ },
+ {
+  "where": "src/test/java/org/springframework/samples/petclinic/owner/OwnerTests.java:30",
+  "line": "pet.setName(\"Buddy\");",
+  "target_name": "pet.setName",
+  "declared": "Pet",
+  "bound_to": "src.main.java.org.springframework.samples.petclinic.model.NamedEntity.NamedEntity.setName",
+  "confidence": 0.8
+ }
+]

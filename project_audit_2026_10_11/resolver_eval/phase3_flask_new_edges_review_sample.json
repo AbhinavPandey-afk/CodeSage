@@ -1,0 +1,362 @@
+[
+ {
+  "where": "tests/test_cli.py:505",
+  "line": "app.add_url_rule(\"/b\", subdomain=\"b\", endpoint=\"b\")",
+  "target_name": "app.add_url_rule",
+  "declared": "new:Flask",
+  "bound_to": "src.flask.sansio.app.App.add_url_rule",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_blueprints.py:330",
+  "line": "bp.add_url_rule(\"/\", view_func=view)",
+  "target_name": "bp.add_url_rule",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.add_url_rule",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_blueprints.py:231",
+  "line": "with app.test_request_context(), blueprint.send_static_file(\"index.html\") as rv:",
+  "target_name": "app.test_request_context",
+  "declared": "flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_request_context",
+  "confidence": 0.85
+ },
+ {
+  "where": "tests/test_request.py:64",
+  "line": "client = app.test_client()",
+  "target_name": "app.test_client",
+  "declared": "Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.85
+ },
+ {
+  "where": "tests/test_json_tag.py:63",
+  "line": "assert s.loads(s.dumps(Foo(\"bar\"))).data == \"bar\"",
+  "target_name": "s.loads",
+  "declared": "new:TaggedJSONSerializer",
+  "bound_to": "src.flask.json.tag.TaggedJSONSerializer.loads",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_helpers.py:344",
+  "line": "with app.test_request_context():",
+  "target_name": "app.test_request_context",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_request_context",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_views.py:112",
+  "line": "app.add_url_rule(\"/\", view_func=Index.as_view(\"index\"))",
+  "target_name": "app.add_url_rule",
+  "declared": "flask.Flask",
+  "bound_to": "src.flask.sansio.app.App.add_url_rule",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/flask/app.py:1419",
+  "line": "self.session_interface.save_session(self, ctx._get_session(), response)",
+  "target_name": "ctx._get_session",
+  "declared": "AppContext",
+  "bound_to": "src.flask.ctx.AppContext._get_session",
+  "confidence": 0.85
+ },
+ {
+  "where": "tests/test_blueprints.py:63",
+  "line": "blue.register_error_handler(MyFunctionException, my_function_exception_handler)",
+  "target_name": "blue.register_error_handler",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.scaffold.Scaffold.register_error_handler",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_blueprints.py:231",
+  "line": "with app.test_request_context(), blueprint.send_static_file(\"index.html\") as rv:",
+  "target_name": "blueprint.send_static_file",
+  "declared": "new:MyBlueprint",
+  "bound_to": "src.flask.blueprints.Blueprint.send_static_file",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_basic.py:1498",
+  "line": "with app.test_request_context():",
+  "target_name": "app.test_request_context",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_request_context",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/flask/app.py:1329",
+  "line": "rv = self.json.response(rv)",
+  "target_name": "self.json.response",
+  "declared": "?",
+  "bound_to": "src.flask.json.provider.JSONProvider.response",
+  "confidence": 0.85
+ },
+ {
+  "where": "tests/test_basic.py:1805",
+  "line": "client = app.test_client()",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_blueprints.py:659",
+  "line": "bp.add_app_template_test(is_boolean, \"boolean\")",
+  "target_name": "bp.add_app_template_test",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.add_app_template_test",
+  "confidence": 0.75
+ },
+ {
+  "where": "examples/tutorial/flaskr/db.py:37",
+  "line": "with current_app.open_resource(\"schema.sql\") as f:",
+  "target_name": "current_app.open_resource",
+  "declared": null,
+  "bound_to": "src.flask.app.Flask.open_resource",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_templating.py:418",
+  "line": "c = app.test_client()",
+  "target_name": "app.test_client",
+  "declared": "new:MyFlask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_blueprints.py:899",
+  "line": "child.register_blueprint(grandchild, url_prefix=\"/grandchild\")",
+  "target_name": "child.register_blueprint",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_json_tag.py:29",
+  "line": "assert s.loads(s.dumps(data)) == data",
+  "target_name": "s.loads",
+  "declared": "new:TaggedJSONSerializer",
+  "bound_to": "src.flask.json.tag.TaggedJSONSerializer.loads",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_blueprints.py:1083",
+  "line": "bp.register_blueprint(bp)",
+  "target_name": "bp.register_blueprint",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "examples/tutorial/flaskr/__init__.py:40",
+  "line": "app.register_blueprint(blog.bp)",
+  "target_name": "app.register_blueprint",
+  "declared": "new:Flask",
+  "bound_to": "src.flask.sansio.app.App.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "src/flask/app.py:1418",
+  "line": "if not self.session_interface.is_null_session(ctx._get_session()):",
+  "target_name": "self.session_interface.is_null_session",
+  "declared": "?",
+  "bound_to": "src.flask.sessions.SessionInterface.is_null_session",
+  "confidence": 0.85
+ },
+ {
+  "where": "tests/test_basic.py:1439",
+  "line": "with app.test_client().get(\"/foo/index.html\") as rv:",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_blueprints.py:465",
+  "line": "bp.add_app_template_filter(super_reverse)",
+  "target_name": "bp.add_app_template_filter",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.add_app_template_filter",
+  "confidence": 0.75
+ },
+ {
+  "where": "src/flask/app.py:1482",
+  "line": "collect_errors.raise_any(\"Errors during app teardown\")",
+  "target_name": "collect_errors.raise_any",
+  "declared": "new:_CollectErrors",
+  "bound_to": "src.flask.helpers._CollectErrors.raise_any",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_testing.py:313",
+  "line": "with app.test_request_context():",
+  "target_name": "app.test_request_context",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_request_context",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_basic.py:1833",
+  "line": "client = app.test_client()",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_blueprints.py:419",
+  "line": "bp.add_app_template_filter(my_reverse, \"strrev\")",
+  "target_name": "bp.add_app_template_filter",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.add_app_template_filter",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_blueprints.py:1015",
+  "line": "parent.register_blueprint(child, url_prefix=child_registration)",
+  "target_name": "parent.register_blueprint",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_user_error_handler.py:208",
+  "line": "c = app.test_client()",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_blueprints.py:983",
+  "line": "parent.register_blueprint(child)",
+  "target_name": "parent.register_blueprint",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_async.py:75",
+  "line": "app.add_url_rule(\"/view\", view_func=AsyncView.as_view(\"view\"))",
+  "target_name": "app.add_url_rule",
+  "declared": "new:Flask",
+  "bound_to": "src.flask.sansio.app.App.add_url_rule",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_session_interface.py:17",
+  "line": "app_ctx.match_request()",
+  "target_name": "app_ctx.match_request",
+  "declared": null,
+  "bound_to": "src.flask.ctx.AppContext.match_request",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_blueprints.py:1034",
+  "line": "parent.register_blueprint(child)",
+  "target_name": "parent.register_blueprint",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_json_tag.py:62",
+  "line": "s.register(TagFoo)",
+  "target_name": "s.register",
+  "declared": "new:TaggedJSONSerializer",
+  "bound_to": "src.flask.json.tag.TaggedJSONSerializer.register",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_signals.py:80",
+  "line": "rv = app.test_client().get(\"/\")",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_signals.py:40",
+  "line": "rv = app.test_client().get(\"/\")",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "examples/tutorial/flaskr/db.py:27",
+  "line": "db = g.pop(\"db\", None)",
+  "target_name": "g.pop",
+  "declared": null,
+  "bound_to": "src.flask.ctx._AppCtxGlobals.pop",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_basic.py:1487",
+  "line": "rv = app.test_client().get(\"/catch/all\")",
+  "target_name": "app.test_client",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.test_client",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_json_tag.py:82",
+  "line": "s.register(Tag1, index=-1)",
+  "target_name": "s.register",
+  "declared": "new:TaggedJSONSerializer",
+  "bound_to": "src.flask.json.tag.TaggedJSONSerializer.register",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_cli.py:513",
+  "line": "app.add_url_rule(\"/a\", host=\"a\", endpoint=\"a\")",
+  "target_name": "app.add_url_rule",
+  "declared": "new:Flask",
+  "bound_to": "src.flask.sansio.app.App.add_url_rule",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_blueprints.py:1106",
+  "line": "bp.register_blueprint(bp2, url_prefix=\"/a\", name=\"sub\")",
+  "target_name": "bp.register_blueprint",
+  "declared": "new:flask.Blueprint",
+  "bound_to": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+  "confidence": 0.75
+ },
+ {
+  "where": "src/flask/ctx.py:326",
+  "line": "self.url_adapter = app.create_url_adapter(self._request)",
+  "target_name": "app.create_url_adapter",
+  "declared": "Flask",
+  "bound_to": "src.flask.app.Flask.create_url_adapter",
+  "confidence": 0.85
+ },
+ {
+  "where": "tests/test_cli.py:454",
+  "line": "app.add_url_rule(\"/zzz_post\", methods=[\"POST\"], endpoint=\"aaa_post\")",
+  "target_name": "app.add_url_rule",
+  "declared": "new:Flask",
+  "bound_to": "src.flask.sansio.app.App.add_url_rule",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_helpers.py:359",
+  "line": "with app.open_resource(\"static/index.html\", mode) as f:",
+  "target_name": "app.open_resource",
+  "declared": "new:flask.Flask",
+  "bound_to": "src.flask.app.Flask.open_resource",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_request.py:51",
+  "line": "with app.app_context():",
+  "target_name": "app.app_context",
+  "declared": "Flask",
+  "bound_to": "src.flask.app.Flask.app_context",
+  "confidence": 0.85
+ }
+]

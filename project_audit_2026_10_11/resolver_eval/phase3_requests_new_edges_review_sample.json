@@ -1,0 +1,290 @@
+[
+ {
+  "where": "tests/test_requests.py:325",
+  "line": "resp = ses.send(prep)",
+  "target_name": "ses.send",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.send",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:2954",
+  "line": "s.get(url)",
+  "target_name": "s.get",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.get",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1727",
+  "line": "s.mount(mixed_case_prefix, my_adapter)",
+  "target_name": "s.mount",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.mount",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1666",
+  "line": "s.mount(\"http://gittip.com/about/\", HTTPAdapter())",
+  "target_name": "s.mount",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.mount",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/requests/models.py:363",
+  "line": "p.prepare(",
+  "target_name": "p.prepare",
+  "declared": "new:PreparedRequest",
+  "bound_to": "src.requests.models.PreparedRequest.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/requests/auth.py:339",
+  "line": "r.register_hook(\"response\", self.handle_401)",
+  "target_name": "r.register_hook",
+  "declared": "PreparedRequest",
+  "bound_to": "src.requests.models.RequestHooksMixin.register_hook",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:2282",
+  "line": "prepared_request = r.prepare()",
+  "target_name": "r.prepare",
+  "declared": "new:requests.Request",
+  "bound_to": "src.requests.models.Request.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:2259",
+  "line": "prepared_request = r.prepare()",
+  "target_name": "r.prepare",
+  "declared": "new:requests.Request",
+  "bound_to": "src.requests.models.Request.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:2439",
+  "line": "keyset = frozenset(lowerkey for lowerkey, v in cid.lower_items())",
+  "target_name": "cid.lower_items",
+  "declared": "new:CaseInsensitiveDict",
+  "bound_to": "src.requests.structures.CaseInsensitiveDict.lower_items",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1948",
+  "line": "assert s.should_strip_auth(\"https://example.com/foo\", \"http://example.com/bar\")",
+  "target_name": "s.should_strip_auth",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.SessionRedirectMixin.should_strip_auth",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_requests.py:1222",
+  "line": "prep = s.prepare_request(r)",
+  "target_name": "s.prepare_request",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.prepare_request",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1651",
+  "line": "s.mount(\"http://git\", HTTPAdapter())",
+  "target_name": "s.mount",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.mount",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1986",
+  "line": "assert not s.should_strip_auth(old_uri, new_uri)",
+  "target_name": "s.should_strip_auth",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.SessionRedirectMixin.should_strip_auth",
+  "confidence": 0.75
+ },
+ {
+  "where": "src/requests/cookies.py:161",
+  "line": "return r.get_new_headers().get(\"Cookie\")",
+  "target_name": "r.get_new_headers",
+  "declared": "new:MockRequest",
+  "bound_to": "src.requests.cookies.MockRequest.get_new_headers",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1380",
+  "line": "jar.set(key1, value1)",
+  "target_name": "jar.set",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.set",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:578",
+  "line": "p = r.prepare()",
+  "target_name": "r.prepare",
+  "declared": "new:requests.Request",
+  "bound_to": "src.requests.models.Request.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1198",
+  "line": "s.send(prep)",
+  "target_name": "s.send",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.send",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1306",
+  "line": "jar.set(key, value, secure=secure, domain=domain, rest=rest)",
+  "target_name": "jar.set",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.set",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:2801",
+  "line": "p = r.prepare()",
+  "target_name": "r.prepare",
+  "declared": "new:requests.Request",
+  "bound_to": "src.requests.models.Request.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:468",
+  "line": "redirects = s.resolve_redirects(resp, prep_req)",
+  "target_name": "s.resolve_redirects",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.SessionRedirectMixin.resolve_redirects",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_requests.py:2645",
+  "line": "p.prepare(method=\"GET\", url=\"https://www.example.com/\", json=body)",
+  "target_name": "p.prepare",
+  "declared": "new:PreparedRequest",
+  "bound_to": "src.requests.models.PreparedRequest.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:332",
+  "line": "next_resp = next(ses.resolve_redirects(resp, prep))",
+  "target_name": "ses.resolve_redirects",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.SessionRedirectMixin.resolve_redirects",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_requests.py:1665",
+  "line": "s.mount(\"http://gittip.com\", HTTPAdapter())",
+  "target_name": "s.mount",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.mount",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1962",
+  "line": "assert s.should_strip_auth(",
+  "target_name": "s.should_strip_auth",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.SessionRedirectMixin.should_strip_auth",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_requests.py:2734",
+  "line": "p.prepare(**kwargs)",
+  "target_name": "p.prepare",
+  "declared": "new:PreparedRequest",
+  "bound_to": "src.requests.models.PreparedRequest.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1431",
+  "line": "jar.set(key, value)",
+  "target_name": "jar.set",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.set",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1653",
+  "line": "s.mount(\"http://github.com\", HTTPAdapter())",
+  "target_name": "s.mount",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.mount",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1366",
+  "line": "keys = jar.keys()",
+  "target_name": "jar.keys",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.keys",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:120",
+  "line": "pr = req.prepare()",
+  "target_name": "req.prepare",
+  "declared": "new:requests.Request",
+  "bound_to": "src.requests.models.Request.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1906",
+  "line": "p = req.prepare()",
+  "target_name": "req.prepare",
+  "declared": "new:requests.Request",
+  "bound_to": "src.requests.models.Request.prepare",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1344",
+  "line": "jar.set(key, value)",
+  "target_name": "jar.set",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.set",
+  "confidence": 0.8
+ },
+ {
+  "where": "src/requests/auth.py:340",
+  "line": "r.register_hook(\"response\", self.handle_redirect)",
+  "target_name": "r.register_hook",
+  "declared": "PreparedRequest",
+  "bound_to": "src.requests.models.RequestHooksMixin.register_hook",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1992",
+  "line": "rg = s.resolve_redirects(r1, r1.request, stream=True)",
+  "target_name": "s.resolve_redirects",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.SessionRedirectMixin.resolve_redirects",
+  "confidence": 0.75
+ },
+ {
+  "where": "tests/test_requests.py:1325",
+  "line": "jar.set(key1, value1)",
+  "target_name": "jar.set",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.set",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1601",
+  "line": "resp = s.send(r)",
+  "target_name": "s.send",
+  "declared": "new:requests.Session",
+  "bound_to": "src.requests.sessions.Session.send",
+  "confidence": 0.8
+ },
+ {
+  "where": "tests/test_requests.py:1396",
+  "line": "jar.set(key1, value1)",
+  "target_name": "jar.set",
+  "declared": "new:requests.cookies.RequestsCookieJar",
+  "bound_to": "src.requests.cookies.RequestsCookieJar.set",
+  "confidence": 0.8
+ }
+]

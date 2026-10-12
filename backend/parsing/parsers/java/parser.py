@@ -23,6 +23,7 @@ valued fields the way JS/TS do, so there's nothing callable to extract there.
 """
 from __future__ import annotations
 
+from collections import defaultdict
 from pathlib import Path
 
 from tree_sitter import Node
@@ -95,6 +96,110 @@ class JavaParser(LanguageParser):
                 dotted += ".*"
             add_import(dotted, node, container_id)
 
+        # ---- declared-type evidence (Symbol.declared_types) ---------------------------------------
+        def java_type(node: Node | None) -> str | None:
+            """Plain class reference for a declared type; None for primitives, arrays, `var`, wildcards."""
+            if node is None:
+                return None
+            if node.type in ("type_identifier", "scoped_type_identifier"):
+                name = text(node)
+                return None if name == "var" else name
+            if node.type == "generic_type":  # `Page<Owner>` -> `Page` (type arguments are not used)
+                base = next((c for c in node.children if c.type in ("type_identifier", "scoped_type_identifier")), None)
+                return text(base) if base is not None else None
+            return None
+
+        def created_type(value: Node | None) -> str | None:
+            if value is not None and value.type == "object_creation_expression":
+                return java_type(value.child_by_field_name("type"))
+            return None
+
+        def declarator_facts(type_node: Node | None, declarators: list[Node], out: dict[str, list[str]]) -> None:
+            declared = java_type(type_node)
+            is_var = type_node is not None and type_node.type == "type_identifier" and text(type_node) == "var"
+            for decl in declarators:
+                name_node = decl.child_by_field_name("name")
+                if name_node is None:
+                    continue
+                if declared is not None:
+                    out[text(name_node)].append(declared)
+                elif is_var:
+                    ctor = created_type(decl.child_by_field_name("value"))
+                    out[text(name_node)].append(f"new:{ctor}" if ctor else "?")
+                else:
+                    out[text(name_node)].append("?")
+
+        def merge_java(facts: list[str]) -> str:
+            if "?" in facts:
+                return "?"
+            declared = {f for f in facts if not f.startswith("new:")}
+            constructed = {f[4:] for f in facts if f.startswith("new:")}
+            if len(declared) == 1 and constructed <= declared:
+                return next(iter(declared))
+            if not declared and len(constructed) == 1:
+                return "new:" + next(iter(constructed))
+            return "?"
+
+        def collect_locals(node: Node, out: dict[str, list[str]]) -> None:
+            for child in node.children:
+                t = child.type
+                if t in ("class_body", "class_declaration"):
+                    continue  # anonymous/local classes bind their own names
+                if t == "local_variable_declaration":
+                    declarator_facts(child.child_by_field_name("type"), [c for c in child.children if c.type == "variable_declarator"], out)
+                elif t == "enhanced_for_statement":
+                    name_node = child.child_by_field_name("name")
+                    if name_node is not None:
+                        declared = java_type(child.child_by_field_name("type"))
+                        out[text(name_node)].append(declared or "?")
+                elif t == "resource":
+                    name_node = child.child_by_field_name("name")
+                    if name_node is not None:
+                        declared = java_type(child.child_by_field_name("type"))
+                        out[text(name_node)].append(declared or "?")
+                elif t == "catch_formal_parameter":
+                    name_node = child.child_by_field_name("name")
+                    types = [c for c in next((c for c in child.children if c.type == "catch_type"), child).children
+                             if c.type in ("type_identifier", "scoped_type_identifier")]
+                    if name_node is not None:
+                        out[text(name_node)].append(java_type(types[0]) if len(types) == 1 else "?")
+                elif t == "lambda_expression":
+                    params = child.child_by_field_name("parameters")
+                    if params is not None and params.type == "identifier":
+                        out[text(params)].append("?")
+                    elif params is not None and params.type == "inferred_parameters":
+                        for c in params.children:
+                            if c.type == "identifier":
+                                out[text(c)].append("?")
+                    elif params is not None and params.type == "formal_parameters":
+                        for c in params.children:
+                            if c.type == "formal_parameter" and c.child_by_field_name("name") is not None:
+                                out[text(c.child_by_field_name("name"))].append(java_type(c.child_by_field_name("type")) or "?")
+                collect_locals(child, out)
+
+        def method_types(node: Node) -> dict[str, str]:
+            facts: dict[str, list[str]] = defaultdict(list)
+            params = node.child_by_field_name("parameters")
+            for c in (params.children if params is not None else []):
+                if c.type == "formal_parameter" and c.child_by_field_name("name") is not None:
+                    facts[text(c.child_by_field_name("name"))].append(java_type(c.child_by_field_name("type")) or "?")
+                elif c.type == "spread_parameter":
+                    for d in c.children:
+                        if d.type == "variable_declarator" and d.child_by_field_name("name") is not None:
+                            facts[text(d.child_by_field_name("name"))].append("?")
+            body = node.child_by_field_name("body")
+            if body is not None:
+                collect_locals(body, facts)
+            return {name: merge_java(fs) for name, fs in facts.items()}
+
+        def field_types(class_node: Node) -> dict[str, str]:
+            facts: dict[str, list[str]] = defaultdict(list)
+            body = class_node.child_by_field_name("body")
+            for member in (body.children if body is not None else []):
+                if member.type == "field_declaration":
+                    declarator_facts(member.child_by_field_name("type"), [c for c in member.children if c.type == "variable_declarator"], facts)
+            return {name: merge_java(fs) for name, fs in facts.items()}
+
         def collect_calls(node: Node, source_symbol_id: str) -> None:
             for child in node.children:
                 if child.type in _CALLABLE_DECL_TYPES:
@@ -119,6 +224,7 @@ class JavaParser(LanguageParser):
                     id=sid, name=name, qualified_name=qname, symbol_type=SymbolType.METHOD,
                     file_path=rel_path, start_line=node.start_point[0] + 1, end_line=node.end_point[0] + 1,
                     language=Language.JAVA, decorators=annotations_of(node),
+                    declared_types=method_types(node),
                 )
             )
             relationships.append(
@@ -149,6 +255,7 @@ class JavaParser(LanguageParser):
                     id=sid, name=name, qualified_name=qname, symbol_type=SymbolType.CLASS,
                     file_path=rel_path, start_line=node.start_point[0] + 1, end_line=node.end_point[0] + 1,
                     language=Language.JAVA, decorators=annotations_of(node),
+                    declared_types=field_types(node),
                 )
             )
             relationships.append(
@@ -177,7 +284,14 @@ class JavaParser(LanguageParser):
                 elif child.type == "class_declaration":
                     visit_class(child, sid, qname)  # nested/inner class
 
+        declared_package: dict[str, str] = {}
+
         def visit(node: Node, container_id: str, qualified_prefix: str) -> None:
+            if node.type == "package_declaration":
+                name_node = next((c for c in node.children if c.type in ("scoped_identifier", "identifier")), None)
+                if name_node is not None:
+                    declared_package["name"] = text(name_node)
+                return
             if node.type == "class_declaration":
                 visit_class(node, container_id, qualified_prefix)
                 return
@@ -197,15 +311,17 @@ class JavaParser(LanguageParser):
             line_count = source.count(b"\n") + 1
 
             file_symbol_id = module_name
-            symbols.append(
-                Symbol(
-                    id=file_symbol_id, name=file_path.name, qualified_name=module_name,
-                    symbol_type=SymbolType.FILE, file_path=rel_path, start_line=1, end_line=line_count,
-                    language=Language.JAVA,
-                )
+            file_symbol = Symbol(
+                id=file_symbol_id, name=file_path.name, qualified_name=module_name,
+                symbol_type=SymbolType.FILE, file_path=rel_path, start_line=1, end_line=line_count,
+                language=Language.JAVA,
             )
+            symbols.append(file_symbol)
             for child in tree.root_node.children:
                 visit(child, file_symbol_id, module_name)
+            # A Java package spans source roots (src/main/java and src/test/java), so the declared package,
+            # not the directory, decides which classes are visible without an import.
+            file_symbol.bound_path = declared_package.get("name")
 
         except Exception as exc:  # a single malformed file must not abort the repo parse
             errors.append(str(exc))

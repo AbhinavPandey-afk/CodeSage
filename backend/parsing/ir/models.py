@@ -47,9 +47,24 @@ class Symbol(BaseModel):
     # file ("np" for `import numpy as np`, "url_for" for `from flask.helpers import
     # url_for`); `bound_path` is the dotted path that name refers to ("numpy",
     # "flask.helpers.url_for"). Relative imports are already resolved to repo-path
-    # form. Not persisted to Neo4j -- resolver input only.
+    # form. On a Java FILE symbol, `bound_path` is the declared package instead.
+    # Not persisted to Neo4j -- resolver input only.
     local_name: str | None = None
     bound_path: str | None = None
+    # Declared-type evidence for the names a scope binds, populated by the Python and Java parsers:
+    #   FUNCTION/METHOD symbol -> its parameters and locals;
+    #   CLASS symbol           -> its fields (Python: `self.x` / class-level annotations; Java: fields);
+    #   FILE symbol            -> module-level variables (Python).
+    # Value formats: "Foo" / "pkg.Foo"  a type written in an annotation or declaration (generic arguments,
+    #                                   Optional[...] and `| None` are stripped);
+    #                "new:Foo"          type of the only constructor-call assignment to the name;
+    #                "def"              the name is a nested def/class in this scope (found by lexical
+    #                                   lookup, not a typed variable);
+    #                "?"                the name is bound here with no usable type, or with conflicting
+    #                                   types -- lookups stop at this scope instead of falling through to
+    #                                   an outer variable of the same name.
+    # Resolver input only (like local_name/bound_path): never persisted to Neo4j.
+    declared_types: dict[str, str] = {}
 
 
 class Relationship(BaseModel):

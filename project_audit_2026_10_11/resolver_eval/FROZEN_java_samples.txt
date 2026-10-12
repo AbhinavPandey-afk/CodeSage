@@ -1,0 +1,7 @@
+FROZEN Java evaluation samples (Phase 3). Labels must not be edited to improve metrics; a genuine label error must be corrected transparently with a note and both resolvers re-scored.
+frozen_at: 2026-10-12T15:18:49+05:30  (before any typed-receiver code was written; resolver = commit a10e450)
+sha256 09dad06720c7225b6f95be7afbb002ea43d4f3f0ff2b718999aa61ecab69f88b  java_petclinic_labelled.json
+sha256 4353e1855071a30156f73fa54569cdc885d061b8275c2bb0d5670e4dc3cdafbf  java_petclinic_supplement_labelled.json
+
+P3 added 2026-10-12T15:26:33+05:30 (after P1/P2 had been used to tune the Java same-package rule; labelled blind):
+sha256 0625dc10dd385ba716e6ae53d7f3df9728261e1827519ca17028a3f14a8f9af0  java_petclinic_p3_labelled.json

@@ -1,0 +1,682 @@
+{
+ "seed": 4242,
+ "workspace_commit_note": "pin to the Flask commit recorded in the registry",
+ "stratum_population": {
+  "recv.m": 540,
+  "expression/deep": 529,
+  "this.m": 5,
+  "bare/new": 454,
+  "this.field.m": 55,
+  "a.b.m": 7
+ },
+ "items": [
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/vet/VetControllerTests.java:78:helen",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.vet.VetControllerTests.VetControllerTests.setup",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/vet/VetControllerTests.java",
+   "source_line": 78,
+   "target_name": "helen",
+   "line": "\t\t\t.willReturn(new PageImpl<Vet>(Lists.newArrayList(james(), helen())));",
+   "context_before": [
+    "\tvoid setup() {",
+    "\t\tgiven(this.vets.findAll()).willReturn(Lists.newArrayList(james(), helen()));",
+    "\t\tgiven(this.vets.findAll(any(Pageable.class)))"
+   ],
+   "same_short_name_candidates": [
+    "src.test.java.org.springframework.samples.petclinic.vet.VetControllerTests.VetControllerTests.helen"
+   ],
+   "label": "src.test.java.org.springframework.samples.petclinic.vet.VetControllerTests.VetControllerTests.helen"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:74:Owner",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerControllerTests.OwnerControllerTests.george",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+   "source_line": 74,
+   "target_name": "Owner",
+   "line": "\t\tOwner george = new Owner();",
+   "context_before": [
+    "\tprivate OwnerRepository owners;",
+    "",
+    "\tprivate Owner george() {"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/PostgresIntegrationTests.java:72:SpringApplicationBuilder",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.PostgresIntegrationTests.PostgresIntegrationTests.main",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/PostgresIntegrationTests.java",
+   "source_line": 72,
+   "target_name": "SpringApplicationBuilder",
+   "line": "\t\tnew SpringApplicationBuilder(PetClinicApplication.class) //",
+   "context_before": [
+    "\t}",
+    "",
+    "\tpublic static void main(String[] args) {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java:82:getVisits",
+   "stratum": "bare/new",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.addVisit",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/Pet.java",
+   "source_line": 82,
+   "target_name": "getVisits",
+   "line": "\t\tgetVisits().add(visit);",
+   "context_before": [
+    "\t}",
+    "",
+    "\tpublic void addVisit(Visit visit) {"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.getVisits"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.owner.Pet.Pet.getVisits"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java:92:status",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.PetControllerTests.PetControllerTests.initCreationForm",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java",
+   "source_line": 92,
+   "target_name": "status",
+   "line": "\t\t\t.andExpect(status().isOk())",
+   "context_before": [
+    "\t@Test",
+    "\tvoid initCreationForm() throws Exception {",
+    "\t\tmockMvc.perform(get(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID))"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:253:model",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerControllerTests.OwnerControllerTests.showOwner",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+   "source_line": 253,
+   "target_name": "model",
+   "line": "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"pets\", not(empty()))))",
+   "context_before": [
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"address\", is(\"110 W. Liberty St.\"))))",
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"city\", is(\"Madison\"))))",
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"telephone\", is(\"6085551023\"))))"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:252:hasProperty",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerControllerTests.OwnerControllerTests.showOwner",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+   "source_line": 252,
+   "target_name": "hasProperty",
+   "line": "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"telephone\", is(\"6085551023\"))))",
+   "context_before": [
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"firstName\", is(\"George\"))))",
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"address\", is(\"110 W. Liberty St.\"))))",
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"city\", is(\"Madison\"))))"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:207:hasProperty",
+   "stratum": "bare/new",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerControllerTests.OwnerControllerTests.initUpdateOwnerForm",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+   "source_line": 207,
+   "target_name": "hasProperty",
+   "line": "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"telephone\", is(\"6085551023\"))))",
+   "context_before": [
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"firstName\", is(\"George\"))))",
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"address\", is(\"110 W. Liberty St.\"))))",
+    "\t\t\t.andExpect(model().attribute(\"owner\", hasProperty(\"city\", is(\"Madison\"))))"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java:159:this.isNew",
+   "stratum": "this.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.toString",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java",
+   "source_line": 159,
+   "target_name": "this.isNew",
+   "line": "\t\t\t.append(\"new\", this.isNew())",
+   "context_before": [
+    "\t@Override",
+    "\tpublic String toString() {",
+    "\t\treturn new ToStringCreator(this).append(\"id\", this.getId())"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.isNew"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.isNew"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java:158:this.getId",
+   "stratum": "this.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.toString",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java",
+   "source_line": 158,
+   "target_name": "this.getId",
+   "line": "\t\treturn new ToStringCreator(this).append(\"id\", this.getId())",
+   "context_before": [
+    "",
+    "\t@Override",
+    "\tpublic String toString() {"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.getId"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.getId"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java:161:this.getFirstName",
+   "stratum": "this.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.toString",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java",
+   "source_line": 161,
+   "target_name": "this.getFirstName",
+   "line": "\t\t\t.append(\"firstName\", this.getFirstName())",
+   "context_before": [
+    "\t\treturn new ToStringCreator(this).append(\"id\", this.getId())",
+    "\t\t\t.append(\"new\", this.isNew())",
+    "\t\t\t.append(\"lastName\", this.getLastName())"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.model.Person.Person.getFirstName"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.model.Person.Person.getFirstName"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java:160:this.getLastName",
+   "stratum": "this.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.toString",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/Owner.java",
+   "source_line": 160,
+   "target_name": "this.getLastName",
+   "line": "\t\t\t.append(\"lastName\", this.getLastName())",
+   "context_before": [
+    "\tpublic String toString() {",
+    "\t\treturn new ToStringCreator(this).append(\"id\", this.getId())",
+    "\t\t\t.append(\"new\", this.isNew())"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.model.Person.Person.getLastName"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.model.Person.Person.getLastName"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java:172:this.owners.findById",
+   "stratum": "this.field.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.OwnerController.OwnerController.showOwner",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java",
+   "source_line": 172,
+   "target_name": "this.owners.findById",
+   "line": "\t\tOptional<Owner> optionalOwner = this.owners.findById(ownerId);",
+   "context_before": [
+    "\t@GetMapping(\"/owners/{ownerId}\")",
+    "\tpublic ModelAndView showOwner(@PathVariable(\"ownerId\") int ownerId) {",
+    "\t\tModelAndView mav = new ModelAndView(\"owners/ownerDetails\");"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:94:this.owners.findByLastNameStartingWith",
+   "stratum": "this.field.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.service.ClinicServiceTests.ClinicServiceTests.shouldFindOwnersByLastName",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java",
+   "source_line": 94,
+   "target_name": "this.owners.findByLastNameStartingWith",
+   "line": "\t\towners = this.owners.findByLastNameStartingWith(\"Daviss\", pageable);",
+   "context_before": [
+    "\t\tPage<Owner> owners = this.owners.findByLastNameStartingWith(\"Davis\", pageable);",
+    "\t\tassertThat(owners).hasSize(2);",
+    ""
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java:149:this.types.findPetTypes",
+   "stratum": "this.field.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.service.ClinicServiceTests.ClinicServiceTests.shouldFindAllPetTypes",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java",
+   "source_line": 149,
+   "target_name": "this.types.findPetTypes",
+   "line": "\t\tCollection<PetType> petTypes = this.types.findPetTypes();",
+   "context_before": [
+    "",
+    "\t@Test",
+    "\tvoid shouldFindAllPetTypes() {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:109:this.owners.save",
+   "stratum": "this.field.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.VisitController.VisitController.processNewVisitForm",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+   "source_line": 109,
+   "target_name": "this.owners.save",
+   "line": "\t\tthis.owners.save(owner);",
+   "context_before": [
+    "\t\t}",
+    "",
+    "\t\towner.addVisit(petId, visit);"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java:118:successCount.get",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.PetClinicConcurrencyTests.PetClinicConcurrencyTests.testDuplicatePetNameRaceConditionIsBlocked",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java",
+   "source_line": 118,
+   "target_name": "successCount.get",
+   "line": "\t\tSystem.out.println(\"Successful additions: \" + successCount.get());",
+   "context_before": [
+    "\t\tint newPetCount = updatedOwner.getPets().size();",
+    "",
+    "\t\tSystem.out.println(\"--- Concurrency Test Assertions ---\");"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/system/I18nPropertiesSyncTest.java:133:report.isEmpty",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.system.I18nPropertiesSyncTest.I18nPropertiesSyncTest.checkI18nPropertyFilesAreInSync",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/system/I18nPropertiesSyncTest.java",
+   "source_line": 133,
+   "target_name": "report.isEmpty",
+   "line": "\t\tif (!report.isEmpty()) {",
+   "context_before": [
+    "\t\t\t}",
+    "\t\t}",
+    ""
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:66:owners.findById",
+   "stratum": "recv.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.VisitController.VisitController.loadPetWithVisit",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+   "source_line": 66,
+   "target_name": "owners.findById",
+   "line": "\t\tOptional<Owner> optionalOwner = owners.findById(ownerId);",
+   "context_before": [
+    "\t@ModelAttribute(\"visit\")",
+    "\tpublic Visit loadPetWithVisit(@PathVariable(\"ownerId\") int ownerId, @PathVariable(\"petId\") int petId,",
+    "\t\t\tMap<String, Object> model) {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java:108:ownersResults.isEmpty",
+   "stratum": "recv.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.OwnerController.OwnerController.processFindForm",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java",
+   "source_line": 108,
+   "target_name": "ownersResults.isEmpty",
+   "line": "\t\tif (ownersResults.isEmpty()) {",
+   "context_before": [
+    "",
+    "\t\t// find owners by last name",
+    "\t\tPage<Owner> ownersResults = findPaginatedForOwnersLastName(page, lastName);"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java:37:cm.createCache",
+   "stratum": "recv.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.system.CacheConfiguration.CacheConfiguration.petclinicCacheConfigurationCustomizer",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java",
+   "source_line": 37,
+   "target_name": "cm.createCache",
+   "line": "\t\treturn cm -> cm.createCache(\"vets\", cacheConfiguration());",
+   "context_before": [
+    "",
+    "\t@Bean",
+    "\tpublic JCacheManagerCustomizer petclinicCacheConfigurationCustomizer() {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/vet/VetControllerTests.java:64:helen.setFirstName",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.vet.VetControllerTests.VetControllerTests.helen",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/vet/VetControllerTests.java",
+   "source_line": 64,
+   "target_name": "helen.setFirstName",
+   "line": "\t\thelen.setFirstName(\"Helen\");",
+   "context_before": [
+    "",
+    "\tprivate Vet helen() {",
+    "\t\tVet helen = new Vet();"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.model.Person.Person.setFirstName"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.model.Person.Person.setFirstName"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/MySqlIntegrationTests.java:63:vets.findAll",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.MySqlIntegrationTests.MySqlIntegrationTests.findAll",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/MySqlIntegrationTests.java",
+   "source_line": 63,
+   "target_name": "vets.findAll",
+   "line": "\t\tvets.findAll();",
+   "context_before": [
+    "",
+    "\t@Test",
+    "\tvoid findAll() {"
+   ],
+   "same_short_name_candidates": [
+    "src.test.java.org.springframework.samples.petclinic.MySqlIntegrationTests.MySqlIntegrationTests.findAll",
+    "src.test.java.org.springframework.samples.petclinic.PetClinicIntegrationTests.PetClinicIntegrationTests.findAll",
+    "src.test.java.org.springframework.samples.petclinic.PostgresIntegrationTests.PostgresIntegrationTests.findAll"
+   ],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java:95:failureCount.incrementAndGet",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.PetClinicConcurrencyTests.PetClinicConcurrencyTests.testDuplicatePetNameRaceConditionIsBlocked",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java",
+   "source_line": 95,
+   "target_name": "failureCount.incrementAndGet",
+   "line": "\t\t\t\t\tfailureCount.incrementAndGet();",
+   "context_before": [
+    "\t\t\t\t\t}",
+    "\t\t\t\t}",
+    "\t\t\t\tcatch (Exception e) {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java:134:errors.hasFieldErrors",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.PetValidatorTests.PetValidatorTests.ValidateHasErrors.validateWithLongPetName",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/PetValidatorTests.java",
+   "source_line": 134,
+   "target_name": "errors.hasFieldErrors",
+   "line": "\t\t\tassertTrue(errors.hasFieldErrors(\"name\"));",
+   "context_before": [
+    "",
+    "\t\t\tpetValidator.validate(pet, errors);",
+    ""
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java:70:owner.getPet",
+   "stratum": "recv.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.VisitController.VisitController.loadPetWithVisit",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/VisitController.java",
+   "source_line": 70,
+   "target_name": "owner.getPet",
+   "line": "\t\tPet pet = owner.getPet(petId);",
+   "context_before": [
+    "\t\tOwner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(",
+    "\t\t\t\t\"Owner not found with id: \" + ownerId + \". Please ensure the ID is correct \"));",
+    ""
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.getPet",
+    "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.getPet",
+    "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.getPet"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.owner.Owner.Owner.getPet"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java:74:map.add",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.PetClinicConcurrencyTests.PetClinicConcurrencyTests.testDuplicatePetNameRaceConditionIsBlocked",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java",
+   "source_line": 74,
+   "target_name": "map.add",
+   "line": "\t\t\t\t\tmap.add(\"name\", duplicatePetName);",
+   "context_before": [
+    "\t\t\t\t\theaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);",
+    "",
+    "\t\t\t\t\tMultiValueMap<String, String> map = new LinkedMultiValueMap<>();"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:162:List.of",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerControllerTests.OwnerControllerTests.processFindFormIgnoresSurroundingWhitespace",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+   "source_line": 162,
+   "target_name": "List.of",
+   "line": "\t\tPage<Owner> tasks = new PageImpl<>(List.of(george()));",
+   "context_before": [
+    "",
+    "\t@Test",
+    "\tvoid processFindFormIgnoresSurroundingWhitespace() throws Exception {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:146:List.of",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerControllerTests.OwnerControllerTests.processFindFormSuccess",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+   "source_line": 146,
+   "target_name": "List.of",
+   "line": "\t\tPage<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));",
+   "context_before": [
+    "",
+    "\t@Test",
+    "\tvoid processFindFormSuccess() throws Exception {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/system/CrashControllerIntegrationTests.java:63:rest.exchange",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.system.CrashControllerIntegrationTests.CrashControllerIntegrationTests.triggerExceptionJson",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/system/CrashControllerIntegrationTests.java",
+   "source_line": 63,
+   "target_name": "rest.exchange",
+   "line": "\t\tResponseEntity<Map<String, Object>> resp = rest.exchange(",
+   "context_before": [
+    "",
+    "\t@Test",
+    "\tvoid triggerExceptionJson() {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java:112:result.rejectValue",
+   "stratum": "recv.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.PetController.PetController.processCreationForm",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/PetController.java",
+   "source_line": 112,
+   "target_name": "result.rejectValue",
+   "line": "\t\t\tresult.rejectValue(\"name\", \"duplicate\", \"already exists\");",
+   "context_before": [
+    "\t\t\tRedirectAttributes redirectAttributes) {",
+    "",
+    "\t\tif (StringUtils.hasText(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/OwnerTests.java:29:pet.setId",
+   "stratum": "recv.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.OwnerTests.OwnerTests.addPetAddsPersistedPet",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerTests.java",
+   "source_line": 29,
+   "target_name": "pet.setId",
+   "line": "\t\tpet.setId(5);",
+   "context_before": [
+    "\tvoid addPetAddsPersistedPet() {",
+    "\t\tOwner owner = new Owner();",
+    "\t\tPet pet = new Pet();"
+   ],
+   "same_short_name_candidates": [
+    "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.setId"
+   ],
+   "label": "src.main.java.org.springframework.samples.petclinic.model.BaseEntity.BaseEntity.setId"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java:118:System.out.println",
+   "stratum": "a.b.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.PetClinicConcurrencyTests.PetClinicConcurrencyTests.testDuplicatePetNameRaceConditionIsBlocked",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java",
+   "source_line": 118,
+   "target_name": "System.out.println",
+   "line": "\t\tSystem.out.println(\"Successful additions: \" + successCount.get());",
+   "context_before": [
+    "\t\tint newPetCount = updatedOwner.getPets().size();",
+    "",
+    "\t\tSystem.out.println(\"--- Concurrency Test Assertions ---\");"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java:66:Pet.class.isAssignableFrom",
+   "stratum": "a.b.m",
+   "caller": "src.main.java.org.springframework.samples.petclinic.owner.PetValidator.PetValidator.supports",
+   "source_file": "src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java",
+   "source_line": 66,
+   "target_name": "Pet.class.isAssignableFrom",
+   "line": "\t\treturn Pet.class.isAssignableFrom(clazz);",
+   "context_before": [
+    "\t */",
+    "\t@Override",
+    "\tpublic boolean supports(Class<?> clazz) {"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/system/I18nPropertiesSyncTest.java:119:\"messages_en.properties\".equals",
+   "stratum": "a.b.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.system.I18nPropertiesSyncTest.I18nPropertiesSyncTest.checkI18nPropertyFilesAreInSync",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/system/I18nPropertiesSyncTest.java",
+   "source_line": 119,
+   "target_name": "\"messages_en.properties\".equals",
+   "line": "\t\t\tif (fileName.equals(baseFile) || \"messages_en.properties\".equals(fileName)) {",
+   "context_before": [
+    "\t\t\tString fileName = entry.getKey();",
+    "\t\t\t// We use fallback logic to include english strings, hence messages_en is not",
+    "\t\t\t// populated."
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java:117:System.out.println",
+   "stratum": "a.b.m",
+   "caller": "src.test.java.org.springframework.samples.petclinic.PetClinicConcurrencyTests.PetClinicConcurrencyTests.testDuplicatePetNameRaceConditionIsBlocked",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/PetClinicConcurrencyTests.java",
+   "source_line": 117,
+   "target_name": "System.out.println",
+   "line": "\t\tSystem.out.println(\"--- Concurrency Test Assertions ---\");",
+   "context_before": [
+    "\t\tOwner updatedOwner = ownerRepository.findById(ownerId).get();",
+    "\t\tint newPetCount = updatedOwner.getPets().size();",
+    ""
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java:247:post(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID).param",
+   "stratum": "expression/deep",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.PetControllerTests.PetControllerTests.ProcessUpdateFormHasErrors.processUpdateFormWithBlankName",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java",
+   "source_line": 247,
+   "target_name": "post(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID).param",
+   "line": "\t\t\t\t.perform(post(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\", \"  \")",
+   "context_before": [
+    "\t\t@Test",
+    "\t\tvoid processUpdateFormWithBlankName() throws Exception {",
+    "\t\t\tmockMvc"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java:267:model().attributeHasFieldErrorCode",
+   "stratum": "expression/deep",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.PetControllerTests.PetControllerTests.ProcessUpdateFormHasErrors.processUpdateFormWithDataIntegrityViolation",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/PetControllerTests.java",
+   "source_line": 267,
+   "target_name": "model().attributeHasFieldErrorCode",
+   "line": "\t\t\t\t.andExpect(model().attributeHasFieldErrorCode(\"pet\", \"name\", \"duplicate\"))",
+   "context_before": [
+    "\t\t\t\t.andExpect(model().attributeHasNoErrors(\"owner\"))",
+    "\t\t\t\t.andExpect(model().attributeHasErrors(\"pet\"))",
+    "\t\t\t\t.andExpect(model().attributeHasFieldErrors(\"pet\", \"name\"))"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java:89:post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param",
+   "stratum": "expression/deep",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.VisitControllerTests.VisitControllerTests.processNewVisitFormHasErrors",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java",
+   "source_line": 89,
+   "target_name": "post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param",
+   "line": "\t\t\t.perform(post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\",",
+   "context_before": [
+    "\t@Test",
+    "\tvoid processNewVisitFormHasErrors() throws Exception {",
+    "\t\tmockMvc"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  },
+  {
+   "key": "src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java:99:post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param",
+   "stratum": "expression/deep",
+   "caller": "src.test.java.org.springframework.samples.petclinic.owner.VisitControllerTests.VisitControllerTests.processNewVisitFormHasErrorsWhenVisitDateIsNotInFuture",
+   "source_file": "src/test/java/org/springframework/samples/petclinic/owner/VisitControllerTests.java",
+   "source_line": 99,
+   "target_name": "post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param",
+   "line": "\t\t\t.perform(post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID)",
+   "context_before": [
+    "\t@Test",
+    "\tvoid processNewVisitFormHasErrorsWhenVisitDateIsNotInFuture() throws Exception {",
+    "\t\tmockMvc"
+   ],
+   "same_short_name_candidates": [],
+   "label": "EXTERNAL"
+  }
+ ],
+ "skip_excluded": [],
+ "labelling_rules": "label = the call's true target by Java semantics, using the declared type of the receiver visible in the source (fields, parameters, locals, `new T()`), inherited methods counted at the class that declares them (e.g. Owner.getId -> BaseEntity.getId); JDK / Spring / Mockito / interface-only targets (the repository interfaces are not in the IR and findById/save are inherited from Spring Data) -> EXTERNAL. Labelled once by reading source with NO resolver output visible, BEFORE the typed-receiver implementation; FROZEN (see FROZEN_java_samples.txt). Overloaded methods share one qualified name; a label names that qualified name. Sample P1: 40 sites, seed 4242, strata by call-target shape (resolver-independent)."
+}

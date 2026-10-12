@@ -82,7 +82,21 @@ def _baseline_status(res, by_id) -> str:
     return "bound_import_node" if by_id[res.target_id].symbol_type == SymbolType.IMPORT else "bound_definition"
 
 
-def make_sample(workspace: Path, out: Path, seed: int, by_shape: bool = False, exclude: Path | None = None) -> None:
+def _java_shape(name: str) -> str:
+    """Java call-target shapes (resolver-independent): the parser keeps the full receiver text."""
+    if "(" in name or name.count(".") >= 3:
+        return "expression/deep"
+    if name.startswith("this.") and name.count(".") == 2:
+        return "this.field.m"
+    if name.startswith("this."):
+        return "this.m"
+    if "." not in name:
+        return "bare/new"
+    return "recv.m" if name.count(".") == 1 else "a.b.m"
+
+
+def make_sample(workspace: Path, out: Path, seed: int, by_shape: bool = False, exclude: Path | None = None,
+                java: bool = False, require_candidate: bool = False) -> None:
     symbols, rels, resolved = _load(workspace)
     by_id = {s.id: s for s in symbols}
     short_index = collections.defaultdict(list)
@@ -111,7 +125,11 @@ def make_sample(workspace: Path, out: Path, seed: int, by_shape: bool = False, e
             stratum = "bound_import_node"
         else:
             stratum = f"bound_definition/{shape}"
-        if by_shape:
+        if require_candidate and not has_cand:
+            continue
+        if java:
+            stratum = _java_shape(raw.target_name)
+        elif by_shape:
             stratum = "chained(?.attr)" if raw.target_name.startswith("?.") else shape
         strata[stratum].append((raw, res))
 
@@ -119,7 +137,11 @@ def make_sample(workspace: Path, out: Path, seed: int, by_shape: bool = False, e
         "bound_definition/bare": 22, "bound_definition/recv.attr": 26, "bound_definition/self": 18,
         "bound_import_node": 14, "unresolved/has_candidate": 26, "unresolved/no_candidate": 14,
     }
-    if by_shape:
+    if java and require_candidate:
+        quotas = {"bare/new": 4, "recv.m": 13, "a.b.m": 1, "expression/deep": 2}
+    elif java:
+        quotas = {"bare/new": 8, "this.m": 4, "this.field.m": 4, "recv.m": 16, "a.b.m": 4, "expression/deep": 4}
+    elif by_shape:
         quotas = {"bare": 30, "self": 30, "recv.attr": 40, "chained(?.attr)": 20}
     rng = random.Random(seed)
     items = []
@@ -137,7 +159,7 @@ def make_sample(workspace: Path, out: Path, seed: int, by_shape: bool = False, e
                 "context_before": ctx_before,
                 "baseline_target": by_id[res.target_id].qualified_name if res.target_id else None,
                 "baseline_confidence": res.confidence,
-                "same_short_name_candidates": sorted(short_index.get(short, []))[:8],
+                "same_short_name_candidates": sorted(short_index.get(short, []))[:12],
                 "label": None,
             })
     payload = {"seed": seed, "workspace_commit_note": "pin to the Flask commit recorded in the registry",
@@ -152,18 +174,29 @@ def evaluate(workspace: Path, labelled: Path, json_out: Path | None) -> None:
     symbols, rels, resolved = _load(workspace)
     by_id = {s.id: s for s in symbols}
     outcome = {}
+    by_attr: dict[str, list] = collections.defaultdict(list)
     for raw, res in zip(rels, resolved):
         if raw.relationship_type == RT.CALLS:
             outcome.setdefault(_key(raw), res)
+            by_attr[f"{raw.source_file}:{raw.source_line}:{raw.target_name.rsplit('.', 1)[-1].split('<')[0]}"].append(res)
+    fallback_uses = 0
 
     rows = []
     for it in data["items"]:
         it["key"] = it["key"].replace(":?.", ":", 1)  # samples drawn after the parser change carry the marker
         if it["label"] is None:
             raise SystemExit(f"unlabelled item: {it['key']}")
-        if it["key"] not in outcome:
-            raise SystemExit(f"labelled call site not found in parse output (stale sample?): {it['key']}")
-        res = outcome[it["key"]]
+        if it["key"] in outcome:
+            res = outcome[it["key"]]
+        else:
+            # The receiver text of a call target can be encoded differently by newer parsers (e.g. `get` ->
+            # `self.config.get`); fall back to (file, line, attribute) when that identifies exactly one call.
+            file_line, _, name = it["key"].rpartition(":")
+            candidates = by_attr.get(f"{file_line}:{name.rsplit('.', 1)[-1]}", [])
+            if len(candidates) != 1:
+                raise SystemExit(f"labelled call site not found (or ambiguous) in parse output: {it['key']}")
+            res = candidates[0]
+            fallback_uses += 1
         target = by_id[res.target_id] if res is not None and res.target_id else None
         is_def = target is not None and target.symbol_type != SymbolType.IMPORT
         got = target.qualified_name if is_def else (f"IMPORT:{target.qualified_name}" if target else None)
@@ -181,7 +214,7 @@ def evaluate(workspace: Path, labelled: Path, json_out: Path | None) -> None:
             "recall": round(len(correct) / len(has_def), 3) if has_def else None,
         }
 
-    report = {"overall": metrics(rows), "by_baseline_stratum": {}}
+    report = {"overall": metrics(rows), "by_baseline_stratum": {}, "key_fallback_matches": fallback_uses}
     for st in sorted({r["stratum"] for r in rows}):
         report["by_baseline_stratum"][st] = metrics([r for r in rows if r["stratum"] == st])
     pop = data.get("stratum_population", {})
@@ -220,6 +253,8 @@ if __name__ == "__main__":
     a.add_argument("out", type=Path)
     a.add_argument("--seed", type=int, default=20261012)
     a.add_argument("--by-shape", action="store_true", help="stratify by call shape (resolver-independent) for a held-out sample")
+    a.add_argument("--require-candidate", action="store_true", help="only sites with a same-short-name repository definition")
+    a.add_argument("--java", action="store_true", help="stratify by Java call-target shapes")
     a.add_argument("--exclude", type=Path, default=None, help="labelled sample whose call sites must not be re-drawn")
     b = sub.add_parser("eval")
     b.add_argument("workspace", type=Path)
@@ -228,7 +263,7 @@ if __name__ == "__main__":
     b.add_argument("--resolver-file", type=Path, default=None, help="score an alternative resolver.py on the CURRENT parser output (NOT a true baseline; for a baseline run the script from an extracted `git archive` of the committed tree)")
     args = ap.parse_args()
     if args.mode == "make-sample":
-        make_sample(args.workspace, args.out, args.seed, args.by_shape, args.exclude)
+        make_sample(args.workspace, args.out, args.seed, args.by_shape, args.exclude, args.java, args.require_candidate)
     else:
         RESOLVER_OVERRIDE = args.resolver_file
         evaluate(args.workspace, args.labelled, args.json)
