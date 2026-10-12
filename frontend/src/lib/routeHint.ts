@@ -11,7 +11,9 @@ export interface ParsedRoute {
 const VERB_FROM_CALL = /\.(get|post|put|delete|patch|websocket)\s*\(/i;
 const BARE_VERB = /@(get|post|put|delete|patch|all)\s*\(/i;
 const MAPPING_VERB = /@(get|post|put|delete|patch)mapping/i;
-const METHODS_LIST_RE = /methods\s*=\s*\[\s*['"](\w+)['"]/i;
+// Flask's own tutorial uses a tuple (`methods=("POST",)`), not just a list
+// (`methods=['POST']`) — both are common in the wild, so both are matched.
+const METHODS_LIST_RE = /methods\s*=\s*[[(]\s*['"](\w+)['"]/i;
 const PATH_RE = /\(\s*['"]([^'"]+)['"]/;
 
 export function parseRouteHint(hint: string | null): ParsedRoute {

@@ -33,6 +33,7 @@ def _hop_response(hop: FlowHop) -> FlowHopResponse:
         source_line=hop.source_line, confidence=hop.confidence, terminal_kind=hop.terminal_kind,
         callee_file_path=hop.callee_file_path, component_id=hop.component_id,
         component_role=hop.component_role, component_name=hop.component_name,
+        terminal_reason=hop.terminal_reason, children_omitted=hop.children_omitted,
         note=hop.note, children=[_hop_response(c) for c in hop.children],
     )
 

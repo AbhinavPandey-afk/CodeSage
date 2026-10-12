@@ -1,11 +1,14 @@
 import cytoscape, { type Core } from "cytoscape";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api/client";
-import type { GraphNode, RelationshipResponse } from "../api/types";
+import type { ArchitectureModel, GraphEdge, GraphNode, RelationshipResponse, Smell } from "../api/types";
 import { GraphToolbar } from "@/components/graph/GraphToolbar";
 import { NodeInspector } from "@/components/graph/NodeInspector";
-import { RelationshipTrail } from "@/components/graph/RelationshipTrail";
+import { RelationshipInvestigation } from "@/components/graph/RelationshipInvestigation";
+import { SelectionStateBar } from "@/components/graph/SelectionStateBar";
+import { componentForFile, findingsForFile } from "@/lib/evidenceExplorer";
 import { useInvestigation } from "@/lib/investigation";
+import { cn } from "@/lib/utils";
 
 type Granularity = "files" | "classes";
 
@@ -21,6 +24,14 @@ const TYPE_VAR: Record<string, string> = {
   CALLS: "--accent",
 };
 
+/** Evidence Explorer (CLAUDE.md §24 Interactive Evidence Explorer, PART 2):
+ * EXPLORE (browse the graph, inspect one entity) and INVESTIGATE (two
+ * entities selected, relationship evidence) are the same page, distinguished
+ * by state rather than a literal tab — `primary`/`secondary` below are that
+ * state. The graph itself, its layout/styling, and the relationship
+ * resolver are untouched; this component only adds the surrounding
+ * investigation surface (inspector, relationship panel, search-compare,
+ * visible selection state). */
 export function GraphView({ repoId }: { repoId: string }) {
   const { focus } = useInvestigation();
   // GraphView remounts whenever the user navigates to this tab (App.tsx only
@@ -30,15 +41,17 @@ export function GraphView({ repoId }: { repoId: string }) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
-  const selectedRef = useRef<GraphNode | null>(null);
+  const primaryRef = useRef<GraphNode | null>(null);
   const nodesRef = useRef<GraphNode[]>([]);
   const uidByNameRef = useRef<Map<string, string>>(new Map());
 
   const [granularity, setGranularity] = useState<Granularity>("files");
-  const [selected, setSelected] = useState<GraphNode | null>(null);
+  const [primary, setPrimaryState] = useState<GraphNode | null>(null);
+  const [secondary, setSecondary] = useState<GraphNode | null>(null);
   const [truncated, setTruncated] = useState(false);
   const [nodeCount, setNodeCount] = useState(0);
   const [nodes, setNodes] = useState<GraphNode[]>([]);
+  const [edges, setEdges] = useState<GraphEdge[]>([]);
   const [relationshipTypes, setRelationshipTypes] = useState<string[]>([]);
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
@@ -47,9 +60,35 @@ export function GraphView({ repoId }: { repoId: string }) {
   const [relationshipLoading, setRelationshipLoading] = useState(false);
   const [relationshipError, setRelationshipError] = useState<string | null>(null);
 
-  function selectNode(node: GraphNode | null) {
-    selectedRef.current = node;
-    setSelected(node);
+  // Reconstruction context for the inspector/investigation panels (PART 3/15) —
+  // reused as-is from their own existing endpoints, not recomputed here.
+  const [architecture, setArchitecture] = useState<ArchitectureModel | null>(null);
+  const [smells, setSmells] = useState<Smell[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .getArchitecture(repoId)
+      .then((a) => !cancelled && setArchitecture(a))
+      .catch(() => !cancelled && setArchitecture(null));
+    api
+      .getSmells(repoId)
+      .then((s) => !cancelled && setSmells(s))
+      .catch(() => !cancelled && setSmells([]));
+    return () => {
+      cancelled = true;
+    };
+  }, [repoId]);
+
+  function setPrimary(node: GraphNode | null) {
+    primaryRef.current = node;
+    setPrimaryState(node);
+  }
+
+  /** Explore a single node — clears any active investigation. */
+  function selectPrimary(node: GraphNode | null) {
+    setPrimary(node);
+    setSecondary(null);
     setRelationship(null);
     setRelationshipError(null);
   }
@@ -72,8 +111,9 @@ export function GraphView({ repoId }: { repoId: string }) {
 
   const compareNodes = useCallback(
     async (a: GraphNode, b: GraphNode) => {
-      selectedRef.current = null;
-      setSelected(null);
+      setPrimary(a);
+      setSecondary(b);
+      setRelationship(null);
       setRelationshipLoading(true);
       setRelationshipError(null);
       try {
@@ -102,11 +142,23 @@ export function GraphView({ repoId }: { repoId: string }) {
     [repoId, highlightPath],
   );
 
+  /** Exit INVESTIGATE, back to EXPLORE on whichever node was the source —
+   * preserves context instead of resetting the whole page (PART 2/17). */
+  const clearInvestigation = useCallback(() => {
+    setSecondary(null);
+    setRelationship(null);
+    setRelationshipError(null);
+    const cy = cyRef.current;
+    if (!cy) return;
+    cy.elements().removeClass("faded");
+    if (primaryRef.current) applyFocus(cy, primaryRef.current.uid);
+  }, [applyFocus]);
+
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    selectNode(null);
+    selectPrimary(null);
     setHiddenTypes(new Set());
 
     api
@@ -117,6 +169,7 @@ export function GraphView({ repoId }: { repoId: string }) {
         setTruncated(view.truncated);
         setNodeCount(view.nodes.length);
         setNodes(view.nodes);
+        setEdges(view.edges);
         nodesRef.current = view.nodes;
         uidByNameRef.current = new Map(view.nodes.map((n) => [n.qualified_name, n.uid]));
         setRelationshipTypes([...new Set(view.edges.map((e) => e.relationship_type))].sort());
@@ -197,18 +250,18 @@ export function GraphView({ repoId }: { repoId: string }) {
 
           const original = evt.originalEvent as MouseEvent | undefined;
           const isCompareClick = original?.ctrlKey || original?.metaKey;
-          const current = selectedRef.current;
+          const current = primaryRef.current;
 
           if (isCompareClick && current && current.uid !== node.uid) {
             void compareNodes(current, node);
           } else {
-            selectNode(node);
+            selectPrimary(node);
             applyFocus(cy, node.uid);
           }
         });
         cy.on("tap", (evt) => {
           if (evt.target === cy) {
-            selectNode(null);
+            selectPrimary(null);
             cy.elements().removeClass("faded");
           }
         });
@@ -216,12 +269,27 @@ export function GraphView({ repoId }: { repoId: string }) {
         cyRef.current = cy;
 
         const wantedName = initialFocusRef.current?.qualifiedName;
+        const wantedComponentId = initialFocusRef.current?.componentId;
         if (wantedName) {
           const match = view.nodes.find((n) => n.qualified_name === wantedName);
           if (match) {
-            selectNode(match);
+            selectPrimary(match);
             applyFocus(cy, match.uid);
             cy.animate({ center: { eles: cy.getElementById(match.uid) }, zoom: 1.4 }, { duration: 300 });
+          }
+        } else if (wantedComponentId) {
+          // component_id IS a directory prefix (analysis/reconstruction/grouping.py's
+          // group_key), so a component's member nodes can be matched directly by
+          // file_path without a second API call back to the architecture endpoint.
+          const matches = view.nodes.filter(
+            (n) => n.file_path === wantedComponentId || n.file_path.startsWith(`${wantedComponentId}/`),
+          );
+          if (matches.length > 0) {
+            const uids = matches.map((n) => n.uid);
+            let collection = cy.collection();
+            for (const uid of uids) collection = collection.union(cy.getElementById(uid));
+            highlightPath(cy, uids);
+            cy.animate({ fit: { eles: collection, padding: 40 } }, { duration: 300 });
           }
         }
 
@@ -241,7 +309,8 @@ export function GraphView({ repoId }: { repoId: string }) {
       cyRef.current?.destroy();
       cyRef.current = null;
     };
-  }, [repoId, granularity, compareNodes, applyFocus]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoId, granularity, compareNodes, applyFocus, highlightPath]);
 
   useEffect(() => {
     const cy = cyRef.current;
@@ -260,6 +329,9 @@ export function GraphView({ repoId }: { repoId: string }) {
     });
   };
 
+  /** Select-and-recenter — used by search "jump to", and by clicking a
+   * neighbor in the inspector's incoming/outgoing lists. Starts a fresh
+   * EXPLORE on that node (exits any active investigation). */
   const jumpToNode = useCallback(
     (uid: string) => {
       const cy = cyRef.current;
@@ -267,12 +339,50 @@ export function GraphView({ repoId }: { repoId: string }) {
       if (!cy || !node) return;
       const ele = cy.getElementById(uid);
       if (ele.empty()) return;
-      selectNode(node);
+      selectPrimary(node);
       applyFocus(cy, uid);
       cy.animate({ center: { eles: ele }, zoom: Math.max(cy.zoom(), 1.4) }, { duration: 300 });
     },
     [applyFocus],
   );
+
+  /** Recenter on an intermediate path hop without leaving the investigation
+   * (PART 9/10) — the path highlight stays exactly as the resolver returned
+   * it; this only moves the camera. */
+  const focusPathNode = useCallback((uid: string) => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    const ele = cy.getElementById(uid);
+    if (ele.empty()) return;
+    cy.animate({ center: { eles: ele }, zoom: Math.max(cy.zoom(), 1.4) }, { duration: 300 });
+  }, []);
+
+  const resolveUid = useCallback(
+    (qualifiedName: string): string | null => {
+      if (relationship?.source.qualified_name === qualifiedName) return relationship.source.uid;
+      if (relationship?.target.qualified_name === qualifiedName) return relationship.target.uid;
+      return uidByNameRef.current.get(qualifiedName) ?? null;
+    },
+    [relationship],
+  );
+
+  const handleCompareFromSearch = useCallback(
+    (node: GraphNode) => {
+      if (!primaryRef.current || primaryRef.current.uid === node.uid) return;
+      void compareNodes(primaryRef.current, node);
+    },
+    [compareNodes],
+  );
+
+  const nodesByUid = useMemo(() => new Map(nodes.map((n) => [n.uid, n])), [nodes]);
+  const primaryComponent = useMemo(
+    () => (primary && architecture ? componentForFile(architecture.components, primary.file_path) : null),
+    [primary, architecture],
+  );
+  const primaryFindings = useMemo(() => (primary ? findingsForFile(smells, primary.file_path) : []), [primary, smells]);
+
+  const investigating = secondary !== null || relationshipLoading || relationship !== null || relationshipError !== null;
+  const showInspector = primary !== null && !investigating;
 
   const legendTypes = useMemo(() => relationshipTypes, [relationshipTypes]);
 
@@ -284,8 +394,7 @@ export function GraphView({ repoId }: { repoId: string }) {
         {granularity === "files"
           ? "Each node is a file; an edge means a function in one calls a function in the other. Isolated files with no cross-file calls are hidden."
           : "Files and the classes they define, with containment, inheritance, and aggregated call relationships between classes."}
-        {truncated && ` Showing the ${nodeCount} most-connected symbols.`} Select a node to focus its
-        neighborhood, then Ctrl/Cmd-click a second node to investigate how they're connected.
+        {truncated && ` Showing the ${nodeCount} most-connected symbols.`}
       </p>
 
       <GraphToolbar
@@ -296,42 +405,61 @@ export function GraphView({ repoId }: { repoId: string }) {
         relationshipTypes={legendTypes}
         hiddenTypes={hiddenTypes}
         onToggleType={toggleType}
+        selectedNode={primary}
+        onCompare={handleCompareFromSearch}
       />
 
-      <div className="relative">
-        {loading && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg border border-(--border) bg-(--bg-raised) text-sm text-(--text-faint)">
-            Loading graph…
+      <SelectionStateBar primary={primary} secondary={secondary} investigating={investigating} onClear={clearInvestigation} />
+
+      <div className={cn("grid gap-4", showInspector ? "lg:grid-cols-[1fr_320px]" : "grid-cols-1")}>
+        <div className="relative min-w-0">
+          {loading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg border border-(--border) bg-(--bg-raised) text-sm text-(--text-faint)">
+              Loading graph…
+            </div>
+          )}
+          <div ref={containerRef} className="h-[520px] rounded-lg border border-(--border) bg-(--bg-raised)" />
+        </div>
+
+        {showInspector && primary && (
+          <div className="h-[520px]">
+            <NodeInspector
+              node={primary}
+              edges={edges}
+              nodesByUid={nodesByUid}
+              component={primaryComponent}
+              findings={primaryFindings}
+              onClose={() => selectPrimary(null)}
+              onJumpToNode={jumpToNode}
+            />
           </div>
-        )}
-        <div ref={containerRef} className="h-[520px] rounded-lg border border-(--border) bg-(--bg-raised)" />
-
-        {selected && !relationship && !relationshipLoading && (
-          <NodeInspector node={selected} onClose={() => selectNode(null)} />
-        )}
-
-        {relationshipLoading && (
-          <div className="absolute top-3 right-3 z-10 rounded-lg border border-(--border) bg-(--bg-raised) px-4 py-3 text-sm text-(--text-faint) shadow-lg">
-            Investigating relationship…
-          </div>
-        )}
-
-        {relationshipError && (
-          <div className="absolute top-3 right-3 z-10 w-64 rounded-lg border border-(--bad)/30 bg-(--bg-raised) px-4 py-3 shadow-lg">
-            <p className="text-sm text-(--bad)">{relationshipError}</p>
-          </div>
-        )}
-
-        {relationship && (
-          <RelationshipTrail
-            relationship={relationship}
-            onClose={() => {
-              setRelationship(null);
-              cyRef.current?.elements().removeClass("faded");
-            }}
-          />
         )}
       </div>
+
+      {relationshipLoading && (
+        <div className="mt-4 rounded-lg border border-(--border) bg-(--bg-raised) px-4 py-3 text-sm text-(--text-faint)">
+          Investigating relationship…
+        </div>
+      )}
+
+      {relationshipError && (
+        <div className="mt-4 rounded-lg border border-(--bad)/30 bg-(--bg-raised) px-4 py-3">
+          <p className="text-sm text-(--bad)">{relationshipError}</p>
+        </div>
+      )}
+
+      {relationship && (
+        <div className="mt-4">
+          <RelationshipInvestigation
+            relationship={relationship}
+            components={architecture?.components ?? []}
+            smells={smells}
+            resolveUid={resolveUid}
+            onFocusNode={focusPathNode}
+            onClose={clearInvestigation}
+          />
+        </div>
+      )}
     </div>
   );
 }

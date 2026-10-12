@@ -39,6 +39,13 @@ class OptimizationProposal:
     affected_components: list[str]
     affected_files: list[str]
     representative_impact: RepresentativeImpact | None = None
+    # The Architecture Analysis finding this proposal was generated from,
+    # when one exists (CLAUDE.md §26/V2 analytical hardening §15) -- an
+    # explicit, stable link in place of the previous implicit
+    # title-string correlation between /smells and /optimization. Optional:
+    # a future proposal source that isn't derived from a single finding
+    # should not be forced to invent one.
+    finding_id: str | None = None
 
 
 @dataclass(frozen=True)

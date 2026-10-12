@@ -1,4 +1,5 @@
 import type {
+  ArchitectureComponent,
   ArchitectureModel,
   AskResponse,
   EntryPoint,
@@ -25,6 +26,24 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(body.detail ?? `Request failed: ${res.status}`);
   }
   return res.json() as Promise<T>;
+}
+
+/** `third_party_dependencies` was added to ArchitectureComponent after this
+ * endpoint shipped; a repository analyzed (or a backend process started)
+ * before that additive change can still omit the key or send it as
+ * null/undefined. Normalize to [] at the API boundary so every consumer
+ * (aggregateExternalDependencies, ArchitectureList, ComponentCard,
+ * ComponentInspector) can rely on the type it's already declared as. */
+function normalizeArchitectureModel(model: ArchitectureModel): ArchitectureModel {
+  return {
+    ...model,
+    components: model.components.map(
+      (c): ArchitectureComponent => ({
+        ...c,
+        third_party_dependencies: Array.isArray(c.third_party_dependencies) ? c.third_party_dependencies : [],
+      }),
+    ),
+  };
 }
 
 export const api = {
@@ -67,7 +86,8 @@ export const api = {
       body: JSON.stringify({ symbol_uid: symbolUid }),
     }),
 
-  getArchitecture: (id: string) => request<ArchitectureModel>(`/api/repositories/${id}/architecture`),
+  getArchitecture: (id: string) =>
+    request<ArchitectureModel>(`/api/repositories/${id}/architecture`).then(normalizeArchitectureModel),
 
   getOptimization: (id: string) => request<OptimizationReport>(`/api/repositories/${id}/optimization`),
 

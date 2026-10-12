@@ -1,4 +1,10 @@
-from analysis.reconstruction.grouping import SymbolSignal, confidence_label, group_key, infer_role
+from analysis.reconstruction.grouping import (
+    SymbolSignal,
+    confidence_label,
+    group_key,
+    infer_role,
+    third_party_dependencies,
+)
 
 
 def test_group_key_uses_up_to_two_directory_levels():
@@ -57,3 +63,20 @@ def test_falls_back_to_other_with_no_evidence():
     assert role == "other"
     assert confidence < 0.4
     assert evidence
+
+
+def test_third_party_dependencies_keeps_real_package_names():
+    deps = third_party_dependencies(["stripe.checkout", "sqlalchemy.orm", "os"])
+    names = {d.name: d.category for d in deps}
+    assert names == {"stripe": "external_service", "sqlalchemy": "database"}
+    assert "os" not in names  # stdlib -- not externally interesting
+
+
+def test_third_party_dependencies_dedupes_by_top_level_module():
+    deps = third_party_dependencies(["requests.get", "requests.post", "requests"])
+    assert len(deps) == 1
+    assert deps[0].name == "requests"
+
+
+def test_third_party_dependencies_empty_for_no_imports():
+    assert third_party_dependencies([]) == []

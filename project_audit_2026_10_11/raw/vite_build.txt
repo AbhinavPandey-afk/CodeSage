@@ -1,0 +1,27 @@
+[36mvite v8.2.1 [32mbuilding client environment for production...[36m[39m
+[2Ktransforming...✓ 2369 modules transformed.
+[33m
+[1m(!)[22m outDir [37m[2mC:\Users\abhin\CodeSage\project_audit_2026_10_11\raw\dist_build[22m[33m is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+[39m
+rendering chunks...
+computing gzip size...
+../project_audit_2026_10_11/raw/dist_build/index.html                                               0.45 kB │ gzip:   0.29 kB
+../project_audit_2026_10_11/raw/dist_build/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2     7.42 kB
+../project_audit_2026_10_11/raw/dist_build/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2       8.00 kB
+../project_audit_2026_10_11/raw/dist_build/assets/fraunces-vietnamese-wght-normal-CnvboYUG.woff2   11.57 kB
+../project_audit_2026_10_11/raw/dist_build/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2        15.08 kB
+../project_audit_2026_10_11/raw/dist_build/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2       16.51 kB
+../project_audit_2026_10_11/raw/dist_build/assets/geist-latin-wght-normal-BgDaEnEv.woff2           29.40 kB
+../project_audit_2026_10_11/raw/dist_build/assets/fraunces-latin-ext-wght-normal-Ca2vKHc0.woff2    33.58 kB
+../project_audit_2026_10_11/raw/dist_build/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2        36.62 kB
+../project_audit_2026_10_11/raw/dist_build/assets/index-C3kfJ4R6.css                               70.68 kB │ gzip:  13.03 kB
+../project_audit_2026_10_11/raw/dist_build/assets/index-Kt33vOtY.js                               980.83 kB │ gzip: 296.32 kB
+
+[32m✓ built in 2.03s[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+vite_exit=0

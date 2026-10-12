@@ -1,0 +1,497 @@
+HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02 "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/architecture "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/smells "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/optimization "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+HTTP Request: POST http://testserver/api/repositories/526e8042-1b3f-414e-9959-117464f02e02/flows/reconstruct "HTTP/1.1 200 OK"
+{
+  "repo_id": "526e8042-1b3f-414e-9959-117464f02e02",
+  "neo4j_connectivity": true,
+  "graph_counts": {
+    "symbols": 2647,
+    "by_label": {
+      "file": 83,
+      "import": 942,
+      "function": 1060,
+      "class": 160,
+      "method": 402
+    },
+    "rels_by_type": {
+      "CONTAINS": 1622,
+      "IMPORTS": 942,
+      "CALLS": 1071,
+      "INHERITS": 70
+    },
+    "calls_conf": {
+      "0.75": 832,
+      "0.95": 239
+    }
+  },
+  "health": [
+    200,
+    {
+      "status": "ok"
+    }
+  ],
+  "repo_record_status": [
+    200,
+    "ready"
+  ],
+  "architecture_status": 200,
+  "architecture": {
+    "components": 8,
+    "relationships": 12,
+    "truncated": false,
+    "roles": {
+      "test": 3,
+      "external_integration": 2,
+      "api": 3
+    },
+    "confidence_labels": {
+      "Confirmed": 7,
+      "Inferred": 1
+    },
+    "components_list": [
+      [
+        "tests",
+        "test",
+        23,
+        1076,
+        "Confirmed"
+      ],
+      [
+        "src/flask",
+        "external_integration",
+        24,
+        442,
+        "Confirmed"
+      ],
+      [
+        "examples/tutorial",
+        "api",
+        9,
+        45,
+        "Confirmed"
+      ],
+      [
+        "tests/type_check",
+        "test",
+        3,
+        30,
+        "Confirmed"
+      ],
+      [
+        "examples/celery",
+        "api",
+        4,
+        12,
+        "Confirmed"
+      ],
+      [
+        "tests/test_apps",
+        "test",
+        15,
+        8,
+        "Confirmed"
+      ],
+      [
+        "examples/javascript",
+        "api",
+        4,
+        7,
+        "Confirmed"
+      ],
+      [
+        "docs",
+        "external_integration",
+        1,
+        2,
+        "Inferred"
+      ]
+    ]
+  },
+  "smells_status": 200,
+  "smells": {
+    "total": 47,
+    "by_severity": {
+      "HIGH": 1,
+      "MEDIUM": 17,
+      "LOW": 29
+    },
+    "by_type": {
+      "architecture_boundary_violation": 1,
+      "circular_dependency": 2,
+      "god_class": 4,
+      "large_function": 16,
+      "circular_component_dependency": 3,
+      "excessive_component_coupling": 1,
+      "dead_code_candidate": 20
+    },
+    "keys": [
+      "affected",
+      "confidence",
+      "context_flags",
+      "evidence",
+      "evidence_details",
+      "explanation",
+      "id",
+      "optimization_supported",
+      "related_finding_ids",
+      "severity",
+      "smell_type",
+      "title"
+    ],
+    "confidence_field_sample": [
+      0.725,
+      0.5,
+      0.75,
+      0.44999999999999996,
+      0.44999999999999996
+    ],
+    "confidence_label_field": {
+      "null": 47
+    },
+    "confidence_buckets_raw_(>=0.75/>=0.4/else)": {
+      "medium": 23,
+      "high": 1,
+      "low": 23
+    },
+    "context_flags": {
+      "HEURISTIC_LAYERING": 1,
+      "INTRA_CLASS_DELEGATION": 1,
+      "METHOD_COUNT_HEURISTIC": 4,
+      "FRAMEWORK_HUB": 5,
+      "LENGTH_BASED_HEURISTIC": 16,
+      "EXPECTED_TEST_DEPENDENCY": 2,
+      "SUPPORTING_STRUCTURE": 25,
+      "DYNAMIC_DISPATCH_RISK": 20
+    }
+  },
+  "optimization_status": 200,
+  "optimization": {
+    "proposals": 5,
+    "by_risk": {
+      "CRITICAL": 1,
+      "HIGH": 4
+    },
+    "summary": "8 architectural component(s) reconstructed, 12 inter-component relationship(s), 5 structural violation(s) found."
+  },
+  "flows_status": 200,
+  "entry_points": [
+    [
+      "examples.celery.src.task_app.__init__.create_app.index",
+      "@app.route(\"/\")"
+    ],
+    [
+      "examples.celery.src.task_app.views.add",
+      "@bp.post(\"/add\")"
+    ],
+    [
+      "examples.celery.src.task_app.views.block",
+      "@bp.post(\"/block\")"
+    ],
+    [
+      "examples.celery.src.task_app.views.process",
+      "@bp.post(\"/process\")"
+    ],
+    [
+      "examples.celery.src.task_app.views.result",
+      "@bp.get(\"/result/<id>\")"
+    ],
+    [
+      "examples.javascript.js_example.views.add",
+      "@app.route(\"/add\", methods=[\"POST\"])"
+    ],
+    [
+      "examples.javascript.js_example.views.index",
+      "@app.route(\"/\", defaults={\"js\": \"fetch\"})"
+    ],
+    [
+      "examples.tutorial.flaskr.__init__.create_app.hello",
+      "@app.route(\"/hello\")"
+    ],
+    [
+      "examples.tutorial.flaskr.auth.login",
+      "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))"
+    ],
+    [
+      "examples.tutorial.flaskr.auth.logout",
+      "@bp.route(\"/logout\")"
+    ],
+    [
+      "examples.tutorial.flaskr.auth.register",
+      "@bp.route(\"/register\", methods=(\"GET\", \"POST\"))"
+    ],
+    [
+      "examples.tutorial.flaskr.blog.create",
+      "@bp.route(\"/create\", methods=(\"GET\", \"POST\"))"
+    ],
+    [
+      "examples.tutorial.flaskr.blog.delete",
+      "@bp.route(\"/<int:id>/delete\", methods=(\"POST\",))"
+    ],
+    [
+      "examples.tutorial.flaskr.blog.index",
+      "@bp.route(\"/\")"
+    ],
+    [
+      "examples.tutorial.flaskr.blog.update",
+      "@bp.route(\"/<int:id>/update\", methods=(\"GET\", \"POST\"))"
+    ],
+    [
+      "tests.test_appctx.test_app_tearing_down_with_handled_exception_by_app_handler.index",
+      "@app.route(\"/\")"
+    ],
+    [
+      "tests.test_appctx.test_app_tearing_down_with_unhandled_exception.index",
+      "@app.route(\"/\")"
+    ],
+    [
+      "tests.test_appctx.test_basic_url_generation.index",
+      "@app.route(\"/\")"
+    ],
+    [
+      "tests.test_appctx.test_context_refcounts.index",
+      "@app.route(\"/\")"
+    ],
+    [
+      "tests.test_appctx.test_robust_teardown.index",
+      "@app.get(\"/\")"
+    ]
+  ],
+  "flows": [
+    {
+      "entry": "examples.celery.src.task_app.__init__.create_app.index",
+      "observed_nodes_incl_entry": 15,
+      "max_depth": 5,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "DEPTH_LIMIT": 7,
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.celery.src.task_app.views.add",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.celery.src.task_app.views.block",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.celery.src.task_app.views.process",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.celery.src.task_app.views.result",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.javascript.js_example.views.add",
+      "observed_nodes_incl_entry": 2,
+      "max_depth": 1,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.javascript.js_example.views.index",
+      "observed_nodes_incl_entry": 15,
+      "max_depth": 5,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "DEPTH_LIMIT": 7,
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.__init__.create_app.hello",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.auth.login",
+      "observed_nodes_incl_entry": 18,
+      "max_depth": 5,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "STANDARD_LIBRARY": 1,
+        "NO_RESOLVED_CALLEES": 2,
+        "DEPTH_LIMIT": 7
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.auth.logout",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.auth.register",
+      "observed_nodes_incl_entry": 18,
+      "max_depth": 5,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "STANDARD_LIBRARY": 1,
+        "NO_RESOLVED_CALLEES": 2,
+        "DEPTH_LIMIT": 7
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.blog.create",
+      "observed_nodes_incl_entry": 18,
+      "max_depth": 5,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "STANDARD_LIBRARY": 1,
+        "NO_RESOLVED_CALLEES": 2,
+        "DEPTH_LIMIT": 7
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.blog.delete",
+      "observed_nodes_incl_entry": 6,
+      "max_depth": 2,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "STANDARD_LIBRARY": 2,
+        "UNRESOLVED": 2
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.blog.index",
+      "observed_nodes_incl_entry": 16,
+      "max_depth": 5,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "STANDARD_LIBRARY": 1,
+        "DEPTH_LIMIT": 7,
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "examples.tutorial.flaskr.blog.update",
+      "observed_nodes_incl_entry": 8,
+      "max_depth": 2,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "STANDARD_LIBRARY": 2,
+        "UNRESOLVED": 2,
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "tests.test_appctx.test_app_tearing_down_with_handled_exception_by_app_handler.index",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "tests.test_appctx.test_app_tearing_down_with_unhandled_exception.index",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "UNRESOLVED": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "tests.test_appctx.test_basic_url_generation.index",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "tests.test_appctx.test_context_refcounts.index",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    },
+    {
+      "entry": "tests.test_appctx.test_robust_teardown.index",
+      "observed_nodes_incl_entry": 1,
+      "max_depth": 0,
+      "truncated": false,
+      "leaf_terminal_reasons": {
+        "NO_RESOLVED_CALLEES": 1
+      },
+      "has_proposed": false
+    }
+  ]
+}

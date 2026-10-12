@@ -25,6 +25,7 @@ def _proposal_response(p) -> OptimizationProposalResponse:
             RepresentativeImpactResponse(**p.representative_impact.__dict__)
             if p.representative_impact is not None else None
         ),
+        finding_id=p.finding_id,
     )
 
 

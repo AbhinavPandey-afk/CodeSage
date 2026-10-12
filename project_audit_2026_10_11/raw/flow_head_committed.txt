@@ -1,0 +1,5 @@
+ENGINE_FILE C:\Users\abhin\AppData\Local\Temp\claude\c--Users-abhin-CodeSage\41d80382-36b1-45da-8226-05eebba69a4d\scratchpad\head\backend\analysis\execution_flow\engine.py
+RESULT {"entry": "examples.tutorial.flaskr.blog.index", "nodes_incl_entry": 3, "leaf_reasons_or_kinds": {"none": 1, "external_service": 1}}
+RESULT {"entry": "examples.tutorial.flaskr.blog.create", "nodes_incl_entry": 4, "leaf_reasons_or_kinds": {"none": 1, "external_service": 2}}
+RESULT {"entry": "examples.tutorial.flaskr.auth.login", "nodes_incl_entry": 4, "leaf_reasons_or_kinds": {"none": 1, "external_service": 2}}
+RESULT {"entry": "examples.tutorial.flaskr.blog.delete", "nodes_incl_entry": 6, "leaf_reasons_or_kinds": {"none": 2, "external_service": 2}}

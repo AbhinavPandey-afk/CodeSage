@@ -2,6 +2,11 @@
 from pydantic import BaseModel
 
 
+class ThirdPartyDependencyResponse(BaseModel):
+    name: str
+    category: str
+
+
 class ArchitectureComponentResponse(BaseModel):
     id: str
     name: str
@@ -12,6 +17,7 @@ class ArchitectureComponentResponse(BaseModel):
     confidence: float
     confidence_label: str
     evidence: list[str]
+    third_party_dependencies: list[ThirdPartyDependencyResponse] = []
 
 
 class ComponentRelationshipResponse(BaseModel):

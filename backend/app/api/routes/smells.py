@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from analysis.smells.detector import run_smell_detection
 from app.models.repository import RepositoryStatus
 from app.repositories.repository_store import repository_store
-from app.schemas.smells import AffectedSymbolResponse, SmellResponse
+from app.schemas.smells import AffectedSymbolResponse, EvidenceRelationshipResponse, SmellResponse
 
 router = APIRouter(prefix="/api/repositories", tags=["smells"])
 
@@ -20,8 +20,8 @@ def get_smells(repo_id: str) -> list[SmellResponse]:
     smells = run_smell_detection(repo_id)
     return [
         SmellResponse(
-            smell_type=s.smell_type, severity=s.severity, title=s.title,
-            explanation=s.explanation, evidence=s.evidence,
+            id=s.id, smell_type=s.smell_type, severity=s.severity, confidence=s.confidence,
+            title=s.title, explanation=s.explanation, evidence=s.evidence,
             affected=[
                 AffectedSymbolResponse(
                     qualified_name=a.qualified_name, file_path=a.file_path,
@@ -29,6 +29,18 @@ def get_smells(repo_id: str) -> list[SmellResponse]:
                 )
                 for a in s.affected
             ],
+            context_flags=s.context_flags,
+            evidence_details=[
+                EvidenceRelationshipResponse(
+                    source=d.source, target=d.target, relationship_type=d.relationship_type,
+                    source_file=d.source_file, source_line=d.source_line,
+                    resolver_confidence=d.resolver_confidence,
+                    source_role=d.source_role, target_role=d.target_role,
+                )
+                for d in s.evidence_details
+            ],
+            optimization_supported=s.optimization_supported,
+            related_finding_ids=s.related_finding_ids,
         )
         for s in smells
     ]

@@ -23,6 +23,10 @@ class OptimizationProposalResponse(BaseModel):
     affected_components: list[str]
     affected_files: list[str]
     representative_impact: RepresentativeImpactResponse | None
+    # Additive (V2 §15): stable link to the /smells finding this proposal
+    # was generated from, replacing the previous implicit title-string
+    # correlation. None for a proposal not derived from a single finding.
+    finding_id: str | None = None
 
 
 class OptimizationReportResponse(BaseModel):

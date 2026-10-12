@@ -2,24 +2,31 @@
 
 Static reconstruction only -- this never executes repository code. Starting
 from a detected API entry point, it traverses resolved CALLS edges already in
-the graph to build a bounded call tree, marking any hop that reaches a
-data-access or external-integration component (per the same reconstructed
-ArchitectureModel used elsewhere) as a terminal. A PROPOSED variant is
-derived by splicing in the service-layer component identified by a
-layer_skip finding from Architecture Optimization wherever the OBSERVED flow
-crosses that exact violating component pair -- CLAUDE.md §22's current vs
-proposed flow comparison. No LLM call anywhere in this module.
+the graph to build a bounded call tree. A PROPOSED variant is derived by
+splicing in the service-layer component identified by a layer_skip finding
+from Architecture Optimization wherever the OBSERVED flow crosses that exact
+violating component pair -- CLAUDE.md §22's current vs proposed flow
+comparison. No LLM call anywhere in this module.
+
+Traversal boundary: a hop stops recursing only when it genuinely runs out of
+resolved evidence (no more CALLS edges for that symbol in this repo's graph),
+or hits the depth/branch/total-hop safety limits -- never merely because its
+Architecture *role* is data_access/external_integration. A component with
+that role can still contain further resolved calls within this same
+repository (e.g. Flask's own `templating.render_template` calling deeper into
+Flask's own source), and those remain traversable. See
+`analysis/execution_flow/models.py`'s module docstring for the full
+terminal_reason contract this produces.
 
 The tree-building and splicing logic (_build_children, _build_proposed_tree)
-is pure -- it takes an already-fetched adjacency map and an
-already-reconstructed ArchitectureModel, so it is unit-testable without
-Neo4j. Only reconstruct_execution_flow() and detect_entry_points() touch
-the graph.
+is pure -- it takes already-fetched maps, so it is unit-testable without
+Neo4j. Only reconstruct_execution_flow() and detect_entry_points() touch the
+graph.
 """
 import dataclasses
 
 from analysis.execution_flow.models import EntryPoint, ExecutionFlowReport, FlowHop
-from analysis.impact.classifiers import is_api_endpoint
+from analysis.impact.classifiers import classify_call_target_module, is_api_endpoint
 from analysis.reconstruction.engine import reconstruct_architecture
 from analysis.reconstruction.models import ArchitectureModel
 from analysis.smells.architecture_violations import all_violation_records
@@ -79,14 +86,36 @@ def _fetch_call_adjacency(repo_id: str) -> CallAdjacency:
     return adjacency
 
 
-def _fetch_symbol_meta(repo_id: str) -> SymbolMeta:
+def _fetch_symbol_meta(repo_id: str) -> tuple[SymbolMeta, dict[str, str], dict[str, list[str]]]:
+    """Returns (uid -> (qualified_name, file_path), uid -> language,
+    uid -> raw unresolved-call target names). The latter two exist purely to
+    let _leaf_terminal_reason tell a genuine standard-library/external
+    boundary apart from a call the resolver simply couldn't attribute --
+    graph/loader.py persists `unresolved_call_targets` for exactly this."""
     with get_driver().session() as session:
         rows = session.run(
             "MATCH (s:Symbol {repo_id: $repo_id}) WHERE s.symbol_type IN ['function', 'method'] "
-            "RETURN s.uid AS uid, s.qualified_name AS qualified_name, s.file_path AS file_path",
+            "RETURN s.uid AS uid, s.qualified_name AS qualified_name, s.file_path AS file_path, "
+            "s.language AS language, s.unresolved_call_targets AS unresolved_call_targets",
             repo_id=repo_id,
         ).data()
-    return {r["uid"]: (r["qualified_name"], r["file_path"]) for r in rows}
+    meta = {r["uid"]: (r["qualified_name"], r["file_path"]) for r in rows}
+    languages = {r["uid"]: r["language"] for r in rows}
+    unresolved_by_uid = {r["uid"]: (r["unresolved_call_targets"] or []) for r in rows}
+    return meta, languages, unresolved_by_uid
+
+
+def _fetch_file_imports(repo_id: str) -> dict[str, list[str]]:
+    with get_driver().session() as session:
+        rows = session.run(
+            "MATCH (s:Symbol {repo_id: $repo_id, symbol_type: 'import'}) "
+            "RETURN s.file_path AS file_path, s.name AS dotted",
+            repo_id=repo_id,
+        ).data()
+    imports: dict[str, list[str]] = {}
+    for r in rows:
+        imports.setdefault(r["file_path"], []).append(r["dotted"])
+    return imports
 
 
 def _component_maps(model: ArchitectureModel) -> tuple[dict[str, str], dict[str, str]]:
@@ -101,6 +130,9 @@ def _component_maps(model: ArchitectureModel) -> tuple[dict[str, str], dict[str,
 
 
 def _terminal_kind_for(uid: str, meta: SymbolMeta, file_to_component: dict[str, str], role_by_component: dict[str, str]) -> str | None:
+    """Purely descriptive Architecture *role* of this symbol's component --
+    "database"/"external_service" badges. Does NOT decide whether traversal
+    continues past it; see _leaf_terminal_reason for that."""
     file_path = meta.get(uid, (None, None))[1]
     component_id = file_to_component.get(file_path) if file_path else None
     role = role_by_component.get(component_id) if component_id else None
@@ -111,20 +143,74 @@ def _terminal_kind_for(uid: str, meta: SymbolMeta, file_to_component: dict[str, 
     return None
 
 
+def _leaf_terminal_reason(
+    uid: str, meta: SymbolMeta, languages: dict[str, str],
+    unresolved_by_uid: dict[str, list[str]], file_imports: dict[str, list[str]],
+) -> str:
+    """Why a symbol with zero resolved outgoing CALLS is a leaf. Cross-checks
+    each unresolved call's own object/module prefix (e.g. "sqlite3" in a
+    "sqlite3.connect(...)" call) against that *file's* actually-recorded
+    imports before trusting it as a module name -- a bare prefix like "g" in
+    "g.pop(...)" is far more likely a local variable than a package, and
+    isn't classified as one unless the file really does import something
+    with that top-level name. This is deliberately more precise than
+    scanning a file's whole import list, which can't tell which import a
+    specific dead-end call was actually about."""
+    targets = unresolved_by_uid.get(uid) or []
+    if not targets:
+        return "NO_RESOLVED_CALLEES"
+
+    file_path = meta.get(uid, (None, None))[1]
+    language = languages.get(uid)
+    imported_top_levels = {t.split(".", 1)[0] for t in file_imports.get(file_path, [])} if file_path else set()
+
+    saw_external = False
+    for target in targets:
+        if "." not in target:
+            continue
+        top_level = target.split(".", 1)[0]
+        if top_level not in imported_top_levels:
+            continue  # can't confirm this prefix is really an imported module
+        if classify_call_target_module(top_level, language) == "stdlib":
+            return "STANDARD_LIBRARY"
+        saw_external = True
+    return "EXTERNAL_DEPENDENCY" if saw_external else "UNRESOLVED"
+
+
 def _build_children(
     caller_uid: str, caller_qname: str, depth: int, path_seen: frozenset[str],
     adjacency: CallAdjacency, meta: SymbolMeta,
     file_to_component: dict[str, str], role_by_component: dict[str, str], budget: list[int],
     component_name_by_id: dict[str, str] | None = None,
-) -> list[FlowHop]:
-    if depth >= _MAX_DEPTH or budget[0] <= 0:
-        return []
+    languages: dict[str, str] | None = None,
+    unresolved_by_uid: dict[str, list[str]] | None = None,
+    file_imports: dict[str, list[str]] | None = None,
+) -> tuple[list[FlowHop], str | None, int]:
+    """Returns (children, terminal_reason, children_omitted).
+    terminal_reason is None whenever `children` is non-empty -- it explains
+    why *this* symbol has no more resolved hops beyond depth/branch limits.
+    children_omitted is how many of this symbol's own resolved calls exist
+    beyond the per-hop branch cap, disclosed rather than silently dropped."""
     component_name_by_id = component_name_by_id or {}
+    languages = languages or {}
+    unresolved_by_uid = unresolved_by_uid or {}
+    file_imports = file_imports or {}
 
-    edges = sorted(adjacency.get(caller_uid, []), key=lambda e: e[1], reverse=True)
+    if depth >= _MAX_DEPTH:
+        return [], "DEPTH_LIMIT", 0
+    if budget[0] <= 0:
+        return [], "BRANCH_LIMIT", 0
+
+    all_edges = sorted(adjacency.get(caller_uid, []), key=lambda e: e[1], reverse=True)
+    if not all_edges:
+        return [], _leaf_terminal_reason(caller_uid, meta, languages, unresolved_by_uid, file_imports), 0
+
+    edges = all_edges[:_MAX_BRANCHES_PER_HOP]
+    children_omitted = max(0, len(all_edges) - len(edges))
+
     hops: list[FlowHop] = []
     for callee_uid, confidence, source_file, source_line in edges:
-        if budget[0] <= 0 or len(hops) >= _MAX_BRANCHES_PER_HOP:
+        if budget[0] <= 0:
             break
         if callee_uid in path_seen:
             continue  # recursive/cyclic call -- stop this branch rather than loop forever
@@ -135,22 +221,22 @@ def _build_children(
         component_name = component_name_by_id.get(component_id) if component_id else None
         budget[0] -= 1
 
-        children: list[FlowHop] = []
-        if terminal_kind is None:
-            children = _build_children(
-                callee_uid, callee_qname, depth + 1, path_seen | {callee_uid},
-                adjacency, meta, file_to_component, role_by_component, budget, component_name_by_id,
-            )
+        grandchildren, terminal_reason, grandchildren_omitted = _build_children(
+            callee_uid, callee_qname, depth + 1, path_seen | {callee_uid},
+            adjacency, meta, file_to_component, role_by_component, budget,
+            component_name_by_id, languages, unresolved_by_uid, file_imports,
+        )
         hops.append(
             FlowHop(
                 label="OBSERVED", caller_qualified_name=caller_qname, callee_qualified_name=callee_qname,
                 callee_uid=callee_uid, relationship_type="CALLS", source_file=source_file,
                 source_line=source_line, confidence=confidence, terminal_kind=terminal_kind,
                 callee_file_path=callee_file, component_id=component_id, component_role=component_role,
-                component_name=component_name, caller_uid=caller_uid, children=children,
+                component_name=component_name, terminal_reason=terminal_reason,
+                children_omitted=grandchildren_omitted, caller_uid=caller_uid, children=grandchildren,
             )
         )
-    return hops
+    return hops, None, children_omitted
 
 
 def _build_proposed_tree(
@@ -219,7 +305,7 @@ def _layer_skip_pairs(model: ArchitectureModel) -> dict[tuple[str, str], str]:
 
 
 def reconstruct_execution_flow(repo_id: str, entry_uid: str) -> ExecutionFlowReport:
-    meta = _fetch_symbol_meta(repo_id)
+    meta, languages, unresolved_by_uid = _fetch_symbol_meta(repo_id)
     if entry_uid not in meta:
         raise EntryPointNotFoundError(f"Entry point {entry_uid} not found in repository {repo_id}.")
     entry_qname, entry_file = meta[entry_uid]
@@ -235,14 +321,16 @@ def reconstruct_execution_flow(repo_id: str, entry_uid: str) -> ExecutionFlowRep
     entry = EntryPoint(uid=entry_uid, qualified_name=entry_qname, file_path=entry_file, start_line=start_line, route_hint=route_hint)
 
     adjacency = _fetch_call_adjacency(repo_id)
+    file_imports = _fetch_file_imports(repo_id)
     model = reconstruct_architecture(repo_id)
     file_to_component, role_by_component = _component_maps(model)
     component_name_by_id = {c.id: c.name for c in model.components}
 
     budget = [_MAX_TOTAL_HOPS]
-    children = _build_children(
+    children, entry_terminal_reason, entry_children_omitted = _build_children(
         entry_uid, entry_qname, 0, frozenset({entry_uid}), adjacency, meta,
         file_to_component, role_by_component, budget, component_name_by_id,
+        languages, unresolved_by_uid, file_imports,
     )
     entry_component_id = file_to_component.get(entry_file) if entry_file else None
     entry_component_role = role_by_component.get(entry_component_id) if entry_component_id else None
@@ -252,6 +340,7 @@ def reconstruct_execution_flow(repo_id: str, entry_uid: str) -> ExecutionFlowRep
         relationship_type="ENTRY", source_file=entry_file, source_line=start_line, confidence=1.0,
         terminal_kind=None, callee_file_path=entry_file, component_id=entry_component_id,
         component_role=entry_component_role, component_name=entry_component_name,
+        terminal_reason=entry_terminal_reason, children_omitted=entry_children_omitted,
         caller_uid=None, children=children,
     )
 
@@ -268,7 +357,10 @@ def reconstruct_execution_flow(repo_id: str, entry_uid: str) -> ExecutionFlowRep
         "repository. Dynamic dispatch, reflection, and dependency injection are not detected and "
         "may cause real call paths to differ from what is shown here.",
         f"Traversal is bounded to depth {_MAX_DEPTH} and up to {_MAX_BRANCHES_PER_HOP} of the highest-"
-        "confidence calls per hop, so less-likely branches may not be shown.",
+        "confidence calls per hop; omitted branches are disclosed per hop rather than hidden.",
+        "Traversal follows resolved calls across the whole repository, including components "
+        "classified as external_integration/data_access -- that role describes the component's "
+        "architectural position, not whether execution flow can continue through it.",
     ]
     if proposed_root is not None:
         detection_notes.append(

@@ -1,0 +1,1 @@
+RESULT {"total": 47, "severity": {"HIGH": 1, "MEDIUM": 17, "LOW": 29}, "confidence_tier_0.7_0.4": {"High": 3, "Medium": 21, "Low": 23}, "severity_x_tier": {"HIGH/High": 1, "LOW/Low": 20, "LOW/Medium": 9, "MEDIUM/High": 2, "MEDIUM/Low": 3, "MEDIUM/Medium": 12}, "conf_min": 0.24999999999999997, "conf_max": 0.75}

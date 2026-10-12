@@ -13,6 +13,10 @@ export interface FocusTarget {
   qualifiedName?: string;
   /** A question to seed Ask the Archeologist with (e.g. from Execution Flow's "Explain" action). */
   presetQuestion?: string;
+  /** A Smell's stable id (backend: analysis/smells/context.py's
+   * compute_finding_id) -- e.g. Overview's "Top discoveries" opening
+   * Architecture Analysis directly on that finding's inspector. */
+  findingId?: string;
 }
 
 interface InvestigationContextValue {

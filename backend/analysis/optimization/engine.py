@@ -171,6 +171,7 @@ def _build_proposal(
         affected_components=list(record.component_ids),
         affected_files=files,
         representative_impact=impact,
+        finding_id=record.smell.id,
     )
 
 

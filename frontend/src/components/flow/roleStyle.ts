@@ -2,8 +2,8 @@ import { Code2, Compass, Database, Globe, Layers3, Play, Route } from "lucide-re
 import type { ComponentRole } from "@/api/types";
 import type { TraceNode } from "@/lib/flowModel";
 
-/** Same role -> token mapping as architecture/ArchitectureMap's ROLE_VAR, so a
- * component reads as the same color on the Architecture map and in a trace. */
+/** Same role -> token mapping as architecture/roleStyle's ROLE_VAR, so a
+ * component reads as the same color on the Architecture diagram and in a trace. */
 const ROLE_VAR: Partial<Record<ComponentRole, string>> = {
   api: "--accent",
   service: "--slate",

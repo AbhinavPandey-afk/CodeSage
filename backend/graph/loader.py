@@ -115,8 +115,19 @@ def load_repository_graph(
             )
 
         relationship_rows_by_type: dict[RelationshipType, list[dict]] = {}
+        # An unresolved CALLS relationship (target_id=None) can't become a graph
+        # edge -- there's no target node to point at -- but its raw target_name
+        # ("sqlite3.connect", "requests.get", ...) is still real evidence about
+        # what the source symbol tried to call. Execution Flow reconstruction
+        # (analysis/execution_flow/engine.py) uses this to tell a genuine
+        # standard-library/external-dependency boundary apart from a call the
+        # resolver simply couldn't attribute, instead of discarding the
+        # distinction entirely.
+        unresolved_call_targets_by_source: dict[str, list[str]] = {}
         for rel in all_relationships:
             if rel.target_id is None:
+                if rel.relationship_type == RelationshipType.CALLS:
+                    unresolved_call_targets_by_source.setdefault(rel.source_id, []).append(rel.target_name)
                 continue  # unresolved — not a graph edge; the target simply isn't in this repo's IR
             relationship_rows_by_type.setdefault(rel.relationship_type, []).append(
                 {
@@ -127,6 +138,19 @@ def load_repository_graph(
                     "confidence": rel.confidence,
                 }
             )
+
+        if unresolved_call_targets_by_source:
+            rows = [
+                {"uid": _uid(repo_id, source_id), "targets": targets}
+                for source_id, targets in unresolved_call_targets_by_source.items()
+            ]
+            for batch in _chunks(rows, _BATCH_SIZE):
+                session.run(
+                    "UNWIND $rows AS row "
+                    "MATCH (s:Symbol {uid: row.uid}) "
+                    "SET s.unresolved_call_targets = row.targets",
+                    rows=batch,
+                )
 
         written_relationships = 0
         for rel_type, rows in relationship_rows_by_type.items():

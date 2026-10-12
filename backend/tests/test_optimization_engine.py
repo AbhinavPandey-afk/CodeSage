@@ -18,7 +18,8 @@ def _model(components):
 
 def _record(kind, component_ids, severity="HIGH"):
     smell = Smell(
-        smell_type="x", severity=severity, title=f"problem involving {component_ids}",
+        id=f"test-{kind}-{'-'.join(component_ids)}", smell_type="x", severity=severity, confidence=0.7,
+        title=f"problem involving {component_ids}",
         explanation="...", evidence="3 call(s)",
     )
     return ViolationRecord(smell=smell, kind=kind, component_ids=component_ids)
@@ -85,3 +86,13 @@ def test_proposal_never_claims_confirmed_without_strong_evidence():
     record = _record("coupling", ("app/hub",), severity="LOW")
     _, confidence = _risk_and_confidence(record, impact=None)
     assert confidence < 0.75  # must not read as "Confirmed" on weak evidence alone
+
+
+def test_proposal_finding_id_matches_the_underlying_violation_records_smell_id():
+    """V2 §15: the explicit link replacing the old implicit title-string
+    correlation between /smells and /optimization."""
+    model = _model([_component("app/api", "api"), _component("app/data", "data_access")])
+    record = _record("boundary", ("app/data", "app/api"))
+    proposal = _build_proposal("opt-0", record, model, impact=None)
+    assert proposal.finding_id == record.smell.id
+    assert proposal.finding_id == "test-boundary-app/data-app/api"

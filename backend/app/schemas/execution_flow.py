@@ -24,6 +24,13 @@ class FlowHopResponse(BaseModel):
     component_id: str | None = None
     component_role: str | None = None
     component_name: str | None = None
+    # Why traversal stopped here -- None whenever `children` is non-empty.
+    # One of NO_RESOLVED_CALLEES, STANDARD_LIBRARY, EXTERNAL_DEPENDENCY,
+    # UNRESOLVED, DEPTH_LIMIT, BRANCH_LIMIT (see execution_flow/models.py).
+    terminal_reason: str | None = None
+    # Additional resolved calls from this symbol beyond the branch cap,
+    # disclosed rather than silently dropped.
+    children_omitted: int = 0
     note: str | None
     children: list["FlowHopResponse"] = []
 

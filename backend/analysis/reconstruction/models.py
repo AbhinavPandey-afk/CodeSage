@@ -12,6 +12,16 @@ ConfidenceLabel = str  # "Confirmed" | "Inferred" | "Uncertain"
 
 
 @dataclass(frozen=True)
+class ThirdPartyDependency:
+    """A real, named external package this component imports — distinct from
+    `role == "external_integration"`, which describes a component's own
+    architectural *purpose* (it may be entirely first-party code that happens
+    to wrap a third-party client). Deduplicated by top-level import name."""
+    name: str
+    category: str  # "database" | "external_service"
+
+
+@dataclass(frozen=True)
 class ArchitectureComponent:
     id: str  # stable slug derived from the directory group, e.g. "app/services"
     name: str  # display name, e.g. "app / services"
@@ -22,6 +32,7 @@ class ArchitectureComponent:
     confidence: float
     confidence_label: ConfidenceLabel
     evidence: list[str] = field(default_factory=list)
+    third_party_dependencies: list[ThirdPartyDependency] = field(default_factory=list)
 
 
 @dataclass(frozen=True)

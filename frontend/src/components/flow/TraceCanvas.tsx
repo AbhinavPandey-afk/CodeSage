@@ -2,12 +2,16 @@ import { ChevronsDownUp, ChevronsUpDown, Maximize2, Minus, Plus, RotateCcw } fro
 import { useEffect, useMemo, useRef, useState } from "react";
 import { defaultCollapsedIds, pathAround, type TraceNode } from "@/lib/flowModel";
 import { cn } from "@/lib/utils";
+import { TraceContinuationCard } from "./TraceContinuationCard";
 import { TraceNodeCard, type CardVisualState } from "./TraceNodeCard";
 
 const MIN_ZOOM = 0.55;
 const MAX_ZOOM = 1.4;
 const AUTO_COLLAPSE_DEPTH = 3;
 const AUTO_COLLAPSE_THRESHOLD = 22;
+
+const TOOLBAR_BTN =
+  "flex size-7 items-center justify-center rounded text-(--text-faint) hover:bg-(--bg-sunken) hover:text-(--text) focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:outline-none";
 
 function collectAllParentIds(node: TraceNode, out: string[] = []): string[] {
   if (node.children.length > 0) out.push(node.id);
@@ -22,6 +26,7 @@ function TraceBranch({
   selectedId,
   highlightSet,
   onSelect,
+  onExpandScope,
 }: {
   node: TraceNode;
   collapsedIds: Set<string>;
@@ -29,6 +34,7 @@ function TraceBranch({
   selectedId: string | null;
   highlightSet: Set<string> | null;
   onSelect: (id: string) => void;
+  onExpandScope: () => void;
 }) {
   const isCollapsed = collapsedIds.has(node.id);
   const showChildren = !isCollapsed && node.children.length > 0;
@@ -36,13 +42,17 @@ function TraceBranch({
 
   return (
     <div id={`trace-node-${node.id}`} className="flex flex-col items-center">
-      <TraceNodeCard
-        node={node}
-        state={state}
-        collapsed={isCollapsed}
-        onToggleCollapse={node.children.length > 0 ? () => onToggleCollapse(node.id) : null}
-        onSelect={() => onSelect(node.id)}
-      />
+      {node.kind === "continuation" ? (
+        <TraceContinuationCard node={node} onExpand={onExpandScope} />
+      ) : (
+        <TraceNodeCard
+          node={node}
+          state={state}
+          collapsed={isCollapsed}
+          onToggleCollapse={node.children.length > 0 ? () => onToggleCollapse(node.id) : null}
+          onSelect={() => onSelect(node.id)}
+        />
+      )}
 
       {showChildren && (
         <>
@@ -65,6 +75,7 @@ function TraceBranch({
                   selectedId={selectedId}
                   highlightSet={highlightSet}
                   onSelect={onSelect}
+                  onExpandScope={onExpandScope}
                 />
               </div>
             ))}
@@ -85,10 +96,16 @@ export function TraceCanvas({
   tree,
   selectedId,
   onSelect,
+  onExpandScope,
+  depthLimit,
 }: {
   tree: TraceNode;
   selectedId: string | null;
   onSelect: (id: string) => void;
+  /** Called when the user expands a scope-filter continuation marker. */
+  onExpandScope: () => void;
+  /** Caps how deep the trace starts expanded (the "Depth" control). `null` means the automatic default. */
+  depthLimit?: number | null;
 }) {
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
   const [zoom, setZoom] = useState(1);
@@ -97,12 +114,13 @@ export function TraceCanvas({
 
   useEffect(() => {
     const totalParents = collectAllParentIds(tree).length;
-    setCollapsedIds(totalParents > 0 ? defaultCollapsedIds(tree, AUTO_COLLAPSE_DEPTH) : new Set());
+    const threshold = depthLimit ?? AUTO_COLLAPSE_DEPTH;
+    setCollapsedIds(totalParents > 0 ? defaultCollapsedIds(tree, threshold) : new Set());
     setZoom(1);
     // A fresh tree (new level/mode/entry point) resets the view rather than
     // carrying over collapse state that may no longer correspond to anything.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tree]);
+  }, [tree, depthLimit]);
 
   const highlightSet = useMemo(() => (selectedId ? pathAround(tree, selectedId) : null), [tree, selectedId]);
   const allParentIds = useMemo(() => collectAllParentIds(tree), [tree]);
@@ -138,7 +156,7 @@ export function TraceCanvas({
           onClick={() => setCollapsedIds(collapsedIds.size > 0 ? new Set() : new Set(allParentIds))}
           aria-label={collapsedIds.size > 0 ? "Expand all steps" : "Collapse all steps"}
           title={collapsedIds.size > 0 ? "Expand all" : "Collapse all"}
-          className="flex size-7 items-center justify-center rounded text-(--text-faint) hover:bg-(--bg-sunken) hover:text-(--text)"
+          className={TOOLBAR_BTN}
         >
           {collapsedIds.size > 0 ? <ChevronsUpDown className="size-3.5" /> : <ChevronsDownUp className="size-3.5" />}
         </button>
@@ -148,7 +166,7 @@ export function TraceCanvas({
           onClick={() => setZoom((z) => Math.max(MIN_ZOOM, z - 0.15))}
           aria-label="Zoom out"
           title="Zoom out"
-          className="flex size-7 items-center justify-center rounded text-(--text-faint) hover:bg-(--bg-sunken) hover:text-(--text)"
+          className={TOOLBAR_BTN}
         >
           <Minus className="size-3.5" />
         </button>
@@ -160,7 +178,7 @@ export function TraceCanvas({
           onClick={() => setZoom((z) => Math.min(MAX_ZOOM, z + 0.15))}
           aria-label="Zoom in"
           title="Zoom in"
-          className="flex size-7 items-center justify-center rounded text-(--text-faint) hover:bg-(--bg-sunken) hover:text-(--text)"
+          className={TOOLBAR_BTN}
         >
           <Plus className="size-3.5" />
         </button>
@@ -169,7 +187,7 @@ export function TraceCanvas({
           onClick={fitToView}
           aria-label="Fit to view"
           title="Fit to view"
-          className="flex size-7 items-center justify-center rounded text-(--text-faint) hover:bg-(--bg-sunken) hover:text-(--text)"
+          className={TOOLBAR_BTN}
         >
           <Maximize2 className="size-3.5" />
         </button>
@@ -181,7 +199,7 @@ export function TraceCanvas({
           }}
           aria-label="Reset view"
           title="Reset view"
-          className="flex size-7 items-center justify-center rounded text-(--text-faint) hover:bg-(--bg-sunken) hover:text-(--text)"
+          className={TOOLBAR_BTN}
         >
           <RotateCcw className="size-3.5" />
         </button>
@@ -209,6 +227,7 @@ export function TraceCanvas({
             selectedId={selectedId}
             highlightSet={highlightSet}
             onSelect={onSelect}
+            onExpandScope={onExpandScope}
           />
         </div>
       </div>

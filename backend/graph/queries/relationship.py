@@ -5,8 +5,11 @@ symbols connect (CLAUDE.md §44); ai/retrieval/relationship_service.py only
 narrates what this module found.
 """
 from dataclasses import dataclass
+from typing import Literal
 
 from graph.neo4j.client import get_driver
+
+RelationshipKind = Literal["DIRECT", "INDIRECT"]
 
 _MAX_PATH_HOPS = 6
 _DIRECT_REL_TYPES = "CALLS|IMPORTS|INHERITS|CONTAINS"
@@ -46,6 +49,13 @@ class RelationshipResult:
     target: SymbolRef
     connected: bool
     steps: list[RelationshipStep]
+    # None when connected is False — "direct vs indirect" is meaningless for a
+    # pair with no verified structural path at all.
+    relationship_kind: RelationshipKind | None = None
+    # DIRECT is always 1 hop, even when multiple parallel direct edge types
+    # exist between the pair (e.g. both CALLS and IMPORTS) — see
+    # _direct_result. INDIRECT is the number of edges in the traced path.
+    hop_count: int | None = None
 
 
 def _step_from_row(row: dict, source: SymbolRef, target: SymbolRef) -> RelationshipStep:
@@ -58,6 +68,44 @@ def _step_from_row(row: dict, source: SymbolRef, target: SymbolRef) -> Relations
         source_line=row["source_line"],
         confidence=row["confidence"],
     )
+
+
+def _direct_result(source: SymbolRef, target: SymbolRef, direct_rows: list[dict]) -> RelationshipResult:
+    """One or more parallel 1-hop edges between the pair (e.g. both CALLS and
+    IMPORTS at once) — still a single DIRECT hop, never rendered as a chain."""
+    steps = [_step_from_row(r, source, target) for r in direct_rows]
+    return RelationshipResult(
+        source=source, target=target, connected=True, steps=steps,
+        relationship_kind="DIRECT", hop_count=1,
+    )
+
+
+def _path_result(
+    source: SymbolRef, target: SymbolRef, path_nodes: list[dict], path_rels: list[dict]
+) -> RelationshipResult:
+    names_by_uid = {n["uid"]: n["qualified_name"] for n in path_nodes}
+    steps = []
+    for i, r in enumerate(path_rels):
+        a_uid, b_uid = path_nodes[i]["uid"], path_nodes[i + 1]["uid"]
+        forward = r["start_uid"] == a_uid
+        steps.append(
+            RelationshipStep(
+                from_qualified_name=names_by_uid[a_uid if forward else b_uid],
+                to_qualified_name=names_by_uid[b_uid if forward else a_uid],
+                relationship_type=r["rel_type"],
+                source_file=r["source_file"],
+                source_line=r["source_line"],
+                confidence=r["confidence"],
+            )
+        )
+    return RelationshipResult(
+        source=source, target=target, connected=True, steps=steps,
+        relationship_kind="INDIRECT", hop_count=len(steps),
+    )
+
+
+def _not_connected_result(source: SymbolRef, target: SymbolRef) -> RelationshipResult:
+    return RelationshipResult(source=source, target=target, connected=False, steps=[])
 
 
 def find_relationship(repo_id: str, source_uid: str, target_uid: str) -> RelationshipResult:
@@ -86,8 +134,7 @@ def find_relationship(repo_id: str, source_uid: str, target_uid: str) -> Relatio
         ).data()
 
         if direct_rows:
-            steps = [_step_from_row(r, source, target) for r in direct_rows]
-            return RelationshipResult(source=source, target=target, connected=True, steps=steps)
+            return _direct_result(source, target, direct_rows)
 
         path_row = session.run(
             "MATCH p = shortestPath((a:Symbol {uid: $source_uid, repo_id: $repo_id})"
@@ -101,22 +148,6 @@ def find_relationship(repo_id: str, source_uid: str, target_uid: str) -> Relatio
         ).single()
 
         if path_row is None or not path_row["path_rels"]:
-            return RelationshipResult(source=source, target=target, connected=False, steps=[])
+            return _not_connected_result(source, target)
 
-        path_nodes = path_row["path_nodes"]
-        names_by_uid = {n["uid"]: n["qualified_name"] for n in path_nodes}
-        steps = []
-        for i, r in enumerate(path_row["path_rels"]):
-            a_uid, b_uid = path_nodes[i]["uid"], path_nodes[i + 1]["uid"]
-            forward = r["start_uid"] == a_uid
-            steps.append(
-                RelationshipStep(
-                    from_qualified_name=names_by_uid[a_uid if forward else b_uid],
-                    to_qualified_name=names_by_uid[b_uid if forward else a_uid],
-                    relationship_type=r["rel_type"],
-                    source_file=r["source_file"],
-                    source_line=r["source_line"],
-                    confidence=r["confidence"],
-                )
-            )
-        return RelationshipResult(source=source, target=target, connected=True, steps=steps)
+        return _path_result(source, target, path_row["path_nodes"], path_row["path_rels"])

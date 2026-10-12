@@ -1,4 +1,6 @@
 """Contracts for POST /api/repositories/{id}/graph/relationship."""
+from typing import Literal
+
 from pydantic import BaseModel
 
 
@@ -29,3 +31,8 @@ class RelationshipResponse(BaseModel):
     connected: bool
     steps: list[RelationshipStepResponse]
     explanation: str
+    # Additive (CLAUDE.md §44/§37: OBSERVED structural fact, never inferred
+    # from steps.length alone — a DIRECT pair can have >1 parallel edge).
+    # None when `connected` is False.
+    relationship_kind: Literal["DIRECT", "INDIRECT"] | None = None
+    hop_count: int | None = None

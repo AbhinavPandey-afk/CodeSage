@@ -9,7 +9,13 @@ Architecture -> Evidence + Confidence. No LLM involvement anywhere in this
 module — the graph and grouping.py are the only sources of truth, per
 CLAUDE.md §15's ban on LLM-invented architecture diagrams.
 """
-from analysis.reconstruction.grouping import SymbolSignal, confidence_label, group_key, infer_role
+from analysis.reconstruction.grouping import (
+    SymbolSignal,
+    confidence_label,
+    group_key,
+    infer_role,
+    third_party_dependencies,
+)
 from analysis.reconstruction.models import ArchitectureComponent, ArchitectureModel, ComponentRelationship
 from graph.neo4j.client import get_driver
 
@@ -92,7 +98,7 @@ def reconstruct_architecture(repo_id: str) -> ArchitectureModel:
                 id=key, name=key.replace("/", " / "), role=role,
                 file_count=len(files), symbol_count=len(symbols), files=files,
                 confidence=confidence, confidence_label=confidence_label(confidence),
-                evidence=evidence,
+                evidence=evidence, third_party_dependencies=third_party_dependencies(imports),
             )
         )
     components.sort(key=lambda c: c.symbol_count, reverse=True)
@@ -137,6 +143,12 @@ def reconstruct_architecture(repo_id: str) -> ArchitectureModel:
         "components; IMPORTS edges are intentionally excluded as too noisy to imply an "
         "architectural dependency on their own.",
     ]
+    if any(c.third_party_dependencies for c in components):
+        detection_notes.append(
+            "Third-party dependencies are the real package names each component imports "
+            "(deduplicated by top-level import), distinct from a component's own architectural "
+            "role — an external_integration component may be entirely first-party code."
+        )
     if truncated:
         detection_notes.append(
             f"{len(ranked_keys)} candidate components were found; only the {_MAX_COMPONENTS} "

@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Network, History, Radar, Route, SearchCheck, X } from "lucide-react";
+import { Network, History, Radar, Route, ScrollText, SearchCheck, X } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { ConfidenceBadge } from "@/components/evidence/ConfidenceBadge";
+import { EvidenceStatusBadge } from "@/components/flow/EvidenceStatusBadge";
+import { classifyStructure, type Layer } from "@/lib/architectureModel";
 import { useInvestigation } from "@/lib/investigation";
 import { ROLE_LABELS } from "@/lib/labels";
 import { cn } from "@/lib/utils";
@@ -29,12 +31,15 @@ function ActionButton({
 
 export function ComponentInspector({
   component,
+  layer,
   nameById,
   relationships,
   findings,
   onClose,
 }: {
   component: ArchitectureComponent | null;
+  /** The layer this component belongs to, if it's part of a reconstructed layer (null for Supporting-structure components). */
+  layer: Layer | null;
   nameById: Map<string, string>;
   relationships: ComponentRelationship[];
   findings: Smell[];
@@ -46,6 +51,11 @@ export function ComponentInspector({
   const related = component
     ? relationships.filter((r) => r.source_id === component.id || r.target_id === component.id)
     : [];
+  const structure = component ? classifyStructure(component) : "runtime";
+
+  const explainQuestion = component
+    ? `Why does "${component.name}" exist as a ${ROLE_LABELS[component.role] ?? component.role} component, and what evidence supports that classification?`
+    : "";
 
   return (
     <AnimatePresence>
@@ -86,11 +96,25 @@ export function ComponentInspector({
 
             <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
               <div className="mb-4 flex flex-wrap items-center gap-2">
+                <EvidenceStatusBadge status="DERIVED" />
                 <span className="rounded bg-(--bg-sunken) px-1.5 py-0.5 font-mono text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">
                   {ROLE_LABELS[component.role] ?? component.role}
                 </span>
+                {structure === "supporting" && (
+                  <span className="rounded border border-(--border) px-1.5 py-0.5 font-mono text-[0.6rem] tracking-wide text-(--text-faint) uppercase">
+                    Supporting
+                  </span>
+                )}
                 <ConfidenceBadge label={component.confidence_label} />
               </div>
+
+              {layer && (
+                <div className="mb-4">
+                  <p className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">Architectural layer</p>
+                  <p className="text-sm text-(--text)">{layer.name}</p>
+                  <p className="text-xs text-(--text-faint)">{layer.purpose}</p>
+                </div>
+              )}
 
               <div className="mb-5 flex gap-6">
                 <div>
@@ -138,7 +162,7 @@ export function ComponentInspector({
 
               <div className="mb-5">
                 <h3 className="mb-2 text-[0.68rem] font-semibold tracking-wide text-(--text-faint) uppercase">
-                  Why classified this way
+                  Why is this a component?
                 </h3>
                 <ul className="flex flex-col gap-1">
                   {component.evidence.map((e, i) => (
@@ -148,6 +172,27 @@ export function ComponentInspector({
                   ))}
                 </ul>
               </div>
+
+              {component.third_party_dependencies.length > 0 && (
+                <div className="mb-5">
+                  <h3 className="mb-2 text-[0.68rem] font-semibold tracking-wide text-(--text-faint) uppercase">
+                    Third-party dependencies ({component.third_party_dependencies.length})
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {component.third_party_dependencies.map((d) => (
+                      <span
+                        key={d.name}
+                        className={cn(
+                          "rounded-full border px-2 py-0.5 font-mono text-xs",
+                          d.category === "database" ? "border-(--bronze)/40 text-(--bronze)" : "border-(--sage)/40 text-(--sage)",
+                        )}
+                      >
+                        {d.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {related.length > 0 && (
                 <div className="mb-5">
@@ -193,6 +238,7 @@ export function ComponentInspector({
               <ActionButton icon={Radar} label="View Impact" onClick={() => navigate("impact", { componentId: component.id })} />
               <ActionButton icon={Route} label="Trace Flow" onClick={() => navigate("flow", { componentId: component.id })} />
               <ActionButton icon={History} label="History" onClick={() => navigate("history", { componentId: component.id })} />
+              <ActionButton icon={ScrollText} label="Ask" onClick={() => navigate("ask", { presetQuestion: explainQuestion })} />
             </div>
           </motion.aside>
         </>

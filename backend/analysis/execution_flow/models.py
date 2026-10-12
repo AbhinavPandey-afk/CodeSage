@@ -7,10 +7,24 @@ layer-skip findings -- it is a synthetic node with no source location, and
 is never presented as observed runtime behavior (CLAUDE.md §39's "never
 claim this definitely happens at runtime" rule). Every hop's `label` field
 makes the distinction explicit rather than leaving it to prose.
+
+`terminal_kind` and `terminal_reason` answer two different questions and
+must not be conflated (a regression this module used to have): `terminal_kind`
+is the reconstructed Architecture *role* of the callee ("database" /
+"external_service" / None) -- purely descriptive, for badges/coloring.
+`terminal_reason` is why traversal actually stopped at this hop -- it is None
+whenever the hop has children, and otherwise one of NO_RESOLVED_CALLEES,
+STANDARD_LIBRARY, EXTERNAL_DEPENDENCY, UNRESOLVED, DEPTH_LIMIT, BRANCH_LIMIT,
+or CONFIGURED_BOUNDARY. A component classified `external_integration` can
+still have further resolved calls *within this same repository* (e.g. Flask's
+own `templating.render_template` calling deeper into Flask's own source) --
+traversal now follows those regardless of architectural role, and only
+reports a component's role as informational context.
 """
 from dataclasses import dataclass, field
 
 FlowLabel = str  # "OBSERVED" | "PROPOSED"
+TerminalReason = str  # see module docstring for the full enumeration
 
 
 @dataclass(frozen=True)
@@ -43,6 +57,13 @@ class FlowHop:
     component_id: str | None = None
     component_role: str | None = None
     component_name: str | None = None
+    # Why traversal stopped here -- None whenever `children` is non-empty.
+    terminal_reason: TerminalReason | None = None
+    # How many additional resolved calls this symbol has beyond the ones
+    # included below, cut by the per-hop branch cap (_MAX_BRANCHES_PER_HOP) --
+    # disclosed rather than silently dropped (CLAUDE.md-adjacent "never hide
+    # evidence" rule).
+    children_omitted: int = 0
     note: str | None = None
     caller_uid: str | None = None  # internal only -- not part of the API response
     children: list["FlowHop"] = field(default_factory=list)

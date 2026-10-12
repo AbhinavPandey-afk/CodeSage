@@ -1,4 +1,4 @@
-from analysis.impact.classifiers import classify_import, is_api_endpoint, is_service_component
+from analysis.impact.classifiers import classify_call_target_module, classify_import, is_api_endpoint, is_service_component
 
 
 def test_python_db_package_classified_as_database():
@@ -65,3 +65,13 @@ def test_api_endpoint_decorator_detected():
     assert is_api_endpoint(["@app.route('/x')"])
     assert is_api_endpoint(["@router.get('/x')"])
     assert not is_api_endpoint(["@staticmethod"])
+
+
+def test_classify_call_target_module_recognizes_python_stdlib():
+    assert classify_call_target_module("sqlite3", "python") == "stdlib"
+    assert classify_call_target_module("os", "python") == "stdlib"
+
+
+def test_classify_call_target_module_defaults_to_external():
+    assert classify_call_target_module("requests", "python") == "external"
+    assert classify_call_target_module("anything", None) == "external"

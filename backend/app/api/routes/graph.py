@@ -64,4 +64,6 @@ def get_relationship(repo_id: str, req: RelationshipRequest) -> RelationshipResp
         connected=result.connected,
         steps=[RelationshipStepResponse(**s.__dict__) for s in result.steps],
         explanation=explanation.explanation,
+        relationship_kind=result.relationship_kind,
+        hop_count=result.hop_count,
     )

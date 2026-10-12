@@ -16,7 +16,7 @@ rather than duplicating unrelated logic.
 from dataclasses import dataclass
 
 from analysis.impact.classifiers import classify_import, is_api_endpoint
-from analysis.reconstruction.models import ComponentRole, ConfidenceLabel
+from analysis.reconstruction.models import ComponentRole, ConfidenceLabel, ThirdPartyDependency
 
 _DATA_ACCESS_SUFFIXES = ("Repository", "Dao", "DAO")
 _EXTERNAL_SUFFIXES = ("Client", "Gateway")
@@ -49,6 +49,27 @@ def group_key(file_path: str) -> str:
     if not dir_parts:
         return "(root)"
     return "/".join(dir_parts[:2])
+
+
+def third_party_dependencies(import_targets: list[str]) -> list[ThirdPartyDependency]:
+    """Real, named external packages a component imports — same evidence
+    already used for role inference (classify_import), but keeping the
+    actual name instead of discarding it after counting categories. Mirrors
+    analysis/impact/engine.py's per-symbol external-dependency extraction
+    (dedup by top-level import segment), just applied to a whole component's
+    import set instead of one symbol's file."""
+    seen: set[str] = set()
+    deps: list[ThirdPartyDependency] = []
+    for dotted in import_targets:
+        category = classify_import(dotted)
+        if category is None:
+            continue
+        top_level = dotted.split(".")[0]
+        if not top_level or top_level in seen:
+            continue
+        seen.add(top_level)
+        deps.append(ThirdPartyDependency(name=top_level, category=category))
+    return deps
 
 
 def _has_segment(key: str, *needles: str) -> bool:

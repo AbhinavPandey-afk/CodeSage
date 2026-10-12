@@ -92,3 +92,23 @@ def classify_import(dotted_name: str) -> str | None:
     if not top_level or top_level.startswith("_"):
         return None
     return "external_service"
+
+
+_LANGUAGE_STDLIB_SETS: dict[str, set[str]] = {
+    "python": _STDLIB_MODULES,
+    "javascript": _NODE_BUILTIN_MODULES,
+    "typescript": _NODE_BUILTIN_MODULES,
+    "java": _JAVA_STDLIB_PREFIXES,
+}
+
+
+def classify_call_target_module(top_level_module: str, language: str | None) -> str:
+    """Categorize a module name already confirmed (by the caller, against
+    that file's own recorded imports) to be the object a call was made
+    through -- e.g. the "sqlite3" in a "sqlite3.connect(...)" call. Returns
+    'stdlib' or 'external'; C++ has no stdlib set here so it always reads
+    'external' for it (disclosed, not silently wrong)."""
+    stdlib_set = _LANGUAGE_STDLIB_SETS.get(language or "")
+    if stdlib_set and top_level_module in stdlib_set:
+        return "stdlib"
+    return "external"

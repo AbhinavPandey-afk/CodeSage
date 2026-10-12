@@ -1,0 +1,42 @@
+{
+  "files_parsed": 83,
+  "parse_errors": 0,
+  "symbols_total": 2654,
+  "symbols_by_type": {
+    "file": 83,
+    "import": 949,
+    "function": 1060,
+    "class": 160,
+    "method": 402
+  },
+  "relationships_raw_total": 6038,
+  "relationships_by_type_raw": {
+    "imports": 949,
+    "contains": 1622,
+    "calls": 3350,
+    "inherits": 117
+  },
+  "relationships_resolved_edges": 3713,
+  "resolved_by_type": {
+    "imports": 949,
+    "contains": 1622,
+    "calls": 1072,
+    "inherits": 70
+  },
+  "unresolved_by_type": {
+    "calls": 2278,
+    "inherits": 47
+  },
+  "ambiguous_conf_0.3_unresolved": 871,
+  "calls_confidence_distribution_resolved": {
+    "0.75": 833,
+    "0.95": 239
+  },
+  "all_confidence_distribution_resolved": {
+    "0.95": 1217,
+    "1.0": 1622,
+    "0.75": 874
+  },
+  "parse_seconds": 2.144,
+  "resolve_seconds": 0.023
+}

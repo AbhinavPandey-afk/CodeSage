@@ -1,0 +1,13 @@
+RESULT_HEADER {"target": "examples.tutorial.flaskr.blog.update", "same_short_name_candidates_in_repo": 1, "incoming_calls": 29}
+RESULT_ROW 0.75 examples/tutorial/flaskr/__init__.py 21 | app.config.update(test_config)
+RESULT_ROW 0.75 src/flask/app.py 496 | rv.globals.update(
+RESULT_ROW 0.75 src/flask/app.py 617 | context.update(self.ensure_sync(func)())
+RESULT_ROW 0.75 src/flask/app.py 619 | context.update(orig_ctx)
+RESULT_ROW 0.75 src/flask/app.py 630 | rv.update(processor())
+RESULT_ROW 0.75 src/flask/app.py 1065 | rv.allow.update(methods)
+RESULT_ROW 0.75 src/flask/app.py 1216 | values.update(
+RESULT_ROW 0.75 src/flask/app.py 1365 | rv.headers.update(headers)
+RESULT_ROW 0.75 src/flask/cli.py 645 | rv.update(info.load_app().cli.list_commands(ctx))
+RESULT_ROW 0.75 src/flask/cli.py 1025 | ctx.update(current_app.make_shell_context())
+RESULT_ROW 0.75 src/flask/config.py 316 | mappings.update(mapping)
+RESULT_ROW 0.75 src/flask/config.py 317 | mappings.update(kwargs)

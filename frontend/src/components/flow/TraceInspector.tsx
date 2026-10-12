@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Hammer, Layers3, Network, Radar, ScrollText, X } from "lucide-react";
+import { ChevronRight, Hammer, Layers3, Network, Radar, ScrollText, X } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { ConfidenceBadge } from "@/components/evidence/ConfidenceBadge";
-import { FlowLabelBadge } from "@/components/evidence/FlowLabelBadge";
+import { EvidenceStatusBadge } from "@/components/flow/EvidenceStatusBadge";
 import { confidenceLabel, type TraceNode } from "@/lib/flowModel";
 import { useInvestigation } from "@/lib/investigation";
 import { ROLE_LABELS } from "@/lib/labels";
+import { TERMINAL_REASON_EXPLANATION, TERMINAL_REASON_LABEL } from "@/lib/terminalReasons";
 import { cn } from "@/lib/utils";
 
 function ActionButton({ icon: Icon, label, onClick }: { icon: typeof Network; label: string; onClick: () => void }) {
@@ -20,16 +21,18 @@ function ActionButton({ icon: Icon, label, onClick }: { icon: typeof Network; la
   );
 }
 
+/** What this step does — NOT whether it's terminal. Architectural role
+ * (component_role/terminal_kind) is informational context here regardless
+ * of whether the step actually stops (see the dedicated "Where the trace
+ * stops" section below for that, driven by terminal_reason only). */
 function whatItDoes(node: TraceNode): string {
   if (node.kind === "entry") return "Entry point into the system — the reconstructed operation begins here.";
   if (node.kind === "proposed") return node.note ?? "A proposed design step, not part of the current implementation.";
-  if (node.terminalKind === "database")
-    return "Reaches a data-access component; the reconstructed trace stops here because this is a recognized persistence boundary.";
-  if (node.terminalKind === "external_service")
-    return "Reaches an external-integration component; the reconstructed trace stops here because this is a recognized external-service boundary.";
-  if (node.kind === "derived") {
-    const label = node.componentName ?? (node.componentRole ? ROLE_LABELS[node.componentRole] : "this stage");
-    return `Represents ${node.collapsedCount} resolved call${node.collapsedCount === 1 ? "" : "s"} within ${label}.`;
+  if (node.kind === "stage") {
+    return `A semantic grouping of ${node.memberIds.length} resolved step${node.memberIds.length === 1 ? "" : "s"} along the highest-confidence path, labeled by their shared architectural role.`;
+  }
+  if (node.kind === "component") {
+    return `The reconstructed Architecture component "${node.name}" — ${node.memberIds.length} step${node.memberIds.length === 1 ? "" : "s"} of this trace resolve to symbols inside it.`;
   }
   return `Called from ${node.callerQualifiedName || "the entry point"}.`;
 }
@@ -37,8 +40,6 @@ function whatItDoes(node: TraceNode): string {
 function whyItMatters(node: TraceNode): string {
   if (node.kind === "entry") return "This is where an external request enters the reconstructed system.";
   if (node.kind === "proposed") return "Introducing this step is intended to enforce a cleaner architectural boundary — see Optimization for the full rationale.";
-  if (node.terminalKind === "database") return "Data-access steps are where the system reads or writes persistent state.";
-  if (node.terminalKind === "external_service") return "External-integration steps hand control to a system outside this repository.";
   switch (node.componentRole) {
     case "api":
       return "Part of the API layer that receives and routes the request.";
@@ -47,7 +48,7 @@ function whyItMatters(node: TraceNode): string {
     case "data_access":
       return "Data-access steps are where the system reads or writes persistent state.";
     case "external_integration":
-      return "External-integration steps hand control to a system outside this repository.";
+      return "External-integration steps hand control to a system outside this repository — but may still contain further resolved calls within it, as this step's own evidence shows.";
     default:
       return "This step's architectural role could not be confidently classified from repository evidence.";
   }
@@ -57,13 +58,18 @@ export function TraceInspector({
   node,
   entryLabel,
   onClose,
+  onExpandEvidence,
 }: {
   node: TraceNode | null;
   entryLabel: string;
   onClose: () => void;
+  /** Jumps to Symbols level with the aggregated stage/component's most
+   * specific underlying symbol selected. */
+  onExpandEvidence: (memberId: string) => void;
 }) {
   const { navigate } = useInvestigation();
   const open = node !== null;
+  const isAggregate = node?.kind === "stage" || node?.kind === "component";
   const canLinkToSymbol = node !== null && node.kind !== "proposed";
 
   const explainQuestion = node
@@ -102,7 +108,7 @@ export function TraceInspector({
 
             <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
               <div className="mb-4 flex flex-wrap items-center gap-2">
-                <FlowLabelBadge label={node.label} />
+                <EvidenceStatusBadge status={node.status} />
                 {node.componentRole && (
                   <span className="rounded bg-(--bg-sunken) px-1.5 py-0.5 font-mono text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">
                     {ROLE_LABELS[node.componentRole]}
@@ -124,45 +130,76 @@ export function TraceInspector({
                 <p className="mt-1.5 text-[0.65rem] text-(--text-faint) italic">Interpretation, not a repository fact.</p>
               </div>
 
+              {node.terminalReason && (
+                <div className="mb-5 rounded-md border border-(--border-strong) bg-(--bg-sunken) p-3">
+                  <h3 className="mb-1 text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">
+                    Where the trace stops — {TERMINAL_REASON_LABEL[node.terminalReason]}
+                  </h3>
+                  <p className="text-xs leading-relaxed text-(--text-soft)">{TERMINAL_REASON_EXPLANATION[node.terminalReason]}</p>
+                </div>
+              )}
+
               <div className="mb-5 rounded-md border border-(--border) bg-(--bg) p-3">
                 <h3 className="mb-2 text-[0.65rem] font-semibold tracking-wide text-(--text-faint) uppercase">Evidence</h3>
-                <dl className="flex flex-col gap-2">
-                  <div>
-                    <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">Where it lives</dt>
-                    <dd className="font-mono text-xs break-all text-(--text-soft)">{node.filePath ?? "Not resolved for this step."}</dd>
-                  </div>
-                  {node.kind !== "entry" && node.kind !== "proposed" && (
+                {isAggregate ? (
+                  <dl className="flex flex-col gap-2">
                     <div>
-                      <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">Call-site evidence</dt>
-                      <dd className="font-mono text-xs break-all text-(--text-soft)">
-                        {node.relationshipType}
-                        {node.sourceFile ? ` — ${node.sourceFile}${node.sourceLine ? `:${node.sourceLine}` : ""}` : ""}
+                      <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">Underlying evidence</dt>
+                      <dd className="text-xs text-(--text-soft)">
+                        {node.memberIds.length} resolved step{node.memberIds.length === 1 ? "" : "s"} — this is a{" "}
+                        {node.kind === "stage" ? "semantic stage" : "component participation"} grouping them, not a single repository fact.
                       </dd>
                     </div>
-                  )}
-                  <div>
-                    <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">What calls it</dt>
-                    <dd className="truncate font-mono text-xs text-(--text-soft)">
-                      {node.callerQualifiedName || "External client (incoming request)"}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">
-                      What it calls ({node.children.length})
-                    </dt>
-                    {node.children.length === 0 ? (
-                      <dd className="text-xs text-(--text-faint)">Nothing further was resolved from here.</dd>
-                    ) : (
-                      <dd className="flex flex-col gap-0.5">
-                        {node.children.slice(0, 6).map((c) => (
-                          <code key={c.id} className="truncate text-xs text-(--text-soft)">
-                            {c.name}
-                          </code>
-                        ))}
-                      </dd>
+                    <button
+                      onClick={() => onExpandEvidence(node.memberIds[node.memberIds.length - 1])}
+                      className="flex w-fit items-center gap-0.5 text-xs font-medium text-(--accent-text) hover:underline"
+                    >
+                      Expand in Symbols <ChevronRight className="size-3" />
+                    </button>
+                  </dl>
+                ) : (
+                  <dl className="flex flex-col gap-2">
+                    <div>
+                      <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">Where it lives</dt>
+                      <dd className="font-mono text-xs break-all text-(--text-soft)">{node.filePath ?? "Not resolved for this step."}</dd>
+                    </div>
+                    {node.kind !== "entry" && node.kind !== "proposed" && (
+                      <div>
+                        <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">Call-site evidence</dt>
+                        <dd className="font-mono text-xs break-all text-(--text-soft)">
+                          {node.relationshipType}
+                          {node.sourceFile ? ` — ${node.sourceFile}${node.sourceLine ? `:${node.sourceLine}` : ""}` : ""}
+                        </dd>
+                      </div>
                     )}
-                  </div>
-                </dl>
+                    <div>
+                      <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">What calls it</dt>
+                      <dd className="truncate font-mono text-xs text-(--text-soft)">
+                        {node.callerQualifiedName || "External client (incoming request)"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[0.6rem] font-semibold tracking-wide text-(--text-faint) uppercase">
+                        What it calls ({node.children.length}
+                        {node.childrenOmitted > 0 ? ` + ${node.childrenOmitted} omitted` : ""})
+                      </dt>
+                      {node.children.length === 0 ? (
+                        <dd className="text-xs text-(--text-faint)">Nothing further was resolved from here.</dd>
+                      ) : (
+                        <dd className="flex flex-col gap-0.5">
+                          {node.children
+                            .filter((c) => c.kind !== "continuation")
+                            .slice(0, 6)
+                            .map((c) => (
+                              <code key={c.id} className="truncate text-xs text-(--text-soft)">
+                                {c.name}
+                              </code>
+                            ))}
+                        </dd>
+                      )}
+                    </div>
+                  </dl>
+                )}
               </div>
 
               {node.note && (
@@ -173,6 +210,13 @@ export function TraceInspector({
             </div>
 
             <div className="flex flex-wrap gap-1.5 border-t border-(--border) px-4 py-3">
+              {isAggregate && (
+                <ActionButton
+                  icon={ChevronRight}
+                  label="Expand in Symbols"
+                  onClick={() => onExpandEvidence(node.memberIds[node.memberIds.length - 1])}
+                />
+              )}
               {canLinkToSymbol && (
                 <ActionButton icon={Network} label="View Evidence" onClick={() => navigate("graph", { qualifiedName: node.qualifiedName })} />
               )}

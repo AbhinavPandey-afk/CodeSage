@@ -1,0 +1,9 @@
+status counts {'ready': 59, 'failed': 8} total 67
+pallets/flask ready_runs 50 duration_s min/median/max 6.4 8.4 127.3
+psf/requests ready_runs 1 duration_s min/median/max 10.9 10.9 10.9
+pallets/jinja ready_runs 2 duration_s min/median/max 7.0 80.4 153.8
+psf/black ready_runs 4 duration_s min/median/max 13.7 15.4 19.6
+sahat/hackathon-starter ready_runs 1 duration_s min/median/max 6.0 6.0 6.0
+spring-projects/spring-petclinic ready_runs 1 duration_s min/median/max 5.4 5.4 5.4
+failed: Counter({('pallets/flask', 'Graph build failed: Failed to read from defunct connection IPv4Address'): 3, ('pallets/flask', "Graph build failed: Failed to write data to connection IPv4Address(('p"): 2, ('django/django', 'Repository exceeds 5000 files.'): 2, ('psf/black', 'Graph build failed: {neo4j_code: Neo.ClientError.Schema.ConstraintVali'): 1})
+flask runs: 55 ready: 50 failed: 5
