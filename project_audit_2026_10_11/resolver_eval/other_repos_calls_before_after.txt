@@ -1,0 +1,18 @@
+== hackathon-starter(JS)
+ BEFORE {"files": 57, "symbols": 386, "calls": 2066, "calls_resolved_to_definition": 130, "calls_resolved_to_import_node": 5, "calls_ambiguous": 2, "inherits_resolved": 0, "inherits_total": 0, "resolve_seconds": 0.005}
+ AFTER  {"files": 57, "symbols": 386, "calls": 2066, "calls_resolved_to_definition": 131, "calls_resolved_to_import_node": 0, "calls_ambiguous": 0, "inherits_resolved": 0, "inherits_total": 0, "resolve_seconds": 0.007}
+== spring-petclinic(Java)
+ BEFORE {"files": 50, "symbols": 753, "calls": 1599, "calls_resolved_to_definition": 282, "calls_resolved_to_import_node": 0, "calls_ambiguous": 59, "inherits_resolved": 8, "inherits_total": 8, "resolve_seconds": 0.005}
+ AFTER  {"files": 50, "symbols": 753, "calls": 1599, "calls_resolved_to_definition": 61, "calls_resolved_to_import_node": 0, "calls_ambiguous": 2, "inherits_resolved": 8, "inherits_total": 8, "resolve_seconds": 0.01}
+== requests
+ BEFORE {"files": 37, "symbols": 1539, "calls": 2510, "calls_resolved_to_definition": 930, "calls_resolved_to_import_node": 23, "calls_ambiguous": 473, "inherits_resolved": 41, "inherits_total": 60, "resolve_seconds": 0.037}
+ AFTER  {"files": 37, "symbols": 1422, "calls": 2510, "calls_resolved_to_definition": 742, "calls_resolved_to_import_node": 0, "calls_ambiguous": 29, "inherits_resolved": 41, "inherits_total": 60, "resolve_seconds": 0.047}
+== jinja
+ BEFORE {"files": 60, "symbols": 2705, "calls": 5906, "calls_resolved_to_definition": 2704, "calls_resolved_to_import_node": 25, "calls_ambiguous": 1343, "inherits_resolved": 124, "inherits_total": 151, "resolve_seconds": 0.017}
+ AFTER  {"files": 60, "symbols": 2460, "calls": 5906, "calls_resolved_to_definition": 1760, "calls_resolved_to_import_node": 0, "calls_ambiguous": 20, "inherits_resolved": 125, "inherits_total": 151, "resolve_seconds": 0.032}
+== black
+ BEFORE {"files": 345, "symbols": 4985, "calls": 6426, "calls_resolved_to_definition": 2060, "calls_resolved_to_import_node": 43, "calls_ambiguous": 569, "inherits_resolved": 22, "inherits_total": 72, "resolve_seconds": 0.057}
+ AFTER  {"files": 345, "symbols": 4581, "calls": 6426, "calls_resolved_to_definition": 1804, "calls_resolved_to_import_node": 0, "calls_ambiguous": 2, "inherits_resolved": 22, "inherits_total": 72, "resolve_seconds": 0.071}
+== flask
+ BEFORE {"files": 83, "symbols": 2654, "calls": 3350, "calls_resolved_to_definition": 833, "calls_resolved_to_import_node": 239, "calls_ambiguous": 862, "inherits_resolved": 70, "inherits_total": 117, "resolve_seconds": 0.01}
+ AFTER  {"files": 83, "symbols": 2353, "calls": 3350, "calls_resolved_to_definition": 739, "calls_resolved_to_import_node": 0, "calls_ambiguous": 12, "inherits_resolved": 76, "inherits_total": 117, "resolve_seconds": 0.021}

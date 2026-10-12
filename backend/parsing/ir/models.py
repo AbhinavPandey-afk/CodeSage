@@ -42,6 +42,14 @@ class Symbol(BaseModel):
     language: Language
     decorators: list[str] = []
     docstring: str | None = None
+    # IMPORT symbols only (populated where the language's parser can supply it --
+    # currently Python). `local_name` is the name the import binds in the importing
+    # file ("np" for `import numpy as np`, "url_for" for `from flask.helpers import
+    # url_for`); `bound_path` is the dotted path that name refers to ("numpy",
+    # "flask.helpers.url_for"). Relative imports are already resolved to repo-path
+    # form. Not persisted to Neo4j -- resolver input only.
+    local_name: str | None = None
+    bound_path: str | None = None
 
 
 class Relationship(BaseModel):

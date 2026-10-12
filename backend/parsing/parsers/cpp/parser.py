@@ -79,9 +79,9 @@ class CppParser(LanguageParser):
                 obj = node.child_by_field_name("argument")
                 field = node.child_by_field_name("field")
                 field_text = text(field) if field else "?"
-                if obj is not None and obj.type == "identifier":
+                if obj is not None and obj.type in ("identifier", "this"):
                     return f"{text(obj)}.{field_text}"
-                return field_text
+                return f"?.{field_text}"  # unknown receiver expression
             if node.type == "qualified_identifier":
                 return flatten_qualified(node)
             return text(node)[:80]

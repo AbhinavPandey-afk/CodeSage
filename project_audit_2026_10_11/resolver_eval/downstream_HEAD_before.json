@@ -1,0 +1,316 @@
+{
+ "graph": {
+  "symbol_nodes": 2647,
+  "edges_by_type": {
+   "IMPORTS": 942,
+   "CONTAINS": 1622,
+   "CALLS": 1071,
+   "INHERITS": 70
+  },
+  "calls_confidence": {
+   "0.75": 832,
+   "0.95": 239
+  },
+  "calls_to_import_nodes": 239
+ },
+ "architecture": {
+  "components": 8,
+  "relationships": 12,
+  "roles": {
+   "test": 3,
+   "external_integration": 2,
+   "api": 3
+  },
+  "relationship_call_counts": [
+   351,
+   146,
+   65,
+   28,
+   25,
+   23,
+   16,
+   6,
+   5,
+   4,
+   4,
+   3
+  ]
+ },
+ "findings": {
+  "total": 47,
+  "severity": {
+   "HIGH": 1,
+   "MEDIUM": 17,
+   "LOW": 29
+  },
+  "confidence_tier_0.7_0.4": {
+   "High": 3,
+   "Medium": 21,
+   "Low": 23
+  },
+  "by_type": {
+   "architecture_boundary_violation": 1,
+   "circular_dependency": 2,
+   "god_class": 4,
+   "large_function": 16,
+   "circular_component_dependency": 3,
+   "excessive_component_coupling": 1,
+   "dead_code_candidate": 20
+  }
+ },
+ "optimization": {
+  "proposals": 5,
+  "by_risk": {
+   "CRITICAL": 1,
+   "HIGH": 4
+  }
+ },
+ "flows": [
+  {
+   "entry": "examples.celery.src.task_app.__init__.create_app.index",
+   "nodes": 12,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 1,
+    "UNRESOLVED": 1,
+    "DEPTH_LIMIT": 4
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.celery.src.task_app.views.add",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.celery.src.task_app.views.block",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.celery.src.task_app.views.process",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.celery.src.task_app.views.result",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.javascript.js_example.views.add",
+   "nodes": 2,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.javascript.js_example.views.index",
+   "nodes": 12,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 1,
+    "UNRESOLVED": 1,
+    "DEPTH_LIMIT": 4
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.__init__.create_app.hello",
+   "nodes": 1,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.auth.login",
+   "nodes": 15,
+   "leaf_reasons": {
+    "STANDARD_LIBRARY": 1,
+    "NO_RESOLVED_CALLEES": 2,
+    "UNRESOLVED": 1,
+    "DEPTH_LIMIT": 4
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.auth.logout",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.auth.register",
+   "nodes": 15,
+   "leaf_reasons": {
+    "STANDARD_LIBRARY": 1,
+    "NO_RESOLVED_CALLEES": 2,
+    "UNRESOLVED": 1,
+    "DEPTH_LIMIT": 4
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.blog.create",
+   "nodes": 15,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 2,
+    "STANDARD_LIBRARY": 1,
+    "UNRESOLVED": 1,
+    "DEPTH_LIMIT": 4
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.blog.delete",
+   "nodes": 6,
+   "leaf_reasons": {
+    "STANDARD_LIBRARY": 2,
+    "UNRESOLVED": 2
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.blog.index",
+   "nodes": 13,
+   "leaf_reasons": {
+    "STANDARD_LIBRARY": 1,
+    "NO_RESOLVED_CALLEES": 1,
+    "UNRESOLVED": 1,
+    "DEPTH_LIMIT": 4
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "examples.tutorial.flaskr.blog.update",
+   "nodes": 8,
+   "leaf_reasons": {
+    "STANDARD_LIBRARY": 2,
+    "UNRESOLVED": 2,
+    "NO_RESOLVED_CALLEES": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "tests.test_appctx.test_app_tearing_down_with_handled_exception_by_app_handler.index",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "tests.test_appctx.test_app_tearing_down_with_unhandled_exception.index",
+   "nodes": 1,
+   "leaf_reasons": {
+    "UNRESOLVED": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "tests.test_appctx.test_basic_url_generation.index",
+   "nodes": 1,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "tests.test_appctx.test_context_refcounts.index",
+   "nodes": 1,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 1
+   },
+   "has_proposed": false
+  },
+  {
+   "entry": "tests.test_appctx.test_robust_teardown.index",
+   "nodes": 1,
+   "leaf_reasons": {
+    "NO_RESOLVED_CALLEES": 1
+   },
+   "has_proposed": false
+  }
+ ],
+ "flow_size_distribution": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  2,
+  6,
+  8,
+  12,
+  12,
+  13,
+  15,
+  15,
+  15
+ ],
+ "blog_index_tree": [
+  "examples.tutorial.flaskr.blog.index [conf=1.00 stop=None]",
+  "  examples.tutorial.flaskr.db.get_db [conf=0.75 stop=STANDARD_LIBRARY]",
+  "  src.flask.templating.render_template [conf=0.75 stop=None]",
+  "    src.flask.globals.ProxyMixin._get_current_object [conf=0.75 stop=NO_RESOLVED_CALLEES]",
+  "    src.flask.templating._render [conf=0.75 stop=None]",
+  "      src.flask.app.Flask.update_template_context [conf=0.75 stop=None]",
+  "        src.flask.ctx.AppContext.copy [conf=0.75 stop=UNRESOLVED]",
+  "        examples.tutorial.flaskr.blog.update [conf=0.75 stop=None]",
+  "          examples.tutorial.flaskr.blog.get_post [conf=0.75 stop=DEPTH_LIMIT]",
+  "          src.flask.helpers.flash [conf=0.75 stop=DEPTH_LIMIT]",
+  "          examples.tutorial.flaskr.db.get_db [conf=0.75 stop=DEPTH_LIMIT]",
+  "        src.flask.app.Flask.ensure_sync [conf=0.75 stop=None]",
+  "          src.flask.app.Flask.async_to_sync [conf=0.75 stop=DEPTH_LIMIT]"
+ ],
+ "impact": [
+  {
+   "target": "src.flask.app.Flask.test_client",
+   "direct": 45,
+   "indirect": 5,
+   "apis": 0,
+   "tests": 50,
+   "risk": "HIGH",
+   "score": 6
+  },
+  {
+   "target": "src.flask.app.Flask.test_request_context",
+   "direct": 32,
+   "indirect": 6,
+   "apis": 0,
+   "tests": 38,
+   "risk": "HIGH",
+   "score": 7
+  },
+  {
+   "target": "examples.tutorial.flaskr.blog.update",
+   "direct": 22,
+   "indirect": 48,
+   "apis": 20,
+   "tests": 35,
+   "risk": "CRITICAL",
+   "score": 8
+  }
+ ],
+ "blog_update_incoming_calls": 30
+}

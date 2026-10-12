@@ -112,7 +112,7 @@ def test_resolver_links_inheritance_across_same_file(tmp_path):
     resolved = resolve_relationships(pf.symbols, pf.relationships)
     inherit = next(r for r in resolved if r.relationship_type.value == "inherits")
     assert inherit.target_id == "mypkg.mod.BaseService"
-    assert inherit.confidence == 0.75
+    assert inherit.confidence == 0.95  # same-file lexical scope (was name-based 0.75)
 
 
 def test_tsx_file_with_jsx_parses_without_error(tmp_path):

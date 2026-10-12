@@ -1,0 +1,82 @@
+{
+ "overall": {
+  "n": 117,
+  "label_is_repo_definition": 74,
+  "bound": 60,
+  "correct": 60,
+  "wrong_repo": 0,
+  "bound_external": 0,
+  "precision": 1.0,
+  "recall": 0.811
+ },
+ "by_baseline_stratum": {
+  "bound_definition/bare": {
+   "n": 22,
+   "label_is_repo_definition": 18,
+   "bound": 16,
+   "correct": 16,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": 1.0,
+   "recall": 0.889
+  },
+  "bound_definition/recv.attr": {
+   "n": 24,
+   "label_is_repo_definition": 17,
+   "bound": 8,
+   "correct": 8,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": 1.0,
+   "recall": 0.471
+  },
+  "bound_definition/self": {
+   "n": 18,
+   "label_is_repo_definition": 18,
+   "bound": 18,
+   "correct": 18,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "bound_import_node": {
+   "n": 14,
+   "label_is_repo_definition": 14,
+   "bound": 14,
+   "correct": 14,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "unresolved/has_candidate": {
+   "n": 25,
+   "label_is_repo_definition": 7,
+   "bound": 4,
+   "correct": 4,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": 1.0,
+   "recall": 0.571
+  },
+  "unresolved/no_candidate": {
+   "n": 14,
+   "label_is_repo_definition": 0,
+   "bound": 0,
+   "correct": 0,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": null,
+   "recall": null
+  }
+ },
+ "stratum_weighted_estimate": {
+  "precision": 1.0,
+  "recall": 0.758,
+  "note": "strata weighted by population share of the BASELINE resolver output; small-sample estimate"
+ },
+ "resolved_calls_total_definition_targets": 739,
+ "resolved_calls_total_import_targets": 0,
+ "calls_total": 3350
+}

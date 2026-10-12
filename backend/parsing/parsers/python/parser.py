@@ -68,7 +68,10 @@ class PythonParser(LanguageParser):
                 attr_text = text(attr) if attr else "?"
                 if obj is not None and obj.type == "identifier":
                     return f"{text(obj)}.{attr_text}"
-                return attr_text
+                # Receiver is an expression (call result, subscript, nested attribute):
+                # keep the attribute but mark the receiver unknown so the resolver can
+                # tell `foo().bar()` apart from a bare call to a function named `bar`.
+                return f"?.{attr_text}"
             return text(func_node)[:80]
 
         def collect_calls(node: Node, source_symbol_id: str) -> None:
@@ -91,7 +94,25 @@ class PythonParser(LanguageParser):
                         )
                 collect_calls(child, source_symbol_id)
 
-        def add_import(dotted: str, node: Node, container_id: str) -> None:
+        package_parts = module_name.split(".")[:-1]
+
+        def absolute_module(prefix: str) -> str:
+            """Resolve the module part of a `from <prefix> import ...` statement. Absolute
+            prefixes are returned unchanged; relative ones (".", "..helpers") are resolved
+            against this file's package into repo-path form, which is how qualified names
+            are written."""
+            level = len(prefix) - len(prefix.lstrip("."))
+            if level == 0:
+                return prefix
+            keep = len(package_parts) - (level - 1)
+            base = package_parts[:keep] if keep > 0 else []
+            rest = prefix.lstrip(".")
+            return ".".join([*base, *([rest] if rest else [])])
+
+        def add_import(
+            dotted: str, node: Node, container_id: str,
+            local_name: str | None = None, bound_path: str | None = None,
+        ) -> None:
             sid = f"{rel_path}::import::{dotted}::{node.start_point[0]}"
             symbols.append(
                 Symbol(
@@ -103,6 +124,8 @@ class PythonParser(LanguageParser):
                     start_line=node.start_point[0] + 1,
                     end_line=node.end_point[0] + 1,
                     language=Language.PYTHON,
+                    local_name=local_name,
+                    bound_path=bound_path,
                 )
             )
             relationships.append(
@@ -121,24 +144,42 @@ class PythonParser(LanguageParser):
             if node.type == "import_statement":
                 for child in node.children:
                     if child.type == "dotted_name":
-                        add_import(text(child), node, container_id)
+                        dotted = text(child)
+                        # `import a.b.c` binds only the top-level name `a`.
+                        root = dotted.split(".")[0]
+                        add_import(dotted, node, container_id, local_name=root, bound_path=root)
                     elif child.type == "aliased_import":
                         name_node = child.child_by_field_name("name")
+                        alias_node = child.child_by_field_name("alias")
                         if name_node is not None:
-                            add_import(text(name_node), node, container_id)
+                            dotted = text(name_node)
+                            alias = text(alias_node) if alias_node is not None else dotted.split(".")[0]
+                            bound = dotted if alias_node is not None else dotted.split(".")[0]
+                            add_import(dotted, node, container_id, local_name=alias, bound_path=bound)
             elif node.type == "import_from_statement":
                 module_node = node.child_by_field_name("module_name")
                 module_prefix = text(module_node) if module_node else ""
+                module_abs = absolute_module(module_prefix)
                 for child in node.children:
-                    if child is module_node:
+                    if child == module_node:  # tree-sitter nodes compare by value; `is` never matched
                         continue
                     if child.type == "dotted_name":
-                        add_import(f"{module_prefix}.{text(child)}" if module_prefix else text(child), node, container_id)
+                        imported = text(child)
+                        add_import(
+                            f"{module_prefix}.{imported}" if module_prefix else imported, node, container_id,
+                            local_name=imported.split(".")[0],
+                            bound_path=f"{module_abs}.{imported}" if module_abs else imported,
+                        )
                     elif child.type == "aliased_import":
                         name_node = child.child_by_field_name("name")
+                        alias_node = child.child_by_field_name("alias")
                         if name_node is not None:
                             imported = text(name_node)
-                            add_import(f"{module_prefix}.{imported}" if module_prefix else imported, node, container_id)
+                            add_import(
+                                f"{module_prefix}.{imported}" if module_prefix else imported, node, container_id,
+                                local_name=text(alias_node) if alias_node is not None else imported,
+                                bound_path=f"{module_abs}.{imported}" if module_abs else imported,
+                            )
                     elif child.type == "wildcard_import":
                         add_import(f"{module_prefix}.*", node, container_id)
 

@@ -1,0 +1,2420 @@
+{
+ "seed": 777,
+ "workspace_commit_note": "pin to the Flask commit recorded in the registry",
+ "stratum_population": {
+  "recv.attr": 1658,
+  "chained(?.attr)": 519,
+  "bare": 911,
+  "self": 149
+ },
+ "items": [
+  {
+   "key": "src/flask/config.py:209:compile",
+   "stratum": "bare",
+   "caller": "src.flask.config.Config.from_pyfile",
+   "source_file": "src/flask/config.py",
+   "source_line": 209,
+   "target_name": "compile",
+   "line": "                exec(compile(config_file.read(), filename, \"exec\"), d.__dict__)",
+   "context_before": [
+    "        d.__file__ = filename",
+    "        try:",
+    "            with open(filename, mode=\"rb\") as config_file:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/testing.py:218:isinstance",
+   "stratum": "bare",
+   "caller": "src.flask.testing.FlaskClient.open",
+   "source_file": "src/flask/testing.py",
+   "source_line": 218,
+   "target_name": "isinstance",
+   "line": "            elif isinstance(args[0], dict):",
+   "context_before": [
+    "                builder = copy(args[0])",
+    "                builder.environ_base = self._copy_environ(builder.environ_base or {})  # type: ignore[arg-type]",
+    "                request = builder.get_request()"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/blueprints.py:108:dict",
+   "stratum": "bare",
+   "caller": "src.flask.sansio.blueprints.BlueprintSetupState.add_url_rule",
+   "source_file": "src/flask/sansio/blueprints.py",
+   "source_line": 108,
+   "target_name": "dict",
+   "line": "            defaults = dict(defaults, **options.pop(\"defaults\"))",
+   "context_before": [
+    "            endpoint = _endpoint_from_view_func(view_func)  # type: ignore",
+    "        defaults = self.url_defaults",
+    "        if \"defaults\" in options:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:669:list",
+   "stratum": "bare",
+   "caller": "tests.test_basic.test_extended_flashing.test_filter",
+   "source_file": "tests/test_basic.py",
+   "source_line": 669,
+   "target_name": "list",
+   "line": "        assert list(messages) == [(\"message\", \"Hello World\")]",
+   "context_before": [
+    "        messages = flask.get_flashed_messages(",
+    "            category_filter=[\"message\"], with_categories=True",
+    "        )"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/debughelpers.py:78:super",
+   "stratum": "bare",
+   "caller": "src.flask.debughelpers.FormDataRoutingRedirect.__init__",
+   "source_file": "src/flask/debughelpers.py",
+   "source_line": 78,
+   "target_name": "super",
+   "line": "        super().__init__(\"\".join(buf))",
+   "context_before": [
+    "            \" data.\\n\\n\"",
+    "            \"This exception is only raised in debug mode.\"",
+    "        )"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_testing.py:295:Namespace",
+   "stratum": "bare",
+   "caller": "tests.test_testing.test_client_json_no_app_context",
+   "source_file": "tests/test_testing.py",
+   "source_line": 295,
+   "target_name": "Namespace",
+   "line": "    ns = Namespace()",
+   "context_before": [
+    "        def add(self, app):",
+    "            self.count += 1",
+    ""
+   ],
+   "baseline_target": "tests.test_testing.test_client_json_no_app_context.Namespace",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "tests.test_testing.test_client_json_no_app_context.Namespace"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/app.py:1000:handler",
+   "stratum": "bare",
+   "caller": "src.flask.sansio.app.App.handle_url_build_error",
+   "source_file": "src/flask/sansio/app.py",
+   "source_line": 1000,
+   "target_name": "handler",
+   "line": "                rv = handler(error, endpoint, values)",
+   "context_before": [
+    "        \"\"\"",
+    "        for handler in self.url_build_error_handlers:",
+    "            try:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "tests.test_appctx.test_app_tearing_down_with_handled_exception_by_app_handler.handler",
+    "tests.test_basic.test_build_error_handler.handler",
+    "tests.test_basic.test_url_for_passes_special_values_to_build_error_handler.handler"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:201:Submount",
+   "stratum": "bare",
+   "caller": "tests.test_basic.test_werkzeug_routing",
+   "source_file": "tests/test_basic.py",
+   "source_line": 201,
+   "target_name": "Submount",
+   "line": "        Submount(\"/foo\", [Rule(\"/bar\", endpoint=\"bar\"), Rule(\"/\", endpoint=\"index\")])",
+   "context_before": [
+    "    from werkzeug.routing import Submount",
+    "",
+    "    app.url_map.add("
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_json.py:345:ObjectWithHTML",
+   "stratum": "bare",
+   "caller": "tests.test_json.test_html_method",
+   "source_file": "tests/test_json.py",
+   "source_line": 345,
+   "target_name": "ObjectWithHTML",
+   "line": "    result = json.dumps(ObjectWithHTML())",
+   "context_before": [
+    "        def __html__(self):",
+    "            return \"<p>test</p>\"",
+    ""
+   ],
+   "baseline_target": "tests.test_json.test_html_method.ObjectWithHTML",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "tests.test_json.test_html_method.ObjectWithHTML"
+   ],
+   "label": null
+  },
+  {
+   "key": "examples/tutorial/flaskr/blog.py:81:redirect",
+   "stratum": "bare",
+   "caller": "examples.tutorial.flaskr.blog.create",
+   "source_file": "examples/tutorial/flaskr/blog.py",
+   "source_line": 81,
+   "target_name": "redirect",
+   "line": "            return redirect(url_for(\"blog.index\"))",
+   "context_before": [
+    "                (title, body, g.user[\"id\"]),",
+    "            )",
+    "            db.commit()"
+   ],
+   "baseline_target": "src.flask.helpers.redirect",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.helpers.redirect",
+    "src.flask.sansio.app.App.redirect",
+    "tests.test_helpers.test_redirect_with_app.redirect"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_cli.py:497:FlaskGroup",
+   "stratum": "bare",
+   "caller": "tests.test_cli.TestRoutes.test_no_routes",
+   "source_file": "tests/test_cli.py",
+   "source_line": 497,
+   "target_name": "FlaskGroup",
+   "line": "        cli = FlaskGroup(create_app=lambda: app)",
+   "context_before": [
+    "",
+    "    def test_no_routes(self, runner):",
+    "        app = Flask(__name__, static_folder=None)"
+   ],
+   "baseline_target": "src.flask.cli.FlaskGroup",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.cli.FlaskGroup"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_cli.py:195:locate_app",
+   "stratum": "bare",
+   "caller": "tests.test_cli.test_locate_app",
+   "source_file": "tests/test_cli.py",
+   "source_line": 195,
+   "target_name": "locate_app",
+   "line": "    assert locate_app(iname, aname).name == result",
+   "context_before": [
+    "    ),",
+    ")",
+    "def test_locate_app(test_apps, iname, aname, result):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.3,
+   "same_short_name_candidates": [
+    "src.flask.cli.locate_app",
+    "src.flask.cli.locate_app",
+    "src.flask.cli.locate_app"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:478:Markup",
+   "stratum": "bare",
+   "caller": "tests.test_basic.test_session_special_types.dump_session_contents",
+   "source_file": "tests/test_basic.py",
+   "source_line": 478,
+   "target_name": "Markup",
+   "line": "        flask.session[\"m\"] = Markup(\"<html>\")",
+   "context_before": [
+    "    def dump_session_contents():",
+    "        flask.session[\"t\"] = (1, 2, 3)",
+    "        flask.session[\"b\"] = b\"\\xff\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/blueprints.py:431:ValueError",
+   "stratum": "bare",
+   "caller": "src.flask.sansio.blueprints.Blueprint.add_url_rule",
+   "source_file": "src/flask/sansio/blueprints.py",
+   "source_line": 431,
+   "target_name": "ValueError",
+   "line": "            raise ValueError(\"'view_func' name may not contain a dot '.' character.\")",
+   "context_before": [
+    "            raise ValueError(\"'endpoint' may not contain a dot '.' character.\")",
+    "",
+    "        if view_func and hasattr(view_func, \"__name__\") and \".\" in view_func.__name__:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:551:isinstance",
+   "stratum": "bare",
+   "caller": "tests.test_blueprints.test_add_template_test.is_boolean",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 551,
+   "target_name": "isinstance",
+   "line": "        return isinstance(value, bool)",
+   "context_before": [
+    "    bp = flask.Blueprint(\"bp\", __name__)",
+    "",
+    "    def is_boolean(value):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/helpers.py:619:hasattr",
+   "stratum": "bare",
+   "caller": "src.flask.helpers.get_root_path",
+   "source_file": "src/flask/helpers.py",
+   "source_line": 619,
+   "target_name": "hasattr",
+   "line": "    if hasattr(loader, \"get_filename\"):",
+   "context_before": [
+    "    if loader is None:",
+    "        return os.getcwd()",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_views.py:267:str",
+   "stratum": "bare",
+   "caller": "tests.test_views.test_init_once.CountInit.dispatch_request",
+   "source_file": "tests/test_views.py",
+   "source_line": 267,
+   "target_name": "str",
+   "line": "            return str(n)",
+   "context_before": [
+    "            n += 1",
+    "",
+    "        def dispatch_request(self):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:710:get_load_dotenv",
+   "stratum": "bare",
+   "caller": "src.flask.app.Flask.run",
+   "source_file": "src/flask/app.py",
+   "source_line": 710,
+   "target_name": "get_load_dotenv",
+   "line": "        if get_load_dotenv(load_dotenv):",
+   "context_before": [
+    "",
+    "            return",
+    ""
+   ],
+   "baseline_target": "src.flask.helpers.get_load_dotenv",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.helpers.get_load_dotenv"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:535:get_host",
+   "stratum": "bare",
+   "caller": "src.flask.app.Flask.create_url_adapter",
+   "source_file": "src/flask/app.py",
+   "source_line": 535,
+   "target_name": "get_host",
+   "line": "            request.host = get_host(request.environ, request.trusted_hosts)  # pyright: ignore",
+   "context_before": [
+    "                request.trusted_hosts = trusted_hosts",
+    "",
+    "            # Check trusted_hosts here until bind_to_environ does."
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_cli.py:84:Flask",
+   "stratum": "bare",
+   "caller": "tests.test_cli.test_find_best_app.Module.make_app",
+   "source_file": "tests/test_cli.py",
+   "source_line": 84,
+   "target_name": "Flask",
+   "line": "            return Flask(\"appname\")",
+   "context_before": [
+    "    class Module:",
+    "        @staticmethod",
+    "        def make_app():"
+   ],
+   "baseline_target": "src.flask.app.Flask",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask",
+    "tests.test_config.test_custom_config_class.Flask"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1347:TypeError",
+   "stratum": "bare",
+   "caller": "src.flask.app.Flask.make_response",
+   "source_file": "src/flask/app.py",
+   "source_line": 1347,
+   "target_name": "TypeError",
+   "line": "                raise TypeError(",
+   "context_before": [
+    "                        f\" was a {type(rv).__name__}.\"",
+    "                    ).with_traceback(sys.exc_info()[2]) from None",
+    "            else:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/type_check/typing_route.py:88:render_template",
+   "stratum": "bare",
+   "caller": "tests.type_check.typing_route.return_template",
+   "source_file": "tests/type_check/typing_route.py",
+   "source_line": 88,
+   "target_name": "render_template",
+   "line": "    return render_template(\"index.html\", name=name)",
+   "context_before": [
+    "@app.route(\"/template\")",
+    "@app.route(\"/template/<name>\")",
+    "def return_template(name: str | None = None) -> str:"
+   ],
+   "baseline_target": "src.flask.templating.render_template",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.templating.render_template"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/json/tag.py:323:dumps",
+   "stratum": "bare",
+   "caller": "src.flask.json.tag.TaggedJSONSerializer.dumps",
+   "source_file": "src/flask/json/tag.py",
+   "source_line": 323,
+   "target_name": "dumps",
+   "line": "        return dumps(self.tag(value), separators=(\",\", \":\"))",
+   "context_before": [
+    "",
+    "    def dumps(self, value: t.Any) -> str:",
+    "        \"\"\"Tag the value and dump it to a compact JSON string.\"\"\""
+   ],
+   "baseline_target": "src.flask.json.__init__.dumps",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.json.__init__.dumps",
+    "src.flask.json.provider.DefaultJSONProvider.dumps",
+    "src.flask.json.provider.JSONProvider.dumps",
+    "src.flask.json.tag.TaggedJSONSerializer.dumps"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:388:isinstance",
+   "stratum": "bare",
+   "caller": "src.flask.app.Flask.get_send_file_max_age",
+   "source_file": "src/flask/app.py",
+   "source_line": 388,
+   "target_name": "isinstance",
+   "line": "        if isinstance(value, timedelta):",
+   "context_before": [
+    "        if value is None:",
+    "            return None",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_user_error_handler.py:245:getattr",
+   "stratum": "bare",
+   "caller": "tests.test_user_error_handler.TestGenericHandlers.report_error",
+   "source_file": "tests/test_user_error_handler.py",
+   "source_line": 245,
+   "target_name": "getattr",
+   "line": "        original = getattr(e, \"original_exception\", None)",
+   "context_before": [
+    "        return app",
+    "",
+    "    def report_error(self, e):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_instance_config.py:90:purge_module",
+   "stratum": "bare",
+   "caller": "tests.test_instance_config.test_installed_package_paths",
+   "source_file": "tests/test_instance_config.py",
+   "source_line": 90,
+   "target_name": "purge_module",
+   "line": "    purge_module(\"installed_package\")",
+   "context_before": [
+    "    app = installed_path / \"installed_package\"",
+    "    app.mkdir()",
+    "    (app / \"__init__.py\").write_text(\"import flask\\napp = flask.Flask(__name__)\\n\")"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "tests.conftest.purge_module"
+   ],
+   "label": null
+  },
+  {
+   "key": "docs/conf.py:96:reference",
+   "stratum": "bare",
+   "caller": "docs.conf.github_link",
+   "source_file": "docs/conf.py",
+   "source_line": 96,
+   "target_name": "reference",
+   "line": "    node = reference(rawtext, words, refuri=url, **options)",
+   "context_before": [
+    "",
+    "    options = options or {}",
+    "    set_classes(options)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_user_error_handler.py:109:isinstance",
+   "stratum": "bare",
+   "caller": "tests.test_user_error_handler.test_error_handler_http_subclass.code_exception_handler",
+   "source_file": "tests/test_user_error_handler.py",
+   "source_line": 109,
+   "target_name": "isinstance",
+   "line": "        assert isinstance(e, Forbidden)",
+   "context_before": [
+    "",
+    "    @app.errorhandler(403)",
+    "    def code_exception_handler(e):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_cli.py:367:Flask",
+   "stratum": "bare",
+   "caller": "tests.test_cli.test_flaskgroup_debug.create_app",
+   "source_file": "tests/test_cli.py",
+   "source_line": 367,
+   "target_name": "Flask",
+   "line": "        app = Flask(\"flaskgroup\")",
+   "context_before": [
+    "@pytest.mark.parametrize(\"set_debug_flag\", (True, False))",
+    "def test_flaskgroup_debug(runner, set_debug_flag):",
+    "    def create_app():"
+   ],
+   "baseline_target": "src.flask.app.Flask",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask",
+    "tests.test_config.test_custom_config_class.Flask"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:677:list",
+   "stratum": "bare",
+   "caller": "tests.test_basic.test_extended_flashing.test_filters",
+   "source_file": "tests/test_basic.py",
+   "source_line": 677,
+   "target_name": "list",
+   "line": "        assert list(messages) == [",
+   "context_before": [
+    "        messages = flask.get_flashed_messages(",
+    "            category_filter=[\"message\", \"warning\"], with_categories=True",
+    "        )"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/app.py:693:self.add_template_filter",
+   "stratum": "self",
+   "caller": "src.flask.sansio.app.App.template_filter.decorator",
+   "source_file": "src/flask/sansio/app.py",
+   "source_line": 693,
+   "target_name": "self.add_template_filter",
+   "line": "            self.add_template_filter(f, name=name)",
+   "context_before": [
+    "            return name",
+    "",
+    "        def decorator(f: T_template_filter) -> T_template_filter:"
+   ],
+   "baseline_target": "src.flask.sansio.app.App.add_template_filter",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.add_template_filter"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/json/tag.py:317:self._untag_scan",
+   "stratum": "self",
+   "caller": "src.flask.json.tag.TaggedJSONSerializer._untag_scan",
+   "source_file": "src/flask/json/tag.py",
+   "source_line": 317,
+   "target_name": "self._untag_scan",
+   "line": "            value = [self._untag_scan(item) for item in value]",
+   "context_before": [
+    "            value = self.untag(value)",
+    "        elif isinstance(value, list):",
+    "            # untag each item recursively"
+   ],
+   "baseline_target": "src.flask.json.tag.TaggedJSONSerializer._untag_scan",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.json.tag.TaggedJSONSerializer._untag_scan"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/json/provider.py:57:self.dumps",
+   "stratum": "self",
+   "caller": "src.flask.json.provider.JSONProvider.dump",
+   "source_file": "src/flask/json/provider.py",
+   "source_line": 57,
+   "target_name": "self.dumps",
+   "line": "        fp.write(self.dumps(obj, **kwargs))",
+   "context_before": [
+    "            encoding to be valid JSON.",
+    "        :param kwargs: May be passed to the underlying JSON library.",
+    "        \"\"\""
+   ],
+   "baseline_target": "src.flask.json.provider.JSONProvider.dumps",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.json.__init__.dumps",
+    "src.flask.json.provider.DefaultJSONProvider.dumps",
+    "src.flask.json.provider.JSONProvider.dumps",
+    "src.flask.json.tag.TaggedJSONSerializer.dumps"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:359:self.add_url_rule",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.__init__",
+   "source_file": "src/flask/app.py",
+   "source_line": 359,
+   "target_name": "self.add_url_rule",
+   "line": "            self.add_url_rule(",
+   "context_before": [
+    "            # Use a weakref to avoid creating a reference cycle between the app",
+    "            # and the view function (see #3761).",
+    "            self_ref = weakref.ref(self)"
+   ],
+   "baseline_target": "src.flask.sansio.app.App.add_url_rule",
+   "baseline_confidence": 0.85,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.add_url_rule",
+    "src.flask.sansio.blueprints.Blueprint.add_url_rule",
+    "src.flask.sansio.blueprints.BlueprintSetupState.add_url_rule",
+    "src.flask.sansio.scaffold.Scaffold.add_url_rule"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/cli.py:610:self._load_plugin_commands",
+   "stratum": "self",
+   "caller": "src.flask.cli.FlaskGroup.get_command",
+   "source_file": "src/flask/cli.py",
+   "source_line": 610,
+   "target_name": "self._load_plugin_commands",
+   "line": "        self._load_plugin_commands()",
+   "context_before": [
+    "        self._loaded_plugin_commands = True",
+    "",
+    "    def get_command(self, ctx: click.Context, name: str) -> click.Command | None:"
+   ],
+   "baseline_target": "src.flask.cli.FlaskGroup._load_plugin_commands",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.cli.FlaskGroup._load_plugin_commands"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/app.py:326:self.json_provider_class",
+   "stratum": "self",
+   "caller": "src.flask.sansio.app.App.__init__",
+   "source_file": "src/flask/sansio/app.py",
+   "source_line": 326,
+   "target_name": "self.json_provider_class",
+   "line": "        self.json: JSONProvider = self.json_provider_class(self)",
+   "context_before": [
+    "        #:     Moved from ``flask.abort``, which calls this object.",
+    "        self.aborter = self.make_aborter()",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sessions.py:346:self.get_cookie_httponly",
+   "stratum": "self",
+   "caller": "src.flask.sessions.SecureCookieSessionInterface.save_session",
+   "source_file": "src/flask/sessions.py",
+   "source_line": 346,
+   "target_name": "self.get_cookie_httponly",
+   "line": "        httponly = self.get_cookie_httponly(app)",
+   "context_before": [
+    "        secure = self.get_cookie_secure(app)",
+    "        partitioned = self.get_cookie_partitioned(app)",
+    "        samesite = self.get_cookie_samesite(app)"
+   ],
+   "baseline_target": "src.flask.sessions.SessionInterface.get_cookie_httponly",
+   "baseline_confidence": 0.85,
+   "same_short_name_candidates": [
+    "src.flask.sessions.SessionInterface.get_cookie_httponly"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:866:self.ensure_sync",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.handle_http_exception",
+   "source_file": "src/flask/app.py",
+   "source_line": 866,
+   "target_name": "self.ensure_sync",
+   "line": "        return self.ensure_sync(handler)(e)  # type: ignore[no-any-return]",
+   "context_before": [
+    "        handler = self._find_error_handler(e, ctx.request.blueprints)",
+    "        if handler is None:",
+    "            return e"
+   ],
+   "baseline_target": "src.flask.app.Flask.ensure_sync",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.ensure_sync"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/scaffold.py:301:self._method_route",
+   "stratum": "self",
+   "caller": "src.flask.sansio.scaffold.Scaffold.get",
+   "source_file": "src/flask/sansio/scaffold.py",
+   "source_line": 301,
+   "target_name": "self._method_route",
+   "line": "        return self._method_route(\"GET\", rule, options)",
+   "context_before": [
+    "",
+    "        .. versionadded:: 2.0",
+    "        \"\"\""
+   ],
+   "baseline_target": "src.flask.sansio.scaffold.Scaffold._method_route",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.sansio.scaffold.Scaffold._method_route"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1064:self.response_class",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.make_default_options_response",
+   "source_file": "src/flask/app.py",
+   "source_line": 1064,
+   "target_name": "self.response_class",
+   "line": "        rv = self.response_class()",
+   "context_before": [
+    "        .. versionadded:: 0.7",
+    "        \"\"\"",
+    "        methods = ctx.url_adapter.allowed_methods()  # type: ignore[union-attr]"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/app.py:876:self._get_exc_class_and_code",
+   "stratum": "self",
+   "caller": "src.flask.sansio.app.App._find_error_handler",
+   "source_file": "src/flask/sansio/app.py",
+   "source_line": 876,
+   "target_name": "self._get_exc_class_and_code",
+   "line": "        exc_class, code = self._get_exc_class_and_code(type(e))",
+   "context_before": [
+    "        blueprint handler for an exception class, app handler for an exception",
+    "        class, or ``None`` if a suitable handler is not found.",
+    "        \"\"\""
+   ],
+   "baseline_target": "src.flask.sansio.scaffold.Scaffold._get_exc_class_and_code",
+   "baseline_confidence": 0.85,
+   "same_short_name_candidates": [
+    "src.flask.sansio.scaffold.Scaffold._get_exc_class_and_code"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:898:self.ensure_sync",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.handle_user_exception",
+   "source_file": "src/flask/app.py",
+   "source_line": 898,
+   "target_name": "self.ensure_sync",
+   "line": "        return self.ensure_sync(handler)(e)  # type: ignore[no-any-return]",
+   "context_before": [
+    "        if handler is None:",
+    "            raise",
+    ""
+   ],
+   "baseline_target": "src.flask.app.Flask.ensure_sync",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.ensure_sync"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/templating.py:91:self._iter_loaders",
+   "stratum": "self",
+   "caller": "src.flask.templating.DispatchingJinjaLoader._get_source_fast",
+   "source_file": "src/flask/templating.py",
+   "source_line": 91,
+   "target_name": "self._iter_loaders",
+   "line": "        for _srcobj, loader in self._iter_loaders(template):",
+   "context_before": [
+    "    def _get_source_fast(",
+    "        self, environment: BaseEnvironment, template: str",
+    "    ) -> tuple[str, str | None, t.Callable[[], bool] | None]:"
+   ],
+   "baseline_target": "src.flask.templating.DispatchingJinjaLoader._iter_loaders",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.templating.DispatchingJinjaLoader._iter_loaders"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1477:self.ensure_sync",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.do_teardown_appcontext",
+   "source_file": "src/flask/app.py",
+   "source_line": 1477,
+   "target_name": "self.ensure_sync",
+   "line": "                self.ensure_sync(func)(exc)",
+   "context_before": [
+    "",
+    "        for func in reversed(self.teardown_appcontext_funcs):",
+    "            with collect_errors:"
+   ],
+   "baseline_target": "src.flask.app.Flask.ensure_sync",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.ensure_sync"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/json/tag.py:254:self.register",
+   "stratum": "self",
+   "caller": "src.flask.json.tag.TaggedJSONSerializer.__init__",
+   "source_file": "src/flask/json/tag.py",
+   "source_line": 254,
+   "target_name": "self.register",
+   "line": "            self.register(cls)",
+   "context_before": [
+    "        self.order: list[JSONTag] = []",
+    "",
+    "        for cls in self.default_tags:"
+   ],
+   "baseline_target": "src.flask.json.tag.TaggedJSONSerializer.register",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "examples.tutorial.flaskr.auth.register",
+    "src.flask.json.tag.TaggedJSONSerializer.register",
+    "src.flask.sansio.blueprints.Blueprint.register"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sessions.py:344:self.get_cookie_partitioned",
+   "stratum": "self",
+   "caller": "src.flask.sessions.SecureCookieSessionInterface.save_session",
+   "source_file": "src/flask/sessions.py",
+   "source_line": 344,
+   "target_name": "self.get_cookie_partitioned",
+   "line": "        partitioned = self.get_cookie_partitioned(app)",
+   "context_before": [
+    "        domain = self.get_cookie_domain(app)",
+    "        path = self.get_cookie_path(app)",
+    "        secure = self.get_cookie_secure(app)"
+   ],
+   "baseline_target": "src.flask.sessions.SessionInterface.get_cookie_partitioned",
+   "baseline_confidence": 0.85,
+   "same_short_name_candidates": [
+    "src.flask.sessions.SessionInterface.get_cookie_partitioned"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1603:self.handle_exception",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.wsgi_app",
+   "source_file": "src/flask/app.py",
+   "source_line": 1603,
+   "target_name": "self.handle_exception",
+   "line": "                response = self.handle_exception(ctx, e)",
+   "context_before": [
+    "                response = self.full_dispatch_request(ctx)",
+    "            except Exception as e:",
+    "                error = e"
+   ],
+   "baseline_target": "src.flask.app.Flask.handle_exception",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.handle_exception",
+    "tests.test_basic.test_errorhandler_precedence.handle_exception",
+    "tests.test_user_error_handler.TestGenericHandlers.test_handle_generic.handle_exception"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/scaffold.py:661:self._get_exc_class_and_code",
+   "stratum": "self",
+   "caller": "src.flask.sansio.scaffold.Scaffold.register_error_handler",
+   "source_file": "src/flask/sansio/scaffold.py",
+   "source_line": 661,
+   "target_name": "self._get_exc_class_and_code",
+   "line": "        exc_class, code = self._get_exc_class_and_code(code_or_exception)",
+   "context_before": [
+    "",
+    "        .. versionadded:: 0.7",
+    "        \"\"\""
+   ],
+   "baseline_target": "src.flask.sansio.scaffold.Scaffold._get_exc_class_and_code",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.sansio.scaffold.Scaffold._get_exc_class_and_code"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:951:self.finalize_request",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.handle_exception",
+   "source_file": "src/flask/app.py",
+   "source_line": 951,
+   "target_name": "self.finalize_request",
+   "line": "        return self.finalize_request(ctx, server_error, from_error_handler=True)",
+   "context_before": [
+    "        if handler is not None:",
+    "            server_error = self.ensure_sync(handler)(server_error)",
+    ""
+   ],
+   "baseline_target": "src.flask.app.Flask.finalize_request",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.finalize_request"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1017:self.preprocess_request",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.full_dispatch_request",
+   "source_file": "src/flask/app.py",
+   "source_line": 1017,
+   "target_name": "self.preprocess_request",
+   "line": "            rv = self.preprocess_request(ctx)",
+   "context_before": [
+    "",
+    "        try:",
+    "            request_started.send(self, _async_wrapper=self.ensure_sync)"
+   ],
+   "baseline_target": "src.flask.app.Flask.preprocess_request",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.preprocess_request"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/scaffold.py:370:self.add_url_rule",
+   "stratum": "self",
+   "caller": "src.flask.sansio.scaffold.Scaffold.route.decorator",
+   "source_file": "src/flask/sansio/scaffold.py",
+   "source_line": 370,
+   "target_name": "self.add_url_rule",
+   "line": "            self.add_url_rule(rule, endpoint, f, **options)",
+   "context_before": [
+    "",
+    "        def decorator(f: T_route) -> T_route:",
+    "            endpoint = options.pop(\"endpoint\", None)"
+   ],
+   "baseline_target": "src.flask.sansio.scaffold.Scaffold.add_url_rule",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.add_url_rule",
+    "src.flask.sansio.blueprints.Blueprint.add_url_rule",
+    "src.flask.sansio.blueprints.BlueprintSetupState.add_url_rule",
+    "src.flask.sansio.scaffold.Scaffold.add_url_rule"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/ctx.py:516:self.pop",
+   "stratum": "self",
+   "caller": "src.flask.ctx.AppContext.__exit__",
+   "source_file": "src/flask/ctx.py",
+   "source_line": 516,
+   "target_name": "self.pop",
+   "line": "        self.pop(exc_value)",
+   "context_before": [
+    "        exc_value: BaseException | None,",
+    "        tb: TracebackType | None,",
+    "    ) -> None:"
+   ],
+   "baseline_target": "src.flask.ctx.AppContext.pop",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.ctx.AppContext.pop",
+    "src.flask.ctx._AppCtxGlobals.pop"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_cli.py:481:self.expect_order",
+   "stratum": "self",
+   "caller": "tests.test_cli.TestRoutes.test_sort",
+   "source_file": "tests/test_cli.py",
+   "source_line": 481,
+   "target_name": "self.expect_order",
+   "line": "        self.expect_order(",
+   "context_before": [
+    "            [\"static\", \"yyy_get_post\", \"aaa_post\"],",
+    "            invoke([\"routes\", \"-s\", \"methods\"]).output,",
+    "        )"
+   ],
+   "baseline_target": "tests.test_cli.TestRoutes.expect_order",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "tests.test_cli.TestRoutes.expect_order"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/app.py:650:self.url_rule_class",
+   "stratum": "self",
+   "caller": "src.flask.sansio.app.App.add_url_rule",
+   "source_file": "src/flask/sansio/app.py",
+   "source_line": 650,
+   "target_name": "self.url_rule_class",
+   "line": "        rule_obj = self.url_rule_class(rule, methods=methods, **options)",
+   "context_before": [
+    "        # Add the required methods now.",
+    "        methods |= required_methods",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/json/tag.py:314:self.untag",
+   "stratum": "self",
+   "caller": "src.flask.json.tag.TaggedJSONSerializer._untag_scan",
+   "source_file": "src/flask/json/tag.py",
+   "source_line": 314,
+   "target_name": "self.untag",
+   "line": "            value = self.untag(value)",
+   "context_before": [
+    "            # untag each item recursively",
+    "            value = {k: self._untag_scan(v) for k, v in value.items()}",
+    "            # untag the dict itself"
+   ],
+   "baseline_target": "src.flask.json.tag.TaggedJSONSerializer.untag",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.json.tag.TaggedJSONSerializer.untag"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/cli.py:594:self.add_command",
+   "stratum": "self",
+   "caller": "src.flask.cli.FlaskGroup.__init__",
+   "source_file": "src/flask/cli.py",
+   "source_line": 594,
+   "target_name": "self.add_command",
+   "line": "            self.add_command(run_command)",
+   "context_before": [
+    "        self.set_debug_flag = set_debug_flag",
+    "",
+    "        if add_default_commands:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1219:self.handle_url_build_error",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.url_for",
+   "source_file": "src/flask/app.py",
+   "source_line": 1219,
+   "target_name": "self.handle_url_build_error",
+   "line": "            return self.handle_url_build_error(error, endpoint, values)",
+   "context_before": [
+    "            values.update(",
+    "                _anchor=_anchor, _method=_method, _scheme=_scheme, _external=_external",
+    "            )"
+   ],
+   "baseline_target": "src.flask.sansio.app.App.handle_url_build_error",
+   "baseline_confidence": 0.85,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.handle_url_build_error"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/cli.py:342:self.create_app",
+   "stratum": "self",
+   "caller": "src.flask.cli.ScriptInfo.load_app",
+   "source_file": "src/flask/cli.py",
+   "source_line": 342,
+   "target_name": "self.create_app",
+   "line": "            app = self.create_app()",
+   "context_before": [
+    "            return self._loaded_app",
+    "        app: Flask | None = None",
+    "        if self.create_app is not None:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "examples.celery.src.task_app.__init__.create_app",
+    "examples.tutorial.flaskr.__init__.create_app",
+    "tests.test_apps.cliapp.factory.create_app",
+    "tests.test_cli.test_find_best_app.Module.create_app",
+    "tests.test_cli.test_find_best_app.Module.create_app",
+    "tests.test_cli.test_find_best_app.Module.create_app",
+    "tests.test_cli.test_find_best_app.Module.create_app",
+    "tests.test_cli.test_find_best_app.Module.create_app"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:1595:self.request_context",
+   "stratum": "self",
+   "caller": "src.flask.app.Flask.wsgi_app",
+   "source_file": "src/flask/app.py",
+   "source_line": 1595,
+   "target_name": "self.request_context",
+   "line": "        ctx = self.request_context(environ)",
+   "context_before": [
+    "            a list of headers, and an optional exception context to",
+    "            start the response.",
+    "        \"\"\""
+   ],
+   "baseline_target": "src.flask.app.Flask.request_context",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.request_context"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/blueprints.py:667:self.record_once",
+   "stratum": "self",
+   "caller": "src.flask.sansio.blueprints.Blueprint.app_errorhandler.decorator",
+   "source_file": "src/flask/sansio/blueprints.py",
+   "source_line": 667,
+   "target_name": "self.record_once",
+   "line": "            self.record_once(from_blueprint)",
+   "context_before": [
+    "            def from_blueprint(state: BlueprintSetupState) -> None:",
+    "                state.app.errorhandler(code)(f)",
+    ""
+   ],
+   "baseline_target": "src.flask.sansio.blueprints.Blueprint.record_once",
+   "baseline_confidence": 0.95,
+   "same_short_name_candidates": [
+    "src.flask.sansio.blueprints.Blueprint.record_once"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:80:flask.Blueprint",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_blueprint_app_error_handling",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 80,
+   "target_name": "flask.Blueprint",
+   "line": "    errors = flask.Blueprint(\"errors\", __name__)",
+   "context_before": [
+    "",
+    "",
+    "def test_blueprint_app_error_handling(app, client):"
+   ],
+   "baseline_target": "src.flask.blueprints.Blueprint",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.blueprints.Blueprint",
+    "src.flask.sansio.blueprints.Blueprint"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_testing.py:281:rv.get_json",
+   "stratum": "recv.attr",
+   "caller": "tests.test_testing.test_json_request_and_response",
+   "source_file": "tests/test_testing.py",
+   "source_line": 281,
+   "target_name": "rv.get_json",
+   "line": "        assert rv.get_json() == json_data",
+   "context_before": [
+    "        # Response should be in JSON",
+    "        assert rv.status_code == 200",
+    "        assert rv.is_json"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/app.py:928:sys.exc_info",
+   "stratum": "recv.attr",
+   "caller": "src.flask.app.Flask.handle_exception",
+   "source_file": "src/flask/app.py",
+   "source_line": 928,
+   "target_name": "sys.exc_info",
+   "line": "        exc_info = sys.exc_info()",
+   "context_before": [
+    "",
+    "        .. versionadded:: 0.3",
+    "        \"\"\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_cli.py:612:run_command.make_context",
+   "stratum": "recv.attr",
+   "caller": "tests.test_cli.test_run_cert_adhoc",
+   "source_file": "tests/test_cli.py",
+   "source_line": 612,
+   "target_name": "run_command.make_context",
+   "line": "    ctx = run_command.make_context(\"run\", [\"--cert\", \"adhoc\"])",
+   "context_before": [
+    "",
+    "    # cryptography installed",
+    "    monkeypatch.setitem(sys.modules, \"cryptography\", types.ModuleType(\"cryptography\"))"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.cli.FlaskGroup.make_context"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:1114:client.get",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_blueprint_renaming",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 1114,
+   "target_name": "client.get",
+   "line": "    assert client.get(\"/a/error\").data == b\"Error\"",
+   "context_before": [
+    "    assert client.get(\"/b/\").data == b\"alt.index\"",
+    "    assert client.get(\"/a/a/\").data == b\"bp.sub.index2\"",
+    "    assert client.get(\"/b/a/\").data == b\"alt.sub.index2\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_config.py:187:flask.Flask",
+   "stratum": "recv.attr",
+   "caller": "tests.test_config.test_config_missing_file",
+   "source_file": "tests/test_config.py",
+   "source_line": 187,
+   "target_name": "flask.Flask",
+   "line": "    app = flask.Flask(__name__)",
+   "context_before": [
+    "",
+    "",
+    "def test_config_missing_file():"
+   ],
+   "baseline_target": "src.flask.app.Flask",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask",
+    "tests.test_config.test_custom_config_class.Flask"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:1947:r.set_cookie",
+   "stratum": "recv.attr",
+   "caller": "tests.test_basic.test_max_cookie_size.index",
+   "source_file": "tests/test_basic.py",
+   "source_line": 1947,
+   "target_name": "r.set_cookie",
+   "line": "        r.set_cookie(\"foo\", \"bar\" * 100)",
+   "context_before": [
+    "    @app.route(\"/\")",
+    "    def index():",
+    "        r = flask.Response(\"\", status=204)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:1812:client.get",
+   "stratum": "recv.attr",
+   "caller": "tests.test_basic.test_subdomain_matching",
+   "source_file": "tests/test_basic.py",
+   "source_line": 1812,
+   "target_name": "client.get",
+   "line": "    rv = client.get(\"/\", \"http://mitsuhiko.localhost.localdomain/\")",
+   "context_before": [
+    "    def index(user):",
+    "        return f\"index for {user}\"",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/views.py:191:current_app.ensure_sync",
+   "stratum": "recv.attr",
+   "caller": "src.flask.views.MethodView.dispatch_request",
+   "source_file": "src/flask/views.py",
+   "source_line": 191,
+   "target_name": "current_app.ensure_sync",
+   "line": "        return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]",
+   "context_before": [
+    "            meth = getattr(self, \"get\", None)",
+    "",
+    "        assert meth is not None, f\"Unimplemented method {request.method!r}\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.ensure_sync"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/cli.py:70:inspect.isfunction",
+   "stratum": "recv.attr",
+   "caller": "src.flask.cli.find_best_app",
+   "source_file": "src/flask/cli.py",
+   "source_line": 70,
+   "target_name": "inspect.isfunction",
+   "line": "        if inspect.isfunction(app_factory):",
+   "context_before": [
+    "    for attr_name in (\"create_app\", \"make_app\"):",
+    "        app_factory = getattr(module, attr_name, None)",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/templating.py:130:template_rendered.send",
+   "stratum": "recv.attr",
+   "caller": "src.flask.templating._render",
+   "source_file": "src/flask/templating.py",
+   "source_line": 130,
+   "target_name": "template_rendered.send",
+   "line": "    template_rendered.send(",
+   "context_before": [
+    "        app, _async_wrapper=app.ensure_sync, template=template, context=context",
+    "    )",
+    "    rv = template.render(context)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/debughelpers.py:40:buf.append",
+   "stratum": "recv.attr",
+   "caller": "src.flask.debughelpers.DebugFilesKeyError.__init__",
+   "source_file": "src/flask/debughelpers.py",
+   "source_line": 40,
+   "target_name": "buf.append",
+   "line": "            buf.append(",
+   "context_before": [
+    "        ]",
+    "        if form_matches:",
+    "            names = \", \".join(repr(x) for x in form_matches)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_config.py:146:flask.Flask",
+   "stratum": "recv.attr",
+   "caller": "tests.test_config.test_config_from_envvar",
+   "source_file": "tests/test_config.py",
+   "source_line": 146,
+   "target_name": "flask.Flask",
+   "line": "    app = flask.Flask(__name__)",
+   "context_before": [
+    "",
+    "def test_config_from_envvar(monkeypatch):",
+    "    monkeypatch.setattr(\"os.environ\", {})"
+   ],
+   "baseline_target": "src.flask.app.Flask",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask",
+    "tests.test_config.test_custom_config_class.Flask"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_helpers.py:147:MyView.as_view",
+   "stratum": "recv.attr",
+   "caller": "tests.test_helpers.TestUrlFor.test_url_with_method",
+   "source_file": "tests/test_helpers.py",
+   "source_line": 147,
+   "target_name": "MyView.as_view",
+   "line": "        myview = MyView.as_view(\"myview\")",
+   "context_before": [
+    "            def post(self):",
+    "                return \"Create\"",
+    ""
+   ],
+   "baseline_target": "src.flask.views.View.as_view",
+   "baseline_confidence": 0.85,
+   "same_short_name_candidates": [
+    "src.flask.views.View.as_view"
+   ],
+   "label": null
+  },
+  {
+   "key": "examples/tutorial/tests/test_blog.py:47:auth.login",
+   "stratum": "recv.attr",
+   "caller": "examples.tutorial.tests.test_blog.test_create",
+   "source_file": "examples/tutorial/tests/test_blog.py",
+   "source_line": 47,
+   "target_name": "auth.login",
+   "line": "    auth.login()",
+   "context_before": [
+    "",
+    "",
+    "def test_create(client, auth, app):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "examples.tutorial.flaskr.auth.login",
+    "examples.tutorial.tests.conftest.AuthActions.login",
+    "tests.test_basic.test_session_refresh_vary.login"
+   ],
+   "label": null
+  },
+  {
+   "key": "examples/javascript/tests/conftest.py:15:app.test_client",
+   "stratum": "recv.attr",
+   "caller": "examples.javascript.tests.conftest.client",
+   "source_file": "examples/javascript/tests/conftest.py",
+   "source_line": 15,
+   "target_name": "app.test_client",
+   "line": "    return app.test_client()",
+   "context_before": [
+    "",
+    "@pytest.fixture",
+    "def client(app):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.test_client"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:745:app.jinja_env.globals[\"my_get_stuff_custom_name_2\"]",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_template_global",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 745,
+   "target_name": "app.jinja_env.globals[\"my_get_stuff_custom_name_2\"]",
+   "line": "    assert app.jinja_env.globals[\"my_get_stuff_custom_name_2\"](), \"get_stuff_2\"",
+   "context_before": [
+    "",
+    "    assert \"my_get_stuff_custom_name_2\" in app.jinja_env.globals.keys()",
+    "    assert app.jinja_env.globals[\"my_get_stuff_custom_name_2\"] == get_stuff_2"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_helpers.py:176:app.app_context",
+   "stratum": "recv.attr",
+   "caller": "tests.test_helpers.test_redirect_with_app",
+   "source_file": "tests/test_helpers.py",
+   "source_line": 176,
+   "target_name": "app.app_context",
+   "line": "    with app.app_context(), pytest.raises(ValueError):",
+   "context_before": [
+    "",
+    "    app.redirect = redirect",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.app_context"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:1450:app.test_client",
+   "stratum": "recv.attr",
+   "caller": "tests.test_basic.test_static_url_path_with_ending_slash",
+   "source_file": "tests/test_basic.py",
+   "source_line": 1450,
+   "target_name": "app.test_client",
+   "line": "    with app.test_client().get(\"/foo/index.html\") as rv:",
+   "context_before": [
+    "    app = flask.Flask(__name__, static_url_path=\"/foo/\")",
+    "    app.testing = True",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.test_client"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_logging.py:30:logger.setLevel",
+   "stratum": "recv.attr",
+   "caller": "tests.test_logging.reset_logging",
+   "source_file": "tests/test_logging.py",
+   "source_line": 30,
+   "target_name": "logger.setLevel",
+   "line": "    logger.setLevel(logging.NOTSET)",
+   "context_before": [
+    "    logging.root.setLevel(root_level)",
+    "",
+    "    logger.handlers = []"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:145:client.head",
+   "stratum": "recv.attr",
+   "caller": "tests.test_basic.test_request_dispatching",
+   "source_file": "tests/test_basic.py",
+   "source_line": 145,
+   "target_name": "client.head",
+   "line": "    rv = client.head(\"/\")",
+   "context_before": [
+    "    rv = client.post(\"/\")",
+    "    assert rv.status_code == 405",
+    "    assert sorted(rv.allow) == [\"GET\", \"HEAD\", \"OPTIONS\"]"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "tests.test_views.test_explicit_head.Index.head"
+   ],
+   "label": null
+  },
+  {
+   "key": "examples/tutorial/flaskr/auth.py:103:session.clear",
+   "stratum": "recv.attr",
+   "caller": "examples.tutorial.flaskr.auth.login",
+   "source_file": "examples/tutorial/flaskr/auth.py",
+   "source_line": 103,
+   "target_name": "session.clear",
+   "line": "            session.clear()",
+   "context_before": [
+    "",
+    "        if error is None:",
+    "            # store the user id in a new session and return to the index"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "tests.test_basic.test_session_using_session_settings.clear",
+    "tests.test_basic.test_session_vary_cookie.clear"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/sessions.py:374:response.set_cookie",
+   "stratum": "recv.attr",
+   "caller": "src.flask.sessions.SecureCookieSessionInterface.save_session",
+   "source_file": "src/flask/sessions.py",
+   "source_line": 374,
+   "target_name": "response.set_cookie",
+   "line": "        response.set_cookie(",
+   "context_before": [
+    "",
+    "        expires = self.get_expiration_time(app, session)",
+    "        val = self.get_signing_serializer(app).dumps(dict(session))  # type: ignore[union-attr]"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_templating.py:18:flask.render_template",
+   "stratum": "recv.attr",
+   "caller": "tests.test_templating.test_context_processing.index",
+   "source_file": "tests/test_templating.py",
+   "source_line": 18,
+   "target_name": "flask.render_template",
+   "line": "        return flask.render_template(\"context_template.html\", value=23)",
+   "context_before": [
+    "",
+    "    @app.route(\"/\")",
+    "    def index():"
+   ],
+   "baseline_target": "src.flask.templating.render_template",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.templating.render_template"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/debughelpers.py:151:info.append",
+   "stratum": "recv.attr",
+   "caller": "src.flask.debughelpers.explain_template_loading_attempts",
+   "source_file": "src/flask/debughelpers.py",
+   "source_line": 151,
+   "target_name": "info.append",
+   "line": "        info.append(f\"{idx + 1:5}: trying loader of {src_info}\")",
+   "context_before": [
+    "        else:",
+    "            src_info = repr(srcobj)",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_views.py:271:client.get",
+   "stratum": "recv.attr",
+   "caller": "tests.test_views.test_init_once",
+   "source_file": "tests/test_views.py",
+   "source_line": 271,
+   "target_name": "client.get",
+   "line": "    assert client.get(\"/\").data == b\"1\"",
+   "context_before": [
+    "",
+    "    app.add_url_rule(\"/\", view_func=CountInit.as_view(\"index\"))",
+    "    assert client.get(\"/\").data == b\"1\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_json_tag.py:62:s.register",
+   "stratum": "recv.attr",
+   "caller": "tests.test_json_tag.test_custom_tag",
+   "source_file": "tests/test_json_tag.py",
+   "source_line": 62,
+   "target_name": "s.register",
+   "line": "    s.register(TagFoo)",
+   "context_before": [
+    "            return Foo(value)",
+    "",
+    "    s = TaggedJSONSerializer()"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "examples.tutorial.flaskr.auth.register",
+    "src.flask.json.tag.TaggedJSONSerializer.register",
+    "src.flask.sansio.blueprints.Blueprint.register"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:983:parent.register_blueprint",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_nested_callback_order",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 983,
+   "target_name": "parent.register_blueprint",
+   "line": "    parent.register_blueprint(child)",
+   "context_before": [
+    "    def b():",
+    "        return flask.render_template_string(\"{{ key }}\")",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.register_blueprint",
+    "src.flask.sansio.blueprints.Blueprint.register_blueprint"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:1070:app.register_blueprint",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_unique_blueprint_names",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 1070,
+   "target_name": "app.register_blueprint",
+   "line": "        app.register_blueprint(bp)  # same bp, same name, error",
+   "context_before": [
+    "    app.register_blueprint(bp)",
+    "",
+    "    with pytest.raises(ValueError):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.register_blueprint",
+    "src.flask.sansio.blueprints.Blueprint.register_blueprint"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/debughelpers.py:72:buf.append",
+   "stratum": "recv.attr",
+   "caller": "src.flask.debughelpers.FormDataRoutingRedirect.__init__",
+   "source_file": "src/flask/debughelpers.py",
+   "source_line": 72,
+   "target_name": "buf.append",
+   "line": "        buf.append(",
+   "context_before": [
+    "                \" was accessed without one.\"",
+    "            )",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_regression.py:14:flask.redirect",
+   "stratum": "recv.attr",
+   "caller": "tests.test_regression.test_aborting.index",
+   "source_file": "tests/test_regression.py",
+   "source_line": 14,
+   "target_name": "flask.redirect",
+   "line": "        raise flask.abort(flask.redirect(flask.url_for(\"test\")))",
+   "context_before": [
+    "",
+    "    @app.route(\"/\")",
+    "    def index():"
+   ],
+   "baseline_target": "src.flask.helpers.redirect",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.helpers.redirect",
+    "src.flask.sansio.app.App.redirect",
+    "tests.test_helpers.test_redirect_with_app.redirect"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_reqctx.py:151:request.addfinalizer",
+   "stratum": "recv.attr",
+   "caller": "tests.test_reqctx.test_copy_context_thread",
+   "source_file": "tests/test_reqctx.py",
+   "source_line": 151,
+   "target_name": "request.addfinalizer",
+   "line": "    request.addfinalizer(lambda: executor.shutdown(cancel_futures=True))",
+   "context_before": [
+    "    request: pytest.FixtureRequest, app: flask.Flask, client: FlaskClient",
+    ") -> None:",
+    "    executor = futures.ThreadPoolExecutor(max_workers=2)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:984:app.register_blueprint",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_nested_callback_order",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 984,
+   "target_name": "app.register_blueprint",
+   "line": "    app.register_blueprint(parent)",
+   "context_before": [
+    "        return flask.render_template_string(\"{{ key }}\")",
+    "",
+    "    parent.register_blueprint(child)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.sansio.app.App.register_blueprint",
+    "src.flask.sansio.blueprints.Blueprint.register_blueprint"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:190:client.get",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_templates_and_static",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 190,
+   "target_name": "client.get",
+   "line": "    with client.get(\"/admin/static/css/test.css\") as rv:",
+   "context_before": [
+    "    with client.get(\"/admin/static/test.txt\") as rv:",
+    "        assert rv.data.strip() == b\"Admin File\"",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:319:bp.route(\"/\", endpoint=\"a.b\")",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_route_decorator_custom_endpoint_with_dots",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 319,
+   "target_name": "bp.route(\"/\", endpoint=\"a.b\")",
+   "line": "        bp.route(\"/\", endpoint=\"a.b\")(lambda: \"\")",
+   "context_before": [
+    "    bp = flask.Blueprint(\"bp\", __name__)",
+    "",
+    "    with pytest.raises(ValueError):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:147:client.get",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_blueprint_url_defaults",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 147,
+   "target_name": "client.get",
+   "line": "    assert client.get(\"/2/bar\").data == b\"19\"",
+   "context_before": [
+    "    assert client.get(\"/1/foo\").data == b\"23/42\"",
+    "    assert client.get(\"/2/foo\").data == b\"19/42\"",
+    "    assert client.get(\"/1/bar\").data == b\"23\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:499:bp.add_app_template_filter",
+   "stratum": "recv.attr",
+   "caller": "tests.test_blueprints.test_add_template_filter_with_name_and_template",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 499,
+   "target_name": "bp.add_app_template_filter",
+   "line": "    bp.add_app_template_filter(my_reverse, \"super_reverse\")",
+   "context_before": [
+    "    def my_reverse(s):",
+    "        return s[::-1]",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.sansio.blueprints.Blueprint.add_app_template_filter"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:52:client.open",
+   "stratum": "recv.attr",
+   "caller": "tests.test_basic.test_options_on_multiple_rules",
+   "source_file": "tests/test_basic.py",
+   "source_line": 52,
+   "target_name": "client.open",
+   "line": "    rv = client.open(\"/\", method=\"OPTIONS\")",
+   "context_before": [
+    "    def index_put():",
+    "        return \"Aha!\"",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.testing.FlaskClient.open"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_helpers.py:185:flask.abort",
+   "stratum": "recv.attr",
+   "caller": "tests.test_helpers.test_abort_no_app",
+   "source_file": "tests/test_helpers.py",
+   "source_line": 185,
+   "target_name": "flask.abort",
+   "line": "        flask.abort(900)",
+   "context_before": [
+    "        flask.abort(401)",
+    "",
+    "    with pytest.raises(LookupError):"
+   ],
+   "baseline_target": "src.flask.helpers.abort",
+   "baseline_confidence": 0.9,
+   "same_short_name_candidates": [
+    "src.flask.helpers.abort"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_session_interface.py:27:app.test_client",
+   "stratum": "recv.attr",
+   "caller": "tests.test_session_interface.test_open_session_with_endpoint",
+   "source_file": "tests/test_session_interface.py",
+   "source_line": 27,
+   "target_name": "app.test_client",
+   "line": "    response = app.test_client().get(\"/\")",
+   "context_before": [
+    "    def index():",
+    "        return \"Hello, World!\"",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.app.Flask.test_client"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:957:?.append",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_blueprints.test_nested_callback_order.child_before1",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 957,
+   "target_name": "?.append",
+   "line": "        flask.g.setdefault(\"seen\", []).append(\"child_1\")",
+   "context_before": [
+    "",
+    "    @child.before_request",
+    "    def child_before1():"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/type_check/typing_route.py:61:?.encode",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.type_check.typing_route.hello_generator_expression",
+   "source_file": "tests/type_check/typing_route.py",
+   "source_line": 61,
+   "target_name": "?.encode",
+   "line": "    return (f\"data:{x}\\n\\n\".encode() for x in range(100))",
+   "context_before": [
+    "",
+    "@app.route(\"/generator-expression\")",
+    "def hello_generator_expression() -> t.Iterator[bytes]:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/blueprints.py:123:?.join",
+   "stratum": "chained(?.attr)",
+   "caller": "src.flask.blueprints.Blueprint.open_resource",
+   "source_file": "src/flask/blueprints.py",
+   "source_line": 123,
+   "target_name": "?.join",
+   "line": "        path = os.path.join(self.root_path, resource)",
+   "context_before": [
+    "        if mode not in {\"r\", \"rt\", \"rb\"}:",
+    "            raise ValueError(\"Resources can only be opened for reading.\")",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/blueprints.py:32:?.__init__",
+   "stratum": "chained(?.attr)",
+   "caller": "src.flask.blueprints.Blueprint.__init__",
+   "source_file": "src/flask/blueprints.py",
+   "source_line": 32,
+   "target_name": "?.__init__",
+   "line": "        super().__init__(",
+   "context_before": [
+    "        root_path: str | None = None,",
+    "        cli_group: str | None = _sentinel,  # type: ignore",
+    "    ) -> None:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "examples.tutorial.tests.conftest.AuthActions.__init__",
+    "src.flask.app.Flask.__init__",
+    "src.flask.blueprints.Blueprint.__init__",
+    "src.flask.cli.CertParamType.__init__",
+    "src.flask.cli.FlaskGroup.__init__",
+    "src.flask.cli.ScriptInfo.__init__",
+    "src.flask.config.Config.__init__",
+    "src.flask.config.ConfigAttribute.__init__"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_config.py:140:?.from_object",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_config.test_config_from_class",
+   "source_file": "tests/test_config.py",
+   "source_line": 140,
+   "target_name": "?.from_object",
+   "line": "    app.config.from_object(Test)",
+   "context_before": [
+    "        SECRET_KEY = \"config\"",
+    "",
+    "    app = flask.Flask(__name__)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.config.Config.from_object"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:1648:?.is_endpoint_expecting",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_basic.test_url_processors.add_language_code",
+   "source_file": "tests/test_basic.py",
+   "source_line": 1648,
+   "target_name": "?.is_endpoint_expecting",
+   "line": "        if flask.g.lang_code is not None and app.url_map.is_endpoint_expecting(",
+   "context_before": [
+    "def test_url_processors(app, client):",
+    "    @app.url_defaults",
+    "    def add_language_code(endpoint, values):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_json.py:33:?.get_json",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_json.test_json_bad_requests.return_json",
+   "source_file": "tests/test_json.py",
+   "source_line": 33,
+   "target_name": "?.get_json",
+   "line": "        return flask.jsonify(foo=str(flask.request.get_json()))",
+   "context_before": [
+    "def test_json_bad_requests(app, client):",
+    "    @app.route(\"/json\", methods=[\"POST\"])",
+    "    def return_json():"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/app.py:854:?.append",
+   "stratum": "chained(?.attr)",
+   "caller": "src.flask.sansio.app.App.teardown_appcontext",
+   "source_file": "src/flask/sansio/app.py",
+   "source_line": 854,
+   "target_name": "?.append",
+   "line": "        self.teardown_appcontext_funcs.append(f)",
+   "context_before": [
+    "",
+    "        .. versionadded:: 0.9",
+    "        \"\"\""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:1768:?.get",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_basic.test_get_method_on_g",
+   "source_file": "tests/test_basic.py",
+   "source_line": 1768,
+   "target_name": "?.get",
+   "line": "    assert flask.g.get(\"x\") is None",
+   "context_before": [
+    "",
+    "",
+    "def test_get_method_on_g(app_ctx):"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_templating.py:280:?.keys",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_templating.test_add_template_test",
+   "source_file": "tests/test_templating.py",
+   "source_line": 280,
+   "target_name": "?.keys",
+   "line": "    assert \"boolean\" in app.jinja_env.tests.keys()",
+   "context_before": [
+    "        return isinstance(value, bool)",
+    "",
+    "    app.add_template_test(boolean)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_config.py:41:?.dirname",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_config.test_config_from_file_toml",
+   "source_file": "tests/test_config.py",
+   "source_line": 41,
+   "target_name": "?.dirname",
+   "line": "    current_dir = os.path.dirname(os.path.abspath(__file__))",
+   "context_before": [
+    "def test_config_from_file_toml():",
+    "    tomllib = pytest.importorskip(\"tomllib\", reason=\"tomllib added in 3.11\")",
+    "    app = flask.Flask(__name__)"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "examples/tutorial/flaskr/__init__.py:18:?.from_pyfile",
+   "stratum": "chained(?.attr)",
+   "caller": "examples.tutorial.flaskr.__init__.create_app",
+   "source_file": "examples/tutorial/flaskr/__init__.py",
+   "source_line": 18,
+   "target_name": "?.from_pyfile",
+   "line": "        app.config.from_pyfile(\"config.py\", silent=True)",
+   "context_before": [
+    "",
+    "    if test_config is None:",
+    "        # load the instance config, if it exists, when not testing"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.config.Config.from_pyfile"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_basic.py:1439:?.get",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_basic.test_static_url_path",
+   "source_file": "tests/test_basic.py",
+   "source_line": 1439,
+   "target_name": "?.get",
+   "line": "    with app.test_client().get(\"/foo/index.html\") as rv:",
+   "context_before": [
+    "    app = flask.Flask(__name__, static_url_path=\"/foo\")",
+    "    app.testing = True",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.get",
+    "src.flask.sansio.scaffold.Scaffold.get",
+    "tests.test_async.AsyncMethodView.get",
+    "tests.test_basic.test_session_vary_cookie.get",
+    "tests.test_helpers.TestUrlFor.test_url_with_method.MyView.get",
+    "tests.test_reqctx.test_session_dynamic_cookie_name.get",
+    "tests.test_views.test_explicit_head.Index.get",
+    "tests.test_views.test_implicit_head.Index.get"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_templating.py:270:?.keys",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_templating.test_template_test",
+   "source_file": "tests/test_templating.py",
+   "source_line": 270,
+   "target_name": "?.keys",
+   "line": "    assert \"my_boolean_custom_name_2\" in app.jinja_env.tests.keys()",
+   "context_before": [
+    "    def boolean_4(value):",
+    "        return isinstance(value, bool)",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:957:?.setdefault",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_blueprints.test_nested_callback_order.child_before1",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 957,
+   "target_name": "?.setdefault",
+   "line": "        flask.g.setdefault(\"seen\", []).append(\"child_1\")",
+   "context_before": [
+    "",
+    "    @child.before_request",
+    "    def child_before1():"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.ctx._AppCtxGlobals.setdefault",
+    "tests.test_basic.test_session_vary_cookie.setdefault"
+   ],
+   "label": null
+  },
+  {
+   "key": "tests/test_templating.py:100:?.splitlines",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_templating.test_no_escaping",
+   "source_file": "tests/test_templating.py",
+   "source_line": 100,
+   "target_name": "?.splitlines",
+   "line": "    lines = client.get(\"/\").data.splitlines()",
+   "context_before": [
+    "            \"non_escaping_template.txt\", text=text, html=Markup(text)",
+    "        )",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/sansio/blueprints.py:271:?.append",
+   "stratum": "chained(?.attr)",
+   "caller": "src.flask.sansio.blueprints.Blueprint.register_blueprint",
+   "source_file": "src/flask/sansio/blueprints.py",
+   "source_line": 271,
+   "target_name": "?.append",
+   "line": "        self._blueprints.append((blueprint, options))",
+   "context_before": [
+    "        \"\"\"",
+    "        if blueprint is self:",
+    "            raise ValueError(\"Cannot register a blueprint on itself\")"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "src/flask/json/tag.py:285:?.append",
+   "stratum": "chained(?.attr)",
+   "caller": "src.flask.json.tag.TaggedJSONSerializer.register",
+   "source_file": "src/flask/json/tag.py",
+   "source_line": 285,
+   "target_name": "?.append",
+   "line": "            self.order.append(tag)",
+   "context_before": [
+    "            self.tags[key] = tag",
+    "",
+    "        if index is None:"
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [],
+   "label": null
+  },
+  {
+   "key": "tests/test_blueprints.py:238:?.list_templates",
+   "stratum": "chained(?.attr)",
+   "caller": "tests.test_blueprints.test_templates_list",
+   "source_file": "tests/test_blueprints.py",
+   "source_line": 238,
+   "target_name": "?.list_templates",
+   "line": "    templates = sorted(app.jinja_env.list_templates())",
+   "context_before": [
+    "def test_templates_list(test_apps):",
+    "    from blueprintapp import app",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.templating.DispatchingJinjaLoader.list_templates"
+   ],
+   "label": null
+  },
+  {
+   "key": "src/flask/cli.py:676:?.make_context",
+   "stratum": "chained(?.attr)",
+   "caller": "src.flask.cli.FlaskGroup.make_context",
+   "source_file": "src/flask/cli.py",
+   "source_line": 676,
+   "target_name": "?.make_context",
+   "line": "        return super().make_context(info_name, args, parent=parent, **extra)",
+   "context_before": [
+    "                load_dotenv_defaults=self.load_dotenv,",
+    "            )",
+    ""
+   ],
+   "baseline_target": null,
+   "baseline_confidence": 0.35,
+   "same_short_name_candidates": [
+    "src.flask.cli.FlaskGroup.make_context"
+   ],
+   "label": null
+  }
+ ]
+}

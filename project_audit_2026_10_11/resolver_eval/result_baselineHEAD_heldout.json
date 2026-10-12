@@ -1,0 +1,62 @@
+{
+ "overall": {
+  "n": 116,
+  "label_is_repo_definition": 59,
+  "bound": 45,
+  "correct": 35,
+  "wrong_repo": 5,
+  "bound_external": 5,
+  "precision": 0.778,
+  "recall": 0.593
+ },
+ "by_baseline_stratum": {
+  "bare": {
+   "n": 30,
+   "label_is_repo_definition": 10,
+   "bound": 6,
+   "correct": 5,
+   "wrong_repo": 0,
+   "bound_external": 1,
+   "precision": 0.833,
+   "recall": 0.5
+  },
+  "chained(?.attr)": {
+   "n": 20,
+   "label_is_repo_definition": 5,
+   "bound": 4,
+   "correct": 2,
+   "wrong_repo": 0,
+   "bound_external": 2,
+   "precision": 0.5,
+   "recall": 0.4
+  },
+  "recv.attr": {
+   "n": 39,
+   "label_is_repo_definition": 19,
+   "bound": 16,
+   "correct": 9,
+   "wrong_repo": 5,
+   "bound_external": 2,
+   "precision": 0.562,
+   "recall": 0.474
+  },
+  "self": {
+   "n": 27,
+   "label_is_repo_definition": 25,
+   "bound": 19,
+   "correct": 19,
+   "wrong_repo": 0,
+   "bound_external": 0,
+   "precision": 1.0,
+   "recall": 0.76
+  }
+ },
+ "stratum_weighted_estimate": {
+  "precision": 0.645,
+  "recall": 0.501,
+  "note": "strata weighted by population share of the BASELINE resolver output; small-sample estimate"
+ },
+ "resolved_calls_total_definition_targets": 833,
+ "resolved_calls_total_import_targets": 239,
+ "calls_total": 3350
+}

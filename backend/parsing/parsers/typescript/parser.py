@@ -69,7 +69,7 @@ class TypeScriptParser(LanguageParser):
                 prop_text = text(prop) if prop else "?"
                 if obj is not None and obj.type in ("identifier", "this"):
                     return f"{text(obj)}.{prop_text}"
-                return prop_text
+                return f"?.{prop_text}"  # unknown receiver expression
             return text(func_node)[:80]
 
         def add_import(dotted: str, node: Node, container_id: str) -> None:

@@ -76,11 +76,11 @@ def test_resolver_links_call_and_inheritance_across_same_file(tmp_path):
 
     call = next(r for r in resolved if r.relationship_type.value == "calls")
     assert call.target_id == "mypkg.mod.helper"
-    assert call.confidence == 0.75
+    assert call.confidence == 0.95  # same-file lexical scope (was name-based 0.75)
 
     inherit = next(r for r in resolved if r.relationship_type.value == "inherits")
     assert inherit.target_id == "mypkg.mod.Base"
-    assert inherit.confidence == 0.75
+    assert inherit.confidence == 0.95  # same-file lexical scope (was name-based 0.75)
 
 
 def test_duplicate_same_scope_class_names_get_unique_ids(tmp_path):
